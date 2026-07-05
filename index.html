@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Le Médaillier — Gestion de collection numismatique</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#26332B">
@@ -207,6 +207,16 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   .medaillon .val{font-size:1.2rem}
   .barre-ligne{grid-template-columns:84px 1fr 70px}
 }
+/* ---------- Photo de tranche : bandeau panoramique ---------- */
+.photo-tranche{
+  width:100%;max-width:520px;height:60px;border-radius:10px;margin:0 auto;
+  background:#EDE9DC center/cover no-repeat;cursor:zoom-in;position:relative;
+  display:flex;align-items:center;justify-content:center;color:var(--encre2);font-size:.85rem;
+  box-shadow:inset 0 0 0 3px var(--or), var(--ombre);
+}
+.tranche-bloc{margin:0 0 16px}
+.tranche-bloc .lib{text-align:center;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--encre2);margin-top:6px}
+
 /* ---------- v2 : bandeau, graphique, lots, impression ---------- */
 .bandeau-sauvegarde{
   max-width:1200px;margin:14px auto 0;padding:10px 16px;border-radius:10px;
@@ -242,6 +252,73 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   .inv-piece h4{font-size:.9rem;margin-bottom:2px}
   .inv-valeurs{margin-left:auto;text-align:right;white-space:nowrap;font-weight:bold}
   .inv-pied{margin-top:18px;font-size:.75rem;display:flex;justify-content:space-between}
+}
+
+/* ---------- Carte Europe ---------- */
+.carte-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
+.carte-svg .tuile{cursor:pointer}
+.carte-svg .tuile:hover rect{filter:brightness(1.08)}
+.carte-svg text{pointer-events:none}
+
+/* ================= OPTIMISATION MOBILE (iPhone / PWA) ================= */
+header{padding-top:calc(14px + env(safe-area-inset-top))}
+@media (max-width:640px){
+  html{font-size:14.5px}
+  header{padding:calc(10px + env(safe-area-inset-top)) 12px 10px}
+  .header-inner{gap:8px}
+  .logo{width:34px;height:34px}
+  .titre-app{font-size:1.15rem}
+  .header-actions{margin-left:0;width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .header-actions button{padding:10px 6px;font-size:.82rem;white-space:nowrap}
+  nav{padding:0 10px;margin-top:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav::-webkit-scrollbar{display:none}
+  .onglet{padding:10px 12px;white-space:nowrap;font-size:.9rem;flex:none}
+  main{padding:12px 12px calc(80px + env(safe-area-inset-bottom))}
+  .bandeau-wrap{padding:0 12px}
+
+  .medaillons{gap:10px;margin:6px 0 18px}
+  .medaillon{width:106px;height:106px}
+  .medaillon::before{inset:-4px}
+  .medaillon .val{font-size:.95rem}
+  .medaillon .lib{font-size:.52rem;letter-spacing:.07em;padding:0 8px;margin-top:2px}
+  .medaillon .sous{font-size:.6rem;padding:0 6px}
+  .grille-panneaux{grid-template-columns:1fr}
+  .panneau{padding:12px}
+  .barre-ligne{grid-template-columns:76px 1fr 68px;gap:6px;font-size:.78rem}
+  .graph-svg{height:150px}
+
+  .outils{gap:6px}
+  .outils input[type=search]{flex:1 1 100%;min-width:0;font-size:16px}
+  .outils select{flex:1;min-width:0;font-size:.82rem;padding:9px 4px}
+  .compteur{width:100%;text-align:right;margin-left:0}
+  .grille-pieces{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+  .carte-piece{padding:12px 8px 10px}
+  .piece-photo{width:86px;height:86px}
+  .piece-nom{font-size:.86rem}
+
+  .voile{padding:0}
+  .modale{min-height:100dvh;border-radius:0;max-width:none}
+  .modale-tete{border-radius:0;position:sticky;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+  .modale-corps{padding:14px 12px calc(16px + env(safe-area-inset-bottom))}
+  .form-grille{grid-template-columns:1fr 1fr}
+  .champ input,.champ select,.champ textarea{font-size:16px;padding:10px}
+  .form-actions{position:sticky;bottom:0;background:var(--papier);padding:10px 0 calc(8px + env(safe-area-inset-bottom));margin-top:14px;box-shadow:0 -6px 12px -8px rgba(30,40,33,.25)}
+  .form-actions button{flex:1;padding:13px 6px;font-size:.88rem}
+  .photos-form{gap:12px}
+  .photo-slot .piece-photo{width:100px;height:100px}
+
+  .detail-photos{gap:14px;margin-bottom:12px}
+  .detail-photos .piece-photo{width:118px;height:118px}
+  .fiche{grid-template-columns:1fr 1fr;font-size:.85rem;gap:2px 12px}
+  .bandeau-valeur{gap:6px;padding:10px 4px}
+  .bandeau-valeur .bloc .v{font-size:.95rem}
+  .bandeau-valeur .bloc .l{font-size:.56rem}
+  .liste-alertes li{flex-direction:column;gap:2px;align-items:flex-start}
+  .liste-alertes li > span:last-child{align-self:flex-end}
+
+  .choix-export button{padding:14px 12px}
+  .zone-json{font-size:16px;min-height:120px}
+  .toast{bottom:calc(18px + env(safe-area-inset-bottom));width:max-content;max-width:92vw;text-align:center;font-size:.85rem}
 }
 </style>
 </head>
@@ -299,6 +376,11 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
     </div>
 
     <div class="panneau" style="margin-bottom:16px"><h3>Évolution de la valeur de la collection</h3><div id="graphiqueValeur"></div></div>
+
+    <div class="panneau" style="margin-bottom:16px"><h3>Carte de la collection — pièces par pays</h3>
+      <div id="cartePays"></div><div id="cartAutres"></div>
+      <p class="vide-note" style="margin-top:8px">Touchez un pays pour filtrer la collection.</p>
+    </div>
 
     <div class="grille-panneaux">
       <div class="panneau"><h3>Répartition par métal</h3><div id="repMetal"></div></div>
@@ -542,6 +624,7 @@ function rendreDashboard(){
 
   majHistorique(total, metalTotal);
   rendreGraphique();
+  if(typeof rendreCarte==="function") rendreCarte();
 }
 
 /* ---------------- Historique de valeur & graphique ---------------- */
@@ -701,7 +784,10 @@ function ouvrirDetail(id){
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${src?`style="background-image:url('${src}')" data-zoom="${lib}"`:""}>${src?"":"—"}</div>
       <div class="lib">${lib}</div></div>`;
   ouvrirModale(p.nom, `
-    <div class="detail-photos">${photoDiv(p.photoAvers,"Avers")}${photoDiv(p.photoRevers,"Revers")}${p.photoTranche?photoDiv(p.photoTranche,"Tranche"):""}</div>
+    <div class="detail-photos">${photoDiv(p.photoAvers,"Avers")}${photoDiv(p.photoRevers,"Revers")}</div>
+    ${p.photoTranche?`<div class="tranche-bloc">
+      <div class="photo-tranche" style="background-image:url('${p.photoTranche}')" data-zoom="Tranche"></div>
+      <div class="lib">Tranche</div></div>`:""}
     <div class="bandeau-valeur">
       <div class="bloc"><div class="v num">${fmtEuro(coteRetenue(p))}</div><div class="l">Cote retenue</div></div>
       <div class="bloc"><div class="v num">${fmtEuro(parseFloat(p.prixAchat))}</div><div class="l">Prix d'achat</div></div>
@@ -774,7 +860,12 @@ function ouvrirFormulaire(id){
       <div class="lib">${lib} — cliquer</div>
       <input type="file" accept="image/*" id="fichier-${cle}" hidden></div>`;
   ouvrirModale(p?"Modifier la pièce":"Nouvelle pièce", `
-    <div class="photos-form">${slot("photoAvers","Avers")}${slot("photoRevers","Revers")}${slot("photoTranche","Tranche")}</div>
+    <div class="photos-form">${slot("photoAvers","Avers")}${slot("photoRevers","Revers")}</div>
+    <div class="tranche-bloc">
+      <div class="photo-tranche" id="slot-photoTranche" style="cursor:pointer;${photosTemp.photoTranche?`background-image:url('${photosTemp.photoTranche}')`:""}">${photosTemp.photoTranche?"":"📷 Tranche — cliquer"}</div>
+      <div class="lib">Photo de tranche (bandeau panoramique)</div>
+      <input type="file" accept="image/*" id="fichier-photoTranche" hidden>
+    </div>
     <div class="form-grille">
       <div class="champ champ-large"><label>Nom *</label><input id="f-nom" value="${v("nom")}" placeholder="20 Francs Napoléon III tête laurée"></div>
       <div class="champ"><label>Pays</label><input id="f-pays" value="${v("pays")}" placeholder="France"></div>
@@ -1178,6 +1269,19 @@ $("#grillePieces").addEventListener("keydown",e=>{
   if(navigator.storage && navigator.storage.persist){
     navigator.storage.persist().then(ok=>console.log("Stockage persistant :", ok?"accordé":"refusé"));
   }
+  /* Migration v5 : éclatement de l'ancienne série commune en séries par émission */
+  const ancienNomSerie = "2 € Émissions communes zone euro";
+  if(etat.series.some(x=>x.nom===ancienNomSerie)){
+    etat.series = etat.series.filter(x=>x.nom!==ancienNomSerie);
+    await dbConfigEcrire("series", etat.series);
+    for(const p of etat.pieces){
+      if(p.serie===ancienNomSerie){
+        p.serie=null; p.serieItem=null;
+        await detecterSerie(p);
+        await dbSauver(p);
+      }
+    }
+  }
   rafraichir();
   majBandeauSauvegarde();
   /* Migration : générer les miniatures manquantes (une seule fois) */
@@ -1198,6 +1302,51 @@ $("#grillePieces").addEventListener("keydown",e=>{
 
 /* ---------------- Modèles de séries connus ---------------- */
 function normTxt(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
+
+const PAYS = {
+  IS:{nom:"Islande",alias:["islande","iceland"],t:[0,0]},
+  NO:{nom:"Norvège",alias:["norvege","norway"],t:[3,0]},
+  SE:{nom:"Suède",alias:["suede","sweden"],t:[4,0]},
+  FI:{nom:"Finlande",alias:["finlande","finland"],t:[5,0]},
+  EE:{nom:"Estonie",alias:["estonie","estonia"],t:[6,0]},
+  IE:{nom:"Irlande",alias:["irlande","ireland","eire"],t:[0,1]},
+  GB:{nom:"Royaume-Uni",alias:["royaume-uni","royaume uni","grande-bretagne","grande bretagne","angleterre","united kingdom","great britain"],t:[1,1]},
+  DK:{nom:"Danemark",alias:["danemark","denmark"],t:[3,1]},
+  LV:{nom:"Lettonie",alias:["lettonie","latvia"],t:[5,1]},
+  RU:{nom:"Russie",alias:["russie","russia","urss"],t:[6,1]},
+  BE:{nom:"Belgique",alias:["belgique","belgium","belgie"],t:[1,2]},
+  NL:{nom:"Pays-Bas",alias:["pays-bas","pays bas","netherlands","hollande","nederland"],t:[2,2]},
+  DE:{nom:"Allemagne",alias:["allemagne","germany","deutschland"],t:[3,2]},
+  PL:{nom:"Pologne",alias:["pologne","poland"],t:[4,2]},
+  LT:{nom:"Lituanie",alias:["lituanie","lithuania"],t:[5,2]},
+  UA:{nom:"Ukraine",alias:["ukraine"],t:[6,2]},
+  FR:{nom:"France",alias:["france"],t:[1,3]},
+  LU:{nom:"Luxembourg",alias:["luxembourg"],t:[2,3]},
+  CH:{nom:"Suisse",alias:["suisse","switzerland","helvetia"],t:[3,3]},
+  CZ:{nom:"Tchéquie",alias:["tchequie","republique tcheque","tchecoslovaquie","czech"],t:[4,3]},
+  SK:{nom:"Slovaquie",alias:["slovaquie","slovakia"],t:[5,3]},
+  RO:{nom:"Roumanie",alias:["roumanie","romania"],t:[6,3]},
+  PT:{nom:"Portugal",alias:["portugal"],t:[0,4]},
+  ES:{nom:"Espagne",alias:["espagne","spain","espana"],t:[1,4]},
+  MC:{nom:"Monaco",alias:["monaco"],t:[2,4]},
+  IT:{nom:"Italie",alias:["italie","italy","italia"],t:[3,4]},
+  AT:{nom:"Autriche",alias:["autriche","austria","osterreich"],t:[4,4]},
+  HU:{nom:"Hongrie",alias:["hongrie","hungary"],t:[5,4]},
+  BG:{nom:"Bulgarie",alias:["bulgarie","bulgaria"],t:[6,4]},
+  AD:{nom:"Andorre",alias:["andorre","andorra"],t:[0,5]},
+  SM:{nom:"Saint-Marin",alias:["saint-marin","saint marin","san marino"],t:[2,5]},
+  VA:{nom:"Vatican",alias:["vatican","cite du vatican"],t:[3,5]},
+  SI:{nom:"Slovénie",alias:["slovenie","slovenia"],t:[4,5]},
+  HR:{nom:"Croatie",alias:["croatie","croatia"],t:[5,5]},
+  GR:{nom:"Grèce",alias:["grece","greece","hellas"],t:[6,5]},
+  MT:{nom:"Malte",alias:["malte","malta"],t:[3,6]},
+  CY:{nom:"Chypre",alias:["chypre","cyprus"],t:[6,6]}
+};
+function trouverCodePays(pays){
+  const n = normTxt(pays||""); if(!n) return null;
+  for(const [code,p] of Object.entries(PAYS)) if(p.alias.some(al=>n===al||n.includes(al))) return code;
+  return null;
+}
 
 const SERIES_MODELES = [
   {
@@ -1233,15 +1382,29 @@ const SERIES_MODELES = [
     note:"Série en cours — complétez les éléments futurs via « Modifier » au fil des émissions."
   },
   {
-    nom:"2 € Émissions communes zone euro",
-    pays:null,
-    attendus:[
-      {label:"2007 · 50 ans du Traité de Rome", a:2007, mots:["traite de rome"]},
-      {label:"2009 · 10 ans de l'UEM", a:2009, mots:["uem","union economique et monetaire"]},
-      {label:"2012 · 10 ans de l'euro fiduciaire", a:2012, mots:["10 ans de l'euro","dix ans de l'euro"]},
-      {label:"2015 · 30 ans du drapeau européen", a:2015, mots:["drapeau"]},
-      {label:"2022 · 35 ans du programme Erasmus", a:2022, mots:["erasmus"]}
-    ]
+    nom:"2 € commune 2007 — 50 ans du Traité de Rome",
+    commun:true, a:2007, mots:["traite de rome","treaty of rome"],
+    zone:["DE","AT","BE","ES","FI","FR","GR","IE","IT","LU","NL","PT","SI"]
+  },
+  {
+    nom:"2 € commune 2009 — 10 ans de l'UEM",
+    commun:true, a:2009, mots:["uem","union economique et monetaire","emu"],
+    zone:["DE","AT","BE","CY","ES","FI","FR","GR","IE","IT","LU","MT","NL","PT","SK","SI"]
+  },
+  {
+    nom:"2 € commune 2012 — 10 ans de l'euro fiduciaire",
+    commun:true, a:2012, mots:["10 ans de l'euro","dix ans de l'euro","euro fiduciaire","2002-2012","2002 2012","ten years","10 years of euro"],
+    zone:["DE","AT","BE","CY","EE","ES","FI","FR","GR","IE","IT","LU","MT","NL","PT","SK","SI"]
+  },
+  {
+    nom:"2 € commune 2015 — 30 ans du drapeau européen",
+    commun:true, a:2015, mots:["drapeau","flag"],
+    zone:["DE","AT","BE","CY","EE","ES","FI","FR","GR","IE","IT","LT","LU","LV","MT","NL","PT","SK","SI"]
+  },
+  {
+    nom:"2 € commune 2022 — 35 ans du programme Erasmus",
+    commun:true, a:2022, mots:["erasmus"],
+    zone:["DE","AT","BE","CY","EE","ES","FI","FR","GR","IE","IT","LT","LU","LV","MT","NL","PT","SK","SI"]
   }
 ];
 
@@ -1251,6 +1414,18 @@ async function detecterSerie(p){
   const nomN = normTxt(p.nom);
   const facialeOK = /2\s*(euro|€)/.test(normTxt(p.valeurFaciale||"")) || /2\s*(euro|€)/.test(nomN);
   for(const mod of SERIES_MODELES){
+    if(mod.commun){
+      if(parseInt(p.annee)!==mod.a) continue;
+      if(!mod.mots.some(m=>nomN.includes(m))) continue;
+      const code = trouverCodePays(p.pays) || mod.zone.find(c=>PAYS[c].alias.some(al=>nomN.includes(al)));
+      if(code && mod.zone.includes(code)){
+        p.serie = mod.nom; p.serieItem = PAYS[code].nom;
+        await assurerSerie(mod.nom);
+        await dbSauver(p);
+        return mod.nom;
+      }
+      continue;
+    }
     if(mod.pays && !(mod.pays.test(p.pays||""))) continue;
     for(const item of mod.attendus){
       if(item.a && parseInt(p.annee)!==item.a) continue;
@@ -1269,7 +1444,7 @@ async function assurerSerie(nom){
   const mod = SERIES_MODELES.find(m=>m.nom===nom);
   etat.series.push({
     id:uuid(), nom,
-    attendus: mod ? mod.attendus.map(a=>a.label) : [],
+    attendus: mod ? (mod.commun ? mod.zone.map(c=>PAYS[c].nom) : mod.attendus.map(a=>a.label)) : [],
     note: mod?.note||null
   });
   await dbConfigEcrire("series", etat.series);
@@ -1337,7 +1512,7 @@ function ouvrirNouvelleSerie(idExist){
   const selMod = $("#s-modele");
   if(selMod) selMod.addEventListener("change",()=>{
     const m = modelesDispo[parseInt(selMod.value)];
-    if(m){ $("#s-nom").value=m.nom; $("#s-attendus").value=m.attendus.map(a=>a.label).join("\n"); }
+    if(m){ $("#s-nom").value=m.nom; $("#s-attendus").value=(m.commun?m.zone.map(c=>PAYS[c].nom):m.attendus.map(a=>a.label)).join("\n"); }
   });
 }
 async function sauverSerie(id){
@@ -1540,6 +1715,72 @@ document.addEventListener("click", e=>{
   const chip = e.target.closest("[data-wish]");
   if(chip) ajouterWishDepuisSerie(chip.dataset.wish, chip.dataset.serie);
 });
+</script>
+<script>
+"use strict";
+/* =====================================================================
+   v5 — Carte d'Europe interactive (dénombrement par pays)
+===================================================================== */
+function allerVue(nom){
+  document.querySelectorAll(".onglet").forEach(x=>x.classList.toggle("actif",x.dataset.vue===nom));
+  document.querySelectorAll(".vue").forEach(v=>v.classList.toggle("active",v.id==="vue-"+nom));
+  window.scrollTo({top:0});
+}
+function couleurTuile(n){
+  if(!n) return {f:"#EFEBDD",t:"#A9A493",s:"#DED9CB"};
+  if(n<2)  return {f:"#E9DCB2",t:"#6B5416",s:"#D9C88A"};
+  if(n<4)  return {f:"#D9BC72",t:"#4A3A0E",s:"#C4A85C"};
+  if(n<10) return {f:"#B8923D",t:"#FFFFFF",s:"#A07E31"};
+  return {f:"#8A6B24",t:"#FFFFFF",s:"#6F551B"};
+}
+function rendreCarte(){
+  const el=$("#cartePays"); if(!el) return;
+  const ps = etat.pieces.filter(p=>!p.vendu);
+  const compte={}, autres={};
+  for(const p of ps){
+    const q = parseInt(p.quantite)||1;
+    const code = trouverCodePays(p.pays);
+    if(code) compte[code]=(compte[code]||0)+q;
+    else if(p.pays) autres[p.pays]=(autres[p.pays]||0)+q;
+  }
+  const S=34,G=4,PAS=S+G;
+  let maxX=0,maxY=0;
+  for(const p of Object.values(PAYS)){ maxX=Math.max(maxX,p.t[0]); maxY=Math.max(maxY,p.t[1]); }
+  const tuiles = Object.entries(PAYS).map(([code,p])=>{
+    const n=compte[code]||0, c=couleurTuile(n);
+    const x=p.t[0]*PAS, y=p.t[1]*PAS;
+    return `<g data-code="${code}" class="tuile"><title>${p.nom} : ${n} pièce(s)</title>
+      <rect x="${x}" y="${y}" width="${S}" height="${S}" rx="7" fill="${c.f}" stroke="${c.s}" stroke-width="1"/>
+      <text x="${x+S/2}" y="${y+12}" text-anchor="middle" font-size="7.5" fill="${c.t}" opacity=".75" font-family="inherit">${code}</text>
+      <text x="${x+S/2}" y="${y+26}" text-anchor="middle" font-size="${n>99?10:13}" font-weight="700" fill="${c.t}" font-family="inherit">${n||""}</text>
+    </g>`;
+  }).join("");
+  el.innerHTML = `<svg class="carte-svg" viewBox="0 0 ${(maxX+1)*PAS-G} ${(maxY+1)*PAS-G}" role="img" aria-label="Carte des pièces par pays">${tuiles}</svg>`;
+  const autresEl=$("#cartAutres");
+  const entA=Object.entries(autres).sort((a,b)=>b[1]-a[1]);
+  autresEl.innerHTML = entA.length
+    ? `<p class="vide-note" style="margin-top:10px">Hors carte : ${entA.map(([p,n])=>`${esc(p)} (${n})`).join(" · ")}</p>`
+    : "";
+  if(!el._lie){
+    el._lie=true;
+    el.addEventListener("click",e=>{
+      const g=e.target.closest("[data-code]");
+      if(g) filtrerParPaysCode(g.dataset.code);
+    });
+  }
+}
+function filtrerParPaysCode(code){
+  const vals=[...new Set(etat.pieces.filter(p=>!p.vendu && trouverCodePays(p.pays)===code).map(p=>p.pays))];
+  if(!vals.length){ toast("Aucune pièce de "+PAYS[code].nom+" pour l'instant"); return; }
+  allerVue("collection");
+  majFiltres();
+  $("#recherche").value="";
+  $("#filtreStatut").value="collection";
+  const sel=$("#filtrePays");
+  if([...sel.options].some(o=>o.value===vals[0])) sel.value=vals[0];
+  rendreCollection();
+  toast(PAYS[code].nom+" : filtre appliqué");
+}
 </script>
 </body>
 </html>
