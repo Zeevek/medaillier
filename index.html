@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%20role%3D%22img%22%20aria-label%3D%22Challenges%20Pharmacie%22%3E%20%3Cdefs%3E%20%3ClinearGradient%20id%3D%22bg%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%20%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23059669%22%2F%3E%20%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23065f46%22%2F%3E%20%3C%2FlinearGradient%3E%20%3C%2Fdefs%3E%20%3C%21--%20Fond%20--%3E%20%3Crect%20x%3D%220%22%20y%3D%220%22%20width%3D%22512%22%20height%3D%22512%22%20rx%3D%22112%22%20fill%3D%22url%28%23bg%29%22%2F%3E%20%3C%21--%20Piste%20de%20la%20jauge%20--%3E%20%3Ccircle%20cx%3D%22256%22%20cy%3D%22256%22%20r%3D%22168%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-opacity%3D%220.22%22%20stroke-width%3D%2234%22%2F%3E%20%3C%21--%20Arc%20de%20progression%20%28~78%20%25%29%2C%20du%20sommet%20vers%202%20h%20en%20passant%20par%20la%20gauche%20--%3E%20%3Cpath%20d%3D%22M%20256%2088%20A%20168%20168%200%201%200%20421%20225%22%20fill%3D%22none%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%2234%22%20stroke-linecap%3D%22round%22%2F%3E%20%3C%21--%20Croix%20de%20pharmacie%20--%3E%20%3Cg%20fill%3D%22%23ffffff%22%3E%20%3Crect%20x%3D%22212%22%20y%3D%22156%22%20width%3D%2288%22%20height%3D%22200%22%20rx%3D%2226%22%2F%3E%20%3Crect%20x%3D%22156%22%20y%3D%22212%22%20width%3D%22200%22%20height%3D%2288%22%20rx%3D%2226%22%2F%3E%20%3C%2Fg%3E%20%3C%21--%20Point%20d%27%C3%A9tape%20%C3%A0%20l%27extr%C3%A9mit%C3%A9%20de%20la%20jauge%20--%3E%20%3Ccircle%20cx%3D%22421%22%20cy%3D%22225%22%20r%3D%2227%22%20fill%3D%22%23ffffff%22%2F%3E%20%3Cpath%20d%3D%22M409%20225l9%209%2016%20-17%22%20fill%3D%22none%22%20stroke%3D%22%23047857%22%20stroke-width%3D%228%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%20%3C%2Fsvg%3E">
+    <title>Générateur de Challenges – Pharma Pro</title>
+    <!-- Bibliothèque PDF optionnelle : si elle ne charge pas (hors-ligne), l'app bascule sur l'impression du navigateur. -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --primary:#2563eb; --secondary:#64748b; --success:#22c55e;
+            --warning:#f59e0b; --danger:#ef4444; --bg-app:#f1f5f9;
+            --bg-card:#fff; --text-main:#1e293b; --text-muted:#64748b; --border:#e2e8f0;
+        }
+        * { box-sizing:border-box; }
+        body { font-family: system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; background:var(--bg-app); color:var(--text-main); margin:0; padding:20px; display:flex; flex-direction:column; align-items:center; }
+        :focus-visible { outline:3px solid rgba(37,99,235,.4); outline-offset:2px; }
+
+        .form-container { background:#fff; padding:25px; border-radius:12px; width:100%; max-width:1150px; margin-bottom:30px; box-shadow:0 10px 25px -5px rgba(0,0,0,.1); }
+        .header-controls { display:flex; justify-content:space-between; align-items:center; gap:15px; flex-wrap:wrap; margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid #f8fafc; }
+        .header-controls h2 { margin:0; color:var(--primary); }
+        .title-field { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+        .summary-toggle { display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-muted); }
+        .save-state { font-size:12px; color:var(--text-muted); min-height:16px; text-align:center; margin-top:6px; }
+
+        .update-banner { width:100%; max-width:1150px; margin:0 auto 14px; padding:10px 16px; border-radius:10px; font-size:13px; display:none; align-items:center; gap:10px; }
+        .update-banner.warn { display:flex; background:#fffbeb; color:#92400e; border:1px solid #fde68a; }
+        .update-banner.info { display:flex; background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+
+        .kpi-bar { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:22px; }
+        .kpi { background:#f8fafc; border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+        .kpi .num { font-size:24px; font-weight:800; line-height:1; }
+        .kpi .lbl { font-size:11px; color:var(--text-muted); margin-top:4px; text-transform:uppercase; letter-spacing:.03em; }
+
+        .sort-bar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+        .sort-bar .sort-label { font-size:12px; font-weight:600; color:var(--text-muted); margin-right:4px; }
+        .chip { border:1px solid var(--border); background:#fff; border-radius:999px; padding:6px 12px; font-size:12px; cursor:pointer; color:var(--text-main); }
+        .chip.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+        .form-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:20px; }
+        .lab-input-group { border:1px solid var(--border); padding:15px; border-radius:10px; background:#fff; position:relative; transition:box-shadow .2s; }
+        .lab-input-group.dragging { opacity:.4; border:2px dashed var(--primary); }
+        .handle { position:absolute; top:10px; left:10px; color:#cbd5e1; cursor:grab; font-size:18px; user-select:none; }
+        .handle:active { cursor:grabbing; }
+        .order-btns { position:absolute; top:34px; left:8px; display:flex; flex-direction:column; gap:3px; }
+        .order-btns button { border:1px solid var(--border); background:#fff; color:var(--secondary); border-radius:4px; width:22px; height:20px; cursor:pointer; font-size:11px; line-height:1; padding:0; }
+        .btn-group-top { position:absolute; top:10px; right:10px; display:flex; gap:5px; align-items:center; }
+        .delta-badge { font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px; }
+        .delta-up { background:#ecfdf5; color:#047857; } .delta-flat { background:#f1f5f9; color:#64748b; }
+        .small-btn { border:none; border-radius:4px; cursor:pointer; padding:4px 8px; color:#fff; font-size:11px; }
+        .btn-remove { background:var(--danger); } .btn-clone { background:var(--secondary); }
+
+        label { display:block; font-size:12px; margin-top:8px; font-weight:600; color:#475569; padding-left:5px; }
+        input[type=text],input[type=number],input[type=date] { width:100%; padding:8px; margin-top:4px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; }
+        input.invalid { border-color:var(--danger); background:#fef2f2; }
+        input[readonly] { background:#f8fafc; color:var(--text-muted); }
+
+        .counter { display:flex; gap:4px; align-items:center; margin-top:4px; }
+        .counter input { margin-top:0; }
+        .counter button { border:1px solid #cbd5e1; background:#f8fafc; border-radius:6px; padding:8px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text-main); white-space:nowrap; }
+        .counter button:disabled { opacity:.4; cursor:not-allowed; }
+
+        .monthly { margin-top:10px; border:1px dashed var(--border); border-radius:8px; padding:10px; background:#fafcff; }
+        .monthly summary { cursor:pointer; font-size:12px; font-weight:700; color:var(--primary); }
+        .subpanel { margin-top:10px; border:1px dashed var(--border); border-radius:8px; padding:10px; background:#fafcff; }
+        .subpanel summary { cursor:pointer; font-size:12px; font-weight:700; color:var(--primary); }
+        .subpanel .hint { font-size:11px; color:var(--text-muted); margin:6px 0; }
+        .kvrow { display:flex; gap:6px; align-items:center; margin-top:6px; }
+        .kvrow input { margin-top:0; }
+        .kvrow .t-seuil, .kvrow .t-prime, .kvrow .p-amt, .kvrow .p-qty, .kvrow .b-from, .kvrow .b-rate { max-width:130px; }
+        .kvrow button { border:1px solid #cbd5e1; background:#f8fafc; border-radius:6px; padding:8px 10px; cursor:pointer; color:var(--danger); font-size:12px; }
+        .subpanel .addrow { margin-top:8px; font-size:12px; padding:6px 10px; border:1px solid var(--border); background:#fff; border-radius:6px; cursor:pointer; }
+        .pay-type { width:100%; padding:8px; margin-top:4px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; }
+        .monthly .hint { font-size:11px; color:var(--text-muted); margin:6px 0; }
+        .months-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(95px,1fr)); gap:8px; }
+        .month-cell label { margin:0; padding:0; font-size:10px; color:var(--text-muted); display:flex; justify-content:space-between; }
+        .month-cell input { margin-top:2px; padding:6px; }
+        .month-cell.over input { border-color:var(--success); }
+        .month-cell.under input { border-color:#fca5a5; }
+        .monthly-total { font-size:12px; font-weight:700; margin-top:8px; }
+
+        .logo-zone { display:flex; align-items:center; gap:10px; margin-top:4px; padding:8px; border:1.5px dashed var(--border); border-radius:8px; cursor:pointer; background:#fff; }
+        .logo-zone:focus-within, .logo-zone:focus { border-color:var(--primary); outline:none; }
+        .logo-zone.drop { border-color:var(--primary); background:#eff6ff; }
+        .logo-preview { width:56px; height:40px; object-fit:contain; border:1px solid var(--border); border-radius:6px; background:#fff; flex:0 0 auto; }
+        .logo-hint { font-size:11px; color:var(--text-muted); }
+        .logo-actions { display:flex; gap:5px; margin-top:6px; align-items:center; flex-wrap:wrap; }
+        .logo-actions button, .logo-lib { font-size:11px; padding:5px 8px; border:1px solid var(--border); background:#f8fafc; border-radius:6px; cursor:pointer; }
+        .logo-status { font-size:11px; color:var(--success); display:block; margin-top:4px; min-height:13px; }
+        .logo-url-adv { margin-top:6px; }
+        .logo-url-adv summary { font-size:11px; color:var(--text-muted); cursor:pointer; }
+        #storage-meter { font-size:12px; color:var(--text-muted); margin-top:8px; text-align:center; }
+        #storage-meter .bar { height:6px; background:#e2e8f0; border-radius:4px; overflow:hidden; margin:4px auto 0; max-width:320px; }
+        #storage-meter .fill { height:100%; background:var(--primary); }
+        #storage-meter.warn .fill { background:var(--danger); }
+        #storage-meter.warn { color:var(--danger); }
+        .modal-bg { position:fixed; inset:0; background:rgba(15,23,42,.5); display:none; align-items:center; justify-content:center; z-index:1100; }
+        .modal-bg.open { display:flex; }
+        .modal { background:#fff; border-radius:12px; padding:20px; width:min(560px,92vw); max-height:80vh; overflow:auto; }
+        .modal h3 { margin:0 0 12px; }
+        .lib-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
+        .lib-item img { width:48px; height:34px; object-fit:contain; border:1px solid var(--border); border-radius:4px; background:#fff; }
+        .lib-item input { flex:1; }
+        .lib-del { background:var(--danger); color:#fff; border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:12px; }
+        .hbtn { position:relative; font-size:13px; padding:8px 12px; border:1px solid var(--border); background:#f8fafc; border-radius:8px; cursor:pointer; color:var(--text-main); font-weight:600; }
+        .hbtn:hover { background:#eef2f7; }
+        .hdot { display:none; position:absolute; top:-4px; right:-4px; width:10px; height:10px; border-radius:50%; background:var(--danger); }
+        .hdot.on { display:block; }
+        .help-section { margin-bottom:14px; }
+        .help-section h4 { margin:0 0 4px; font-size:14px; color:var(--primary); }
+        .help-section p { margin:0; font-size:13px; line-height:1.5; color:#334155; }
+        .help-section .k { font-weight:700; color:var(--text-main); }
+        .cl-entry { padding:10px 0; border-bottom:1px solid var(--border); }
+        .cl-entry:last-child { border-bottom:none; }
+        .cl-ver { font-weight:800; color:var(--primary); }
+        .cl-date { font-size:11px; color:var(--text-muted); margin-left:6px; }
+        .cl-entry ul { margin:6px 0 0; padding-left:18px; }
+        .cl-entry li { font-size:13px; line-height:1.5; color:#334155; margin-bottom:2px; }
+        .info-i { display:inline-flex; align-items:center; justify-content:center; width:15px; height:15px; border-radius:50%; background:var(--border); color:#475569; font-size:10px; font-weight:700; margin-left:6px; cursor:help; font-style:normal; }
+        /* ===== Navigation & Répartition ===== */
+        .topnav { width:100%; max-width:1150px; margin:0 auto 16px; display:flex; gap:8px; }
+        .navtab { font-size:15px; font-weight:700; padding:10px 20px; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; color:var(--text-muted); }
+        .navtab.active { color:#fff; background:var(--primary); border-color:var(--primary); }
+        .navtab2 { font-size:13px; font-weight:600; padding:7px 14px; border:1px solid var(--border); background:#f8fafc; border-radius:8px; cursor:pointer; color:var(--text-main); }
+        .navtab2.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+        .rep-actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+        .rep-section-title { font-size:13px; font-weight:800; color:var(--primary); text-transform:uppercase; letter-spacing:.03em; margin:20px 0 10px; }
+        .rep-table { width:100%; border-collapse:collapse; font-size:13px; }
+        .rep-table th { text-align:left; font-size:11px; color:var(--text-muted); text-transform:uppercase; padding:6px 8px; border-bottom:2px solid var(--border); }
+        .rep-table td { padding:5px 8px; border-bottom:1px solid var(--border); vertical-align:middle; }
+        .rep-table input, .rep-table select { width:100%; padding:7px; border:1px solid #cbd5e1; border-radius:6px; font-size:13px; margin:0; }
+        .rep-table .share { font-weight:800; color:#047857; white-space:nowrap; text-align:right; }
+        .rep-chal { display:flex; align-items:center; gap:10px; padding:8px 10px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; flex-wrap:wrap; }
+        .rep-chal .name { flex:1; font-weight:600; min-width:120px; }
+        .rep-chal .gain-hint { font-size:11px; color:var(--text-muted); }
+        .rep-chal input[type=number] { width:110px; padding:7px; border:1px solid #cbd5e1; border-radius:6px; margin:0; }
+        .rep-pool { margin-top:12px; font-size:15px; }
+        .rep-totals { display:flex; gap:24px; flex-wrap:wrap; padding:16px; background:#f8fafc; border:1px solid var(--border); border-radius:10px; font-size:15px; margin-top:14px; }
+        .rep-totals b { font-size:20px; display:block; }
+        .rep-totals .lbl { font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.03em; }
+        .rep-coef-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; max-width:720px; }
+        .rep-coef-grid label { font-weight:600; font-size:13px; }
+        .rep-inactive { opacity:.45; }
+        .rep-inactive .share { color:var(--text-muted) !important; }
+
+        @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+        @media print {
+            body { padding:0; background:#fff; }
+            #toast, .update-banner, .topnav { display:none !important; }
+            body:not(.printing-rep) .form-container { display:none !important; }
+            body:not(.printing-rep) .a4-page { box-shadow:none; margin:0; }
+            body.printing-rep #view-challenges { display:none !important; }
+            body.printing-rep .rep-actions, body.printing-rep #rep-tab-param, body.printing-rep .addrow, body.printing-rep .lib-del, body.printing-rep th:last-child, body.printing-rep td:last-child { display:none !important; }
+            body.printing-rep .form-container { box-shadow:none; }
+        }
+
+        .block-msg { font-size:11px; margin-top:8px; min-height:14px; }
+        .block-msg .warn { color:var(--warning); } .block-msg .err { color:var(--danger); }
+        .spark-wrap { margin-top:10px; display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-muted); }
+
+        .actions { margin-top:25px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; padding-top:20px; border-top:1px solid #f1f5f9; }
+        button.main-btn { padding:12px 18px; font-size:14px; cursor:pointer; border:none; border-radius:8px; color:#fff; font-weight:600; display:flex; align-items:center; gap:8px; }
+        .btn-add{background:var(--secondary);} .btn-period{background:#ea580c;} .btn-snap{background:#0369a1;}
+        .btn-save{background:#7c3aed;} .btn-load{background:#0891b2;} .btn-csv{background:#0d9488;}
+        .btn-pdf{background:var(--success);} .btn-clear{background:var(--danger);}
+        .empty-state { text-align:center; color:var(--text-muted); padding:30px; border:2px dashed var(--border); border-radius:12px; }
+
+        #toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); background:#1e293b; color:#fff; padding:12px 18px; border-radius:10px; display:none; align-items:center; gap:14px; z-index:1000; box-shadow:0 10px 25px rgba(0,0,0,.25); font-size:14px; }
+        #toast button { background:#facc15; color:#1e293b; border:none; border-radius:6px; padding:6px 12px; font-weight:700; cursor:pointer; }
+
+        #preview-container { display:block; padding:0; margin:0; }
+        .a4-page { width:210mm; height:296mm; background:#fff; padding:10mm 15mm; display:flex; flex-direction:column; position:relative; overflow:hidden; }
+        @media screen { .a4-page { margin-bottom:30px; box-shadow:0 0 20px rgba(0,0,0,.2); } }
+        .html2pdf__page-break { display:block; page-break-after:always; height:0; }
+        /* ===== Pages imprimées — identité officine ===== */
+        .a4-page { --rg:#047857; --rg-deep:#065f46; --ink:#0b1f33; --rmut:#5b6b73; --line:#d7e3dc; --panel:#f4f7f5; --track:#e6ebe8;
+            font-feature-settings:"tnum" 1; font-variant-numeric:tabular-nums; color:var(--ink); }
+
+        .mast { display:flex; justify-content:space-between; align-items:center; padding-bottom:6mm; border-bottom:2px solid var(--rg); margin-bottom:7mm; }
+        .mast-l { display:flex; align-items:center; gap:12px; }
+        .mast-badge { width:34px; height:34px; border-radius:9px; background:var(--rg); display:flex; align-items:center; justify-content:center; flex:0 0 auto; }
+        .mast h1 { margin:0; font-size:21px; font-weight:800; letter-spacing:-.01em; line-height:1.05; }
+        .mast .sub { font-size:11px; color:var(--rmut); margin-top:3px; letter-spacing:.01em; }
+        .page-pill { font-size:10px; font-weight:700; color:var(--rg-deep); background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:5px 12px; letter-spacing:.04em; white-space:nowrap; }
+        .eyebrow { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--rmut); }
+
+        .cards-grid { display:grid; grid-template-columns:1fr 1fr; grid-template-rows:repeat(3,1fr); gap:7mm; flex:1; min-height:0; }
+        .pcard { position:relative; border:1px solid var(--line); border-radius:14px; padding:12px 15px 11px; display:flex; flex-direction:column; gap:7px; background:#fff; overflow:hidden; }
+        .pcard::before { content:""; position:absolute; left:0; top:0; bottom:0; width:5px; background:var(--st); }
+        .pcard-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; padding-left:7px; }
+        .pcard-name { font-size:14px; font-weight:800; line-height:1.12; letter-spacing:-.01em; }
+        .pcard-logo { height:28px; max-width:78px; object-fit:contain; flex:0 0 auto; }
+        .pcard-main { display:flex; align-items:center; gap:14px; padding-left:7px; }
+        .gauge { position:relative; width:84px; height:84px; flex:0 0 auto; }
+        .gauge .val { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+        .gauge .pc { font-size:21px; font-weight:800; line-height:1; }
+        .gauge .pc small { font-size:11px; font-weight:700; color:var(--rmut); }
+        .pcard-readout { flex:1; min-width:0; }
+        .pcard-readout .big { font-size:25px; font-weight:800; line-height:1; }
+        .pcard-readout .big span { font-size:13px; font-weight:600; color:var(--rmut); }
+        .st-pill { display:inline-block; margin-top:7px; font-size:10px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--st-soft); color:var(--st); }
+        .pcard-foot { padding-left:7px; display:flex; flex-direction:column; gap:4px; margin-top:auto; }
+        .pcard-target { padding-left:7px; font-size:11px; color:#3f4f49; line-height:1.35; }
+        .pcard-target .eyebrow { display:block; margin-bottom:2px; }
+        .pcard-target .tval { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .tier-block { padding-left:7px; }
+        .tier-segs { display:flex; gap:4px; }
+        .tier-segs .seg { flex:1; height:7px; border-radius:3px; background:#e6ebe8; }
+        .tier-labels { display:flex; gap:4px; margin-top:3px; }
+        .tier-labels span { flex:1; text-align:center; font-size:8.5px; color:var(--rmut); }
+        .tier-note { font-size:10px; color:var(--rg-deep); font-weight:600; margin-top:4px; }
+        .pay-block { padding-left:7px; }
+        .pay-amt { font-size:14px; font-weight:800; color:var(--ink); }
+        .pay-min { font-size:10px; font-weight:600; margin-top:2px; }
+        .pay-min.ok { color:#047857; }
+        .pay-min.ko { color:#b45309; }
+        .pay-proj { font-size:10px; color:var(--rmut); margin-top:2px; }
+        .gains-line { font-size:12px; color:var(--ink); background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:9px 13px; margin-bottom:6mm; }
+        .gains-line b { color:#047857; }
+        .prods { padding-left:7px; }
+        .prods-box { border:1px solid var(--line); border-radius:9px; overflow:hidden; }
+        .prods-row { display:flex; justify-content:space-between; padding:3px 9px; font-size:10px; border-top:1px solid var(--line); }
+        .prods-row:first-child { border-top:none; }
+        .prods-row .amt { font-weight:700; color:var(--rg-deep); white-space:nowrap; margin-left:8px; }
+        .prods-more { padding:2px 9px; font-size:9px; color:var(--rmut); background:var(--panel); }
+        .prods .eyebrow { margin-bottom:3px !important; }
+        .pay-block { padding-left:7px; }
+        .pay-amt { font-size:13px; font-weight:800; color:var(--ink); line-height:1.2; }
+        .chips { display:flex; flex-wrap:wrap; gap:5px; }
+        .chip-p { font-size:10px; padding:3px 8px; border-radius:7px; background:var(--panel); color:#475e57; border:1px solid var(--line); }
+        .chip-p.soon { background:#fbf1e3; color:#9a5b08; border-color:#f3dcb8; }
+        .chip-p.exp { background:#fcebea; color:#b91c1c; border-color:#f4c9c6; }
+        .pace2 { font-size:10px; color:var(--rmut); }
+
+        .pfoot { margin-top:6mm; padding-top:3mm; border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; font-size:9px; color:var(--rmut); letter-spacing:.03em; }
+        .pfoot .gc { display:flex; align-items:center; gap:6px; }
+
+        .cover-mast { padding-bottom:7mm; border-bottom:2px solid var(--rg); margin-bottom:8mm; }
+        .cover-mast .row { display:flex; justify-content:space-between; align-items:flex-start; }
+        .cover-badge { width:48px; height:48px; border-radius:13px; background:var(--rg); display:flex; align-items:center; justify-content:center; }
+        .cover-mast h1 { margin:12px 0 0; font-size:34px; font-weight:800; letter-spacing:-.02em; line-height:1; }
+        .cover-mast .sub { font-size:13px; color:var(--rmut); margin-top:9px; }
+        .kpi-band { display:grid; grid-template-columns:repeat(4,1fr); gap:5mm; margin-bottom:8mm; }
+        .kpi-tile { border:1px solid var(--line); border-radius:12px; padding:14px; background:var(--panel); }
+        .kpi-tile .n { font-size:29px; font-weight:800; line-height:1; }
+        .kpi-tile .l { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--rmut); margin-top:8px; }
+        .sec-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--rg-deep); margin:0 0 4mm; display:flex; align-items:center; gap:10px; }
+        .sec-title::after { content:""; flex:1; height:1px; background:var(--line); }
+        .podium2 { display:flex; justify-content:center; align-items:flex-end; gap:14px; margin-bottom:8mm; }
+        .podium2 .col { width:128px; text-align:center; }
+        .podium2 .medal { font-size:20px; }
+        .podium2 .nm { font-size:12px; font-weight:700; margin:3px 0 5px; }
+        .podium2 .bar { border-radius:10px 10px 0 0; color:#fff; font-weight:800; font-size:17px; display:flex; align-items:flex-start; justify-content:center; padding-top:9px; }
+        .watch { font-size:11px; color:#9a5b08; background:#fbf1e3; border:1px solid #f3dcb8; border-radius:10px; padding:9px 13px; margin-bottom:6mm; }
+        .watch b { color:#7c4708; }
+        .rtable { width:100%; border-collapse:collapse; font-size:11.5px; }
+        .rtable th { text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--rmut); padding:0 8px 7px; border-bottom:1.5px solid var(--line); }
+        .rtable td { padding:7px 8px; border-bottom:1px solid var(--line); }
+        .rtable .nm { font-weight:700; }
+        .rbar { height:7px; width:96px; background:var(--track); border-radius:4px; overflow:hidden; }
+        .rbar i { display:block; height:100%; }
+
+        @media (prefers-reduced-motion: reduce) { * { transition:none !important; } }
+        /* ===== Mobile ===== */
+        .rep-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; max-width:100%; }
+        #view-challenges, #view-repartition { width:100%; min-width:0; display:flex; flex-direction:column; align-items:center; }
+        #view-repartition .form-container, #view-challenges .form-container { min-width:0; }
+        #preview-container { max-width:100%; }
+        @media (max-width:640px) {
+            body { padding:10px; }
+            .topnav { gap:6px; }
+            .navtab { flex:1; text-align:center; padding:10px 6px; font-size:14px; }
+            .form-container { padding:14px; border-radius:10px; }
+            .header-controls { flex-direction:column; align-items:stretch; gap:10px; }
+            .header-controls h2 { font-size:18px; margin:0; }
+            .title-field { gap:8px; }
+            #main-title-input { width:100% !important; flex:1 1 100%; }
+            .hbtn { flex:1; text-align:center; }
+            .kpi-bar { grid-template-columns:repeat(2,1fr); gap:8px; }
+            .form-grid { grid-template-columns:1fr; gap:14px; }
+            .kvrow { flex-wrap:wrap; }
+            .kvrow input { min-width:0; flex:1 1 40%; }
+            .kvrow .p-name { flex:1 1 100%; }
+            .logo-zone { flex-wrap:wrap; }
+            .actions { gap:8px; }
+            button.main-btn { flex:1 1 46%; justify-content:center; padding:11px 8px; font-size:13px; }
+            .rep-actions { width:100%; }
+            .rep-actions .navtab2 { flex:1; text-align:center; }
+            .rep-chal { gap:8px; padding:8px; }
+            .rep-chal .gain-hint { flex-basis:100%; order:3; }
+            .rep-chal input[type=number] { width:90px; }
+            .rep-table { min-width:720px; }
+            .rep-totals { gap:14px; padding:12px; font-size:14px; }
+            .rep-totals b { font-size:17px; }
+            .rep-coef-grid { grid-template-columns:repeat(2,1fr); }
+            .modal { padding:14px; }
+        }
+        /* ===== Mode capture PDF : géométrie exacte pour html2canvas ===== */
+        body.pdf-capture { display:block !important; padding:0 !important; background:#fff !important; }
+        body.pdf-capture .topnav, body.pdf-capture .update-banner, body.pdf-capture #toast,
+        body.pdf-capture .form-container, body.pdf-capture #view-repartition { display:none !important; }
+        body.pdf-capture #view-challenges { display:block !important; width:auto; }
+        body.pdf-capture #preview-container { max-width:none !important; width:210mm; margin:0 !important; }
+        body.pdf-capture .a4-page { margin:0 !important; box-shadow:none !important; border-radius:0 !important; }
+        @media print { body { padding:0; background:#fff; } }
+    </style>
+</head>
+<body>
+
+<div class="topnav">
+    <button class="navtab active" data-view="challenges" onclick="switchView('challenges')">📊 Challenges</button>
+    <button class="navtab" data-view="repartition" onclick="switchView('repartition')">💰 Répartition</button>
+</div>
+
+<div id="view-challenges">
+<div class="update-banner" id="update-banner"></div>
+
+<div class="form-container">
+    <div class="header-controls">
+        <h2>🚀 Tableau de bord des challenges</h2>
+        <div class="title-field">
+            <label style="margin:0;">Titre du rapport</label>
+            <input type="text" id="main-title-input" value="Challenges Pharmacie" style="width:230px;">
+            <label class="summary-toggle"><input type="checkbox" id="summary-toggle" checked onchange="updateInfographic()" style="width:auto;margin:0;"> Page de synthèse</label>
+            <button type="button" class="hbtn" onclick="openHelp()" title="Aide et guide d'utilisation">ⓘ Aide</button>
+            <button type="button" class="hbtn" id="changelog-btn" onclick="openChangelog()" title="Nouveautés et journal des versions">✨ Nouveautés<span class="hdot" id="changelog-dot"></span></button>
+        </div>
+    </div>
+
+    <div class="kpi-bar" id="kpi-bar"></div>
+
+    <div class="sort-bar">
+        <span class="sort-label">Trier par</span>
+        <button class="chip active" data-sort="manual" onclick="setSort('manual')">Ordre manuel</button>
+        <button class="chip" data-sort="deadline" onclick="setSort('deadline')">Échéance</button>
+        <button class="chip" data-sort="progress" onclick="setSort('progress')">Progression</button>
+        <button class="chip" data-sort="name" onclick="setSort('name')">Nom</button>
+    </div>
+
+    <div class="form-grid" id="inputs-container"></div>
+    <div id="empty-state"></div>
+
+    <div class="actions">
+        <button class="main-btn btn-add" onclick="addLabBlock()">➕ Ajouter un labo</button>
+        <button class="main-btn btn-period" onclick="newPeriod()">🔄 Nouvelle période</button>
+        <button class="main-btn btn-snap" onclick="captureSnapshot(true)">📸 Point d'historique</button>
+        <button class="main-btn btn-clear" onclick="clearAll()">🗑️ Tout effacer</button>
+        <button class="main-btn btn-save" onclick="exportToJSON()">💾 Sauvegarder (.json)</button>
+        <button class="main-btn btn-load" onclick="document.getElementById('file-upload').click()">📂 Charger un fichier</button>
+        <input type="file" id="file-upload" style="display:none" accept=".json,.db" onchange="importFromFile(this)">
+        <button class="main-btn btn-csv" onclick="exportToCSV()">📊 Export Excel (CSV)</button>
+        <button class="main-btn btn-pdf" onclick="generatePDF()">📥 Télécharger le PDF</button>
+    </div>
+    <div class="save-state" id="save-state"></div>
+    <div id="storage-meter"></div>
+</div>
+
+<div class="modal-bg" id="lib-modal">
+    <div class="modal">
+        <h3>🗂️ Bibliothèque de logos</h3>
+        <p style="font-size:12px;color:var(--text-muted);margin-top:0;">Renommez ou supprimez les logos enregistrés localement. Ils restent réutilisables d'une période à l'autre.</p>
+        <div id="lib-list"></div>
+        <button class="main-btn btn-add" style="margin-top:14px;" onclick="closeLibrary()">Fermer</button>
+    </div>
+</div>
+
+<div class="modal-bg" id="help-modal">
+    <div class="modal" id="help-body"></div>
+</div>
+<div class="modal-bg" id="changelog-modal">
+    <div class="modal" id="changelog-body"></div>
+</div>
+
+<div id="preview-container"></div>
+</div><!-- /view-challenges -->
+
+<div id="view-repartition" style="display:none">
+    <div class="form-container">
+        <div class="header-controls">
+            <h2>💰 Répartition des gains</h2>
+            <div class="rep-actions">
+                <button class="navtab2 active" id="reptab-rep" onclick="repTab('rep')">Répartition</button>
+                <button class="navtab2" id="reptab-param" onclick="repTab('param')">Paramètres</button>
+                <button class="hbtn" onclick="printRepartition()">🖨️ Imprimer</button>
+                <button class="hbtn" onclick="exportRepCSV()">📊 CSV</button>
+            </div>
+        </div>
+
+        <div id="rep-tab-rep">
+            <div class="rep-section-title">Challenges à répartir</div>
+            <p style="font-size:12px;color:var(--text-muted);margin:0 0 8px;">Cochez les challenges concernés et ajustez les montants si besoin (pré-remplis avec les gains acquis).</p>
+            <div id="rep-challenges"></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button type="button" class="addrow" onclick="addCustomChal()">+ Ajouter un laboratoire</button>
+                <button type="button" class="addrow" onclick="repResetAmounts()">↻ Réinitialiser aux gains calculés</button>
+            </div>
+            <div class="rep-pool">Montant total à répartir : <b id="rep-pool-val">0 €</b></div>
+
+            <div class="rep-section-title">Équipe &amp; dispatch</div>
+            <div class="rep-table-wrap"><table class="rep-table"><thead><tr>
+                <th style="text-align:center">Participe</th><th>Nom</th><th>Prénom</th><th>Email</th><th>Poste</th><th>Heures</th><th style="text-align:right">Part</th><th style="text-align:center">Payé</th><th></th>
+            </tr></thead><tbody id="rep-people"></tbody></table></div>
+            <button type="button" class="addrow" onclick="addPerson()">+ Ajouter une personne</button>
+
+            <div class="rep-totals">
+                <div><span class="lbl">Total à verser</span><b id="rep-total-verser">0 €</b></div>
+                <div><span class="lbl">Déjà versé</span><b id="rep-total-verse" style="color:#047857">0 €</b></div>
+                <div><span class="lbl">Reste à verser</span><b id="rep-total-reste" style="color:#b45309">0 €</b></div>
+            </div>
+        </div>
+
+        <div id="rep-tab-param" style="display:none">
+            <div class="rep-section-title">Pondération par poste</div>
+            <p style="font-size:12px;color:var(--text-muted);margin:0 0 10px;">Coefficient de répartition selon le poste : plus il est élevé, plus la part est grande.</p>
+            <div class="rep-coef-grid">
+                <label>Pharmacien<input type="number" step="0.1" min="0" id="coef-pharmacien" oninput="repCoef('pharmacien',this.value)"></label>
+                <label>Préparateur<input type="number" step="0.1" min="0" id="coef-preparateur" oninput="repCoef('preparateur',this.value)"></label>
+                <label>Rayonniste<input type="number" step="0.1" min="0" id="coef-rayonniste" oninput="repCoef('rayonniste',this.value)"></label>
+                <label>Étudiant<input type="number" step="0.1" min="0" id="coef-etudiant" oninput="repCoef('etudiant',this.value)"></label>
+            </div>
+            <label class="summary-toggle" style="margin-top:16px;"><input type="checkbox" id="rep-use-hours" onchange="repUseHours(this.checked)" style="width:auto;margin:0;"> Pondérer aussi par les heures travaillées <span class="info-i" title="Multiplie la part par (heures de la personne ÷ base temps plein). Les personnes sans heures renseignées gardent leur coefficient de poste seul.">i</span></label>
+            <div style="margin-top:12px;max-width:280px">
+                <label>Base temps plein (référentiel)</label>
+                <div style="display:flex;align-items:center;gap:8px">
+                    <input type="number" min="1" step="1" id="rep-base-hours" oninput="repBaseHours(this.value)" style="width:100px">
+                    <span style="color:var(--text-muted);font-size:13px">heures / semaine</span>
+                </div>
+                <div class="hint">Ex. : une personne à 10 h sur une base de 35 h compte pour 10/35 ≈ 0,29.</div>
+            </div>
+        </div>
+    </div>
+</div><!-- /view-repartition -->
+<div id="toast"><span id="toast-msg"></span><button id="toast-action">Annuler</button></div>
+
+<script>
+const MAX_CARDS_PER_PAGE = 6;
+const STORAGE_KEY = 'pharma_challenges_v3';
+const HISTORY_KEY = 'pharma_challenges_history_v1';
+const MS_DAY = 86400000;
+const MOIS = ['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+let debounceTimer, currentSort = 'manual', undoData = null, toastTimer = null;
+let lastUpdate = null, prevSnapshot = null;
+
+const DEFAULT_DATA = {
+  "title":"Challenges Pharmacie",
+  "labs":[]
+};
+
+const LOGO_PLACEHOLDER = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="50"><rect width="100" height="50" rx="6" fill="#f1f5f9"/><text x="50" y="30" font-family="sans-serif" font-size="12" fill="#94a3b8" text-anchor="middle">LOGO</text></svg>'
+);
+
+window.onload = () => {
+    const saved = loadState();
+    const data = (saved && saved.labs && saved.labs.length) ? saved : DEFAULT_DATA;
+    lastUpdate = (saved && saved.lastUpdate) ? saved.lastUpdate : new Date().toISOString();
+    document.getElementById('main-title-input').value = data.title || "Challenges Pharmacie";
+    (data.labs || []).forEach(lab => appendLabBlock(lab));
+    document.getElementById('toast-action').addEventListener('click', doUndo);
+    autoWeeklySnapshot();
+    prevSnapshot = previousSnapshot();
+    updateInfographic();
+    refreshSparklines();
+    refreshLibrarySelects();
+    renderStorage();
+    renderUpdateBanner();
+    // Évite que le navigateur ouvre une image déposée à côté d'une zone logo.
+    window.addEventListener('dragover', e => e.preventDefault());
+    window.addEventListener('drop', e => e.preventDefault());
+    document.querySelectorAll('.modal-bg').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal-bg.open').forEach(m => m.classList.remove('open')); });
+    try { if (localStorage.getItem(SEEN_KEY) !== APP_VERSION) document.getElementById('changelog-dot').classList.add('on'); } catch (e) {}
+    repState = repLoad();
+    window.addEventListener('afterprint', () => document.body.classList.remove('printing-rep'));
+};
+
+document.addEventListener('input', (e) => {
+    // La page Répartition et les modales gèrent leur propre sauvegarde :
+    // ne pas re-rendre l'aperçu ni marquer les challenges comme mis à jour.
+    if (e.target.closest('#view-repartition') || e.target.closest('.modal-bg')) return;
+    clearTimeout(debounceTimer); debounceTimer = setTimeout(() => { markUpdated(); updateInfographic(); }, 400);
+});
+
+/* ---------- Mois ---------- */
+function monthsBetween(startStr, endStr) {
+    const s = parseDate(startStr), e = parseDate(endStr);
+    if (!s || !e || e < s) return [];
+    const arr = []; let y = s.getFullYear(), m = s.getMonth();
+    const ey = e.getFullYear(), em = e.getMonth();
+    while (y < ey || (y === ey && m <= em)) { arr.push(`${y}-${String(m+1).padStart(2,'0')}`); m++; if (m > 11) { m = 0; y++; } }
+    return arr;
+}
+function monthLabel(ym) { const [y, m] = ym.split('-'); return `${MOIS[parseInt(m,10)-1]} ${y.slice(2)}`; }
+function monthLastDay(ym) { const [y, m] = ym.split('-').map(Number); return new Date(y, m, 0); }
+
+/* ---------- DOM <-> données ---------- */
+function blocks() { return Array.from(document.querySelectorAll('.lab-input-group')); }
+function readBlock(g) {
+    const months = {};
+    g.querySelectorAll('.in-month').forEach(m => months[m.dataset.ym] = parseFloat(m.value) || 0);
+    const products = [...g.querySelectorAll('.prod-rows .kvrow')]
+        .map(r => { const qe = r.querySelector('.p-qty'); return { name:r.querySelector('.p-name').value.trim(), amount:parseFloat(r.querySelector('.p-amt').value)||0, qty: qe ? (parseFloat(qe.value)||0) : 0 }; })
+        .filter(p => p.name);
+    const payType = g.querySelector('.pay-type').value;
+    let payout = { type:payType };
+    if (payType === 'tiers') {
+        payout.tiers = [...g.querySelectorAll('.tier-rows .kvrow')]
+            .map(r => ({ seuil:parseFloat(r.querySelector('.t-seuil').value)||0, prime:parseFloat(r.querySelector('.t-prime').value)||0 }))
+            .filter(t => t.seuil > 0);
+    } else if (payType === 'perbox') {
+        payout.min = parseFloat(g.querySelector('.pay-min').value) || 0;
+        payout.level = g.querySelector('.pay-level').value.trim();
+        payout.brackets = [...g.querySelectorAll('.bracket-rows .kvrow')]
+            .map(r => ({ from:parseFloat(r.querySelector('.b-from').value)||1, rate:parseFloat(r.querySelector('.b-rate').value)||0 }))
+            .filter(b => b.rate > 0);
+    } else if (payType === 'perproduct') {
+        payout.min = parseFloat(g.querySelector('.pp-min').value) || 0;
+        payout.level = g.querySelector('.pp-level').value.trim();
+    }
+    return {
+        lab:g.querySelector('.in-name').value, gamme:g.querySelector('.in-gamme').value,
+        obj:g.querySelector('.in-obj').value, actuel:g.querySelector('.in-actu').value,
+        logo:g.querySelector('.in-logo').value, start:g.querySelector('.in-start').value, end:g.querySelector('.in-end').value,
+        monthlyMode:g.querySelector('.in-monthly').checked, months, payout, products
+    };
+}
+function collectLabs() { return blocks().map(readBlock); }
+function collectData() { return { title:document.getElementById('main-title-input').value, labs:collectLabs(), history:loadHistory(), lastUpdate, repartition:repState }; }
+
+function createLabInputHTML(data = {}) {
+    const div = document.createElement('div');
+    div.className = 'lab-input-group';
+    const logo = data.logo || '', isData = logo.startsWith('data:');
+    const monthly = !!data.monthlyMode;
+    div.innerHTML = `
+        <div class="handle" title="Glisser pour réordonner">⋮⋮</div>
+        <div class="order-btns">
+            <button type="button" title="Monter" onclick="moveBlock(this,-1)">▲</button>
+            <button type="button" title="Descendre" onclick="moveBlock(this,1)">▼</button>
+        </div>
+        <div class="btn-group-top">
+            <span class="delta-badge delta-flat"></span>
+            <button class="small-btn btn-clone" onclick="cloneLab(this)" title="Dupliquer">❐</button>
+            <button class="small-btn btn-remove" onclick="removeLabBlock(this)" title="Supprimer">✕</button>
+        </div>
+        <div style="margin-top:15px;">
+            <label>Laboratoire</label>
+            <input type="text" class="in-name" value="${esc(data.lab)}" placeholder="Ex : Boiron">
+            <label>Gamme / cible</label>
+            <input type="text" class="in-gamme" value="${esc(data.gamme)}" placeholder="Ex : Homéopathie">
+            <div style="display:flex; gap:5px">
+                <div style="flex:1"><label>Début</label><input type="date" class="in-start" value="${esc(data.start)}" onchange="syncMonths(this.closest('.lab-input-group'))"></div>
+                <div style="flex:1"><label>Fin</label><input type="date" class="in-end" value="${esc(data.end)}" onchange="syncMonths(this.closest('.lab-input-group'))"></div>
+            </div>
+            <div style="display:flex; gap:10px;">
+                <div style="flex:1"><label>Objectif</label><input type="number" min="0" class="in-obj" value="${esc(data.obj)||0}"></div>
+                <div style="flex:1">
+                    <label>Réalisé (total)</label>
+                    <div class="counter">
+                        <button type="button" class="c-minus" onclick="bump(this,-1)" title="-1">−</button>
+                        <input type="number" min="0" class="in-actu" value="${esc(data.actuel)||0}">
+                        <button type="button" class="c-plus1" onclick="bump(this,1)">+1</button>
+                        <button type="button" class="c-plus5" onclick="bump(this,5)">+5</button>
+                    </div>
+                </div>
+            </div>
+
+            <details class="monthly" ${monthly ? 'open' : ''}>
+                <summary>📅 Saisie mensuelle<i class="info-i" title="Reportez les ventes mois par mois depuis votre logiciel métier. Le total et la projection (au rythme des mois clôturés) se calculent automatiquement.">i</i></summary>
+                <div class="hint">Recopiez les ventes mois par mois depuis votre logiciel ; le total se calcule tout seul.</div>
+                <label class="summary-toggle" style="margin:0 0 6px;"><input type="checkbox" class="in-monthly" ${monthly ? 'checked' : ''} onchange="syncMonths(this.closest('.lab-input-group'))" style="width:auto;margin:0;"> Utiliser le détail mensuel</label>
+                <div class="months-grid"></div>
+                <div class="monthly-total"></div>
+            </details>
+
+            <details class="subpanel" ${(data.payout && data.payout.type && data.payout.type !== 'none') || (data.tiers && data.tiers.length) ? 'open' : ''}>
+                <summary>💶 Rémunération du challenge<i class="info-i" title="« € par boîte » : tarif marginal par tranches, minimum optionnel conditionnant le paiement, booster possible. « Par produit » : boîtes vendues × barème. « Paliers » : primes cumulatives par seuil.">i</i></summary>
+                <label>Type de rémunération</label>
+                <select class="pay-type" onchange="onPayType(this)">
+                    <option value="none">Aucune</option>
+                    <option value="tiers">Prime par paliers (cumulatif)</option>
+                    <option value="perbox">€ par boîte (booster / minimum trimestriel)</option>
+                    <option value="perproduct">Par produit (quantités × barème)</option>
+                </select>
+
+                <div class="pay-perproduct" style="display:none">
+                    <div class="hint">Rémunération = somme (boîtes vendues × montant) des produits, comptée si le minimum trimestriel est atteint. Sans détail par produit : <b>1 €/boîte vendue</b>. Renseignez les ventes par produit dans « 🧾 Produits challengés » ci-dessous.</div>
+                    <div style="display:flex;gap:10px">
+                        <div style="flex:1"><label>Minimum trimestriel (boîtes)</label><input type="number" min="0" class="pp-min" placeholder="0 = pas de minimum"></div>
+                        <div style="flex:1"><label>Niveau (info)</label><input type="text" class="pp-level" placeholder="ex : Niveau Or"></div>
+                    </div>
+                </div>
+
+                <div class="pay-tiers" style="display:none">
+                    <div class="hint">Seuil d'unités + prime gagnée ; le cumul des paliers atteints s'affiche.</div>
+                    <div class="tier-rows"></div>
+                    <button type="button" class="addrow" onclick="addTierRow(this)">+ palier</button>
+                </div>
+
+                <div class="pay-perbox" style="display:none">
+                    <div style="display:flex;gap:10px">
+                        <div style="flex:1"><label>Minimum (boîtes)</label><input type="number" min="0" class="pay-min" placeholder="0 = pas de minimum"></div>
+                        <div style="flex:1"><label>Niveau (info)</label><input type="text" class="pay-level" placeholder="ex : Palier Or"></div>
+                    </div>
+                    <div class="hint">Tarif marginal par tranche (€/boîte). 1re tranche « à partir de 1 » ; un booster est une tranche supplémentaire à tarif majoré (ex. 2 € puis 2,50 € à partir de la 201e boîte).</div>
+                    <div class="bracket-rows"></div>
+                    <button type="button" class="addrow" onclick="addBracketRow(this)">+ tranche</button>
+                    <div class="hint">⚠️ Si un minimum est défini et n'est pas atteint, la rémunération est nulle.</div>
+                </div>
+            </details>
+
+            <details class="subpanel" ${(data.products && data.products.length) ? 'open' : ''}>
+                <summary>🧾 Produits challengés (barème)</summary>
+                <div class="hint">Produits ou gammes concernés et leur montant. Affichés dans un encart sur la fiche.</div>
+                <div class="prod-rows">${(data.products || []).map(prodRowHTML).join('')}</div>
+                <button type="button" class="addrow" onclick="addProdRow(this)">+ produit</button>
+            </details>
+
+            <label>Logo</label>
+            <div class="logo-zone" tabindex="0" title="Cliquer pour importer · déposer une image · Ctrl+V pour coller">
+                <img class="logo-preview" src="${logo ? esc(logo) : LOGO_PLACEHOLDER}" referrerpolicy="no-referrer" onerror="this.src='${LOGO_PLACEHOLDER}'">
+                <span class="logo-hint">Déposer / coller / cliquer pour importer</span>
+            </div>
+            <div class="logo-actions">
+                <button type="button" onclick="pickLogo(this)">📷 Importer</button>
+                <select class="logo-lib" title="Réutiliser un logo enregistré" onchange="onLibPick(this)"><option value="">🗂️ Bibliothèque…</option></select>
+                <button type="button" onclick="clearLogo(this)">Effacer</button>
+            </div>
+            <span class="logo-status">${isData ? '✓ image locale' : ''}</span>
+            <details class="logo-url-adv" ${(!isData && logo) ? 'open' : ''}>
+                <summary>Lien URL (avancé)</summary>
+                <input type="text" class="in-logo-url" placeholder="https://…" value="${isData ? '' : esc(logo)}" oninput="syncLogoUrl(this)">
+            </details>
+            <input type="file" class="logo-file" accept="image/*,.svg" hidden onchange="onLogoFile(this)">
+            <input type="hidden" class="in-logo" value="${esc(logo)}">
+            <input type="hidden" class="months-data" value='${esc(JSON.stringify(data.months || {}))}'>
+            <div class="block-msg"></div>
+            <div class="spark-wrap"><span class="spark-label">Tendance</span><span class="spark-svg">—</span></div>
+        </div>`;
+    return div;
+}
+
+function appendLabBlock(data = {}) {
+    const div = createLabInputHTML(data);
+    document.getElementById('inputs-container').appendChild(div);
+    enableDrag(div);
+    enableLogoZone(div);
+    syncMonths(div);
+    initPayout(div, resolvePayout(data));
+    fillLibSelect(div.querySelector('.logo-lib'));
+}
+function addLabBlock(data = {}) { appendLabBlock(data); markUpdated(); updateInfographic(); refreshSparklines(); }
+
+/* ---------- Saisie mensuelle ---------- */
+function syncMonths(g) {
+    const cb = g.querySelector('.in-monthly');
+    const grid = g.querySelector('.months-grid');
+    const totalEl = g.querySelector('.monthly-total');
+    const actu = g.querySelector('.in-actu');
+    const minus = g.querySelector('.c-minus'), p1 = g.querySelector('.c-plus1'), p5 = g.querySelector('.c-plus5');
+    const stored = JSON.parse(g.querySelector('.months-data').value || '{}');
+    const months = monthsBetween(g.querySelector('.in-start').value, g.querySelector('.in-end').value);
+
+    if (!cb.checked) {
+        grid.innerHTML = '<div class="hint" style="grid-column:1/-1">Activez le détail mensuel pour saisir mois par mois.</div>';
+        totalEl.textContent = '';
+        actu.readOnly = false; minus.disabled = p1.disabled = p5.disabled = false;
+        return;
+    }
+    if (!months.length) {
+        grid.innerHTML = '<div class="hint" style="grid-column:1/-1">Renseignez d\'abord les dates de début et de fin.</div>';
+        totalEl.textContent = '';
+        return;
+    }
+    const obj = parseFloat(g.querySelector('.in-obj').value) || 0;
+    const monthlyTarget = obj > 0 ? obj / months.length : 0;
+    grid.innerHTML = months.map(ym => {
+        const v = stored[ym] != null ? stored[ym] : '';
+        return `<div class="month-cell">
+            <label><span>${monthLabel(ym)}</span>${monthlyTarget ? `<span title="Cible du mois">/${Math.round(monthlyTarget)}</span>` : ''}</label>
+            <input type="number" min="0" class="in-month" data-ym="${ym}" value="${v}" oninput="onMonthInput(this)">
+        </div>`;
+    }).join('');
+    actu.readOnly = true; minus.disabled = p1.disabled = p5.disabled = true;
+    recomputeMonthly(g);
+}
+
+function onMonthInput(input) {
+    const g = input.closest('.lab-input-group');
+    recomputeMonthly(g);
+}
+function recomputeMonthly(g) {
+    const obj = parseFloat(g.querySelector('.in-obj').value) || 0;
+    const cells = g.querySelectorAll('.in-month');
+    const monthlyTarget = obj > 0 && cells.length ? obj / cells.length : 0;
+    let sum = 0, store = {};
+    cells.forEach(c => {
+        const v = parseFloat(c.value) || 0; sum += v; store[c.dataset.ym] = v;
+        const cell = c.closest('.month-cell');
+        cell.classList.remove('over', 'under');
+        if (monthlyTarget && c.value !== '') cell.classList.add(v >= monthlyTarget ? 'over' : 'under');
+    });
+    g.querySelector('.months-data').value = JSON.stringify(store);
+    g.querySelector('.in-actu').value = sum;
+    g.querySelector('.monthly-total').innerHTML = `Total cumulé : <strong>${sum}</strong>${obj ? ` / ${obj} (${Math.round(obj?sum/obj*100:0)}%)` : ''}`;
+}
+
+/* ---------- Compteur / clone / suppression ---------- */
+function bump(btn, delta) {
+    const input = btn.closest('.counter').querySelector('.in-actu');
+    if (input.readOnly) return;
+    input.value = Math.max(0, (parseFloat(input.value) || 0) + delta);
+    markUpdated(); updateInfographic();
+}
+function cloneLab(btn) { addLabBlock(readBlock(btn.closest('.lab-input-group'))); }
+function removeLabBlock(btn) {
+    const block = btn.closest('.lab-input-group');
+    const index = blocks().indexOf(block);
+    const data = readBlock(block);
+    block.remove();
+    markUpdated(); updateInfographic();
+    undoData = { type:'one', index, data };
+    showToast("Challenge supprimé.", "Annuler");
+}
+function clearAll() {
+    if (!document.querySelector('.lab-input-group')) return;
+    const snapshot = collectData();
+    document.getElementById('inputs-container').innerHTML = '';
+    markUpdated(); updateInfographic();
+    undoData = { type:'all', data:snapshot };
+    showToast("Tous les challenges ont été effacés.", "Annuler");
+}
+function doUndo() {
+    if (!undoData) return;
+    if (undoData.type === 'one') {
+        const container = document.getElementById('inputs-container');
+        const div = createLabInputHTML(undoData.data);
+        enableDrag(div);
+        container.insertBefore(div, container.children[undoData.index] || null);
+        enableLogoZone(div);
+        syncMonths(div);
+        initPayout(div, resolvePayout(undoData.data));
+        refreshLibrarySelects();
+    } else if (undoData.type === 'all') {
+        document.getElementById('main-title-input').value = undoData.data.title || "Challenges Pharmacie";
+        (undoData.data.labs || []).forEach(l => appendLabBlock(l));
+    }
+    undoData = null; hideToast(); updateInfographic(); refreshSparklines();
+}
+function showToast(msg, action) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    document.getElementById('toast-action').textContent = action;
+    t.style.display = 'flex';
+    clearTimeout(toastTimer); toastTimer = setTimeout(hideToast, 7000);
+}
+function hideToast() { document.getElementById('toast').style.display = 'none'; }
+
+/* ---------- Logos locaux : import, drop, coller, bibliothèque ---------- */
+const LIBRARY_KEY = 'pharma_logo_library_v1';
+function loadLibrary() { try { const r = localStorage.getItem(LIBRARY_KEY); return r ? JSON.parse(r) : []; } catch (e) { return []; } }
+function saveLibrary(a) { try { localStorage.setItem(LIBRARY_KEY, JSON.stringify(a)); return true; } catch (e) { alert("Stockage plein : supprimez des logos de la bibliothèque."); return false; } }
+function addToLibrary(name, data) {
+    if (!data || !data.startsWith('data:')) return;
+    let lib = loadLibrary();
+    if (lib.some(x => x.data === data)) return;
+    lib.push({ id:'L'+Date.now()+Math.floor(Math.random()*1000), name:(name||'Logo').slice(0,40), data });
+    lib = lib.slice(-40);
+    saveLibrary(lib); refreshLibrarySelects(); renderStorage();
+}
+function fillLibSelect(sel) {
+    if (!sel) return;
+    const v = sel.value;
+    sel.innerHTML = '<option value="">🗂️ Bibliothèque…</option>' + loadLibrary().map(x => `<option value="${x.id}">${esc(x.name)}</option>`).join('');
+    sel.value = v;
+}
+function refreshLibrarySelects() { document.querySelectorAll('.logo-lib').forEach(fillLibSelect); }
+function onLibPick(sel) {
+    const item = loadLibrary().find(x => x.id === sel.value);
+    sel.value = '';
+    if (item) setLogo(sel.closest('.lab-input-group'), item.data, item.name, false);
+}
+function labName(g) { return g.querySelector('.in-name').value || 'Logo'; }
+function setLogo(g, dataUri, name, addLib = true) {
+    g.querySelector('.in-logo').value = dataUri;
+    g.querySelector('.in-logo-url').value = '';
+    g.querySelector('.logo-preview').src = dataUri || LOGO_PLACEHOLDER;
+    g.querySelector('.logo-status').textContent = dataUri ? '✓ image locale' : '';
+    if (addLib) addToLibrary(name || labName(g), dataUri);
+    markUpdated(); updateInfographic(); renderStorage();
+}
+function syncLogoUrl(input) {
+    const g = input.closest('.lab-input-group');
+    g.querySelector('.in-logo').value = input.value;
+    g.querySelector('.logo-preview').src = input.value || LOGO_PLACEHOLDER;
+    g.querySelector('.logo-status').textContent = input.value ? '🔗 via URL' : '';
+}
+function pickLogo(btn) { btn.closest('.lab-input-group').querySelector('.logo-file').click(); }
+function clearLogo(btn) {
+    const g = btn.closest('.lab-input-group');
+    g.querySelector('.in-logo').value = ''; g.querySelector('.in-logo-url').value = '';
+    g.querySelector('.logo-preview').src = LOGO_PLACEHOLDER; g.querySelector('.logo-status').textContent = '';
+    markUpdated(); updateInfographic();
+}
+function onLogoFile(input) {
+    const file = input.files[0]; if (!file) return;
+    processImageFile(file, (dataUri) => {
+        if (!dataUri) { alert("Image illisible."); return; }
+        setLogo(input.closest('.lab-input-group'), dataUri, (file.name||'Logo').replace(/\.[^.]+$/, ''));
+    });
+    input.value = '';
+}
+// SVG conservé en vectoriel ; raster redimensionné (240px) et compressé.
+function processImageFile(file, cb) {
+    const isSvg = file.type === 'image/svg+xml' || /\.svg$/i.test(file.name || '');
+    const reader = new FileReader();
+    if (isSvg) {
+        reader.onload = e => { try { cb('data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(e.target.result)))); } catch (err) { cb(null); } };
+        reader.onerror = () => cb(null); reader.readAsText(file); return;
+    }
+    reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+            const maxW = 240, scale = Math.min(1, maxW / img.width);
+            const w = Math.max(1, Math.round(img.width * scale)), h = Math.max(1, Math.round(img.height * scale));
+            const c = document.createElement('canvas'); c.width = w; c.height = h;
+            c.getContext('2d').drawImage(img, 0, 0, w, h);
+            try { cb(file.type === 'image/jpeg' ? c.toDataURL('image/jpeg', 0.85) : c.toDataURL('image/png')); }
+            catch (err) { cb(null); }
+        };
+        img.onerror = () => cb(null); img.src = e.target.result;
+    };
+    reader.onerror = () => cb(null); reader.readAsDataURL(file);
+}
+// Glisser-déposer + coller sur la zone logo.
+function enableLogoZone(g) {
+    const zone = g.querySelector('.logo-zone'); if (!zone) return;
+    zone.addEventListener('click', () => g.querySelector('.logo-file').click());
+    zone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); g.querySelector('.logo-file').click(); } });
+    zone.addEventListener('dragover', e => { e.preventDefault(); e.stopPropagation(); zone.classList.add('drop'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drop'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault(); e.stopPropagation(); zone.classList.remove('drop');
+        const file = [...(e.dataTransfer.files || [])].find(f => f.type.startsWith('image/') || /\.svg$/i.test(f.name));
+        if (file) processImageFile(file, d => { if (d) setLogo(g, d, (file.name||'Logo').replace(/\.[^.]+$/, '')); });
+        else { const url = e.dataTransfer.getData('text'); if (/^https?:\/\//.test(url)) { const u = g.querySelector('.in-logo-url'); u.value = url; syncLogoUrl(u); markUpdated(); updateInfographic(); } }
+    });
+    zone.addEventListener('paste', e => {
+        const item = [...(e.clipboardData.items || [])].find(i => i.type.startsWith('image/'));
+        if (item) { const f = item.getAsFile(); if (f) { e.preventDefault(); processImageFile(f, d => { if (d) setLogo(g, d, labName(g)); }); return; } }
+        const txt = e.clipboardData.getData('text');
+        if (/^https?:\/\//.test(txt)) { e.preventDefault(); const u = g.querySelector('.in-logo-url'); u.value = txt; syncLogoUrl(u); markUpdated(); updateInfographic(); }
+    });
+}
+
+/* ---------- Jauge de stockage ---------- */
+function bytesOf(key) { try { const v = localStorage.getItem(key); return v ? (key.length + v.length) : 0; } catch (e) { return 0; } }
+function renderStorage() {
+    const el = document.getElementById('storage-meter'); if (!el) return;
+    let total;
+    try { total = bytesOf(STORAGE_KEY) + bytesOf(HISTORY_KEY) + bytesOf(LIBRARY_KEY); }
+    catch (e) { el.style.display = 'none'; return; }
+    const limit = 5 * 1024 * 1024, pct = Math.min(100, (total / limit) * 100), ko = (total / 1024).toFixed(0);
+    el.className = pct >= 80 ? 'warn' : '';
+    el.innerHTML = `🗄️ Stockage local : ${ko} Ko (${pct.toFixed(0)} %) <button onclick="openLibrary()" style="font-size:11px;margin-left:6px;border:1px solid var(--border);background:#f8fafc;border-radius:6px;padding:3px 8px;cursor:pointer;">Gérer les logos</button>${pct>=80?'<br>⚠️ Espace presque plein : supprimez des logos inutilisés.':''}<div class="bar"><div class="fill" style="width:${pct}%"></div></div>`;
+}
+
+/* ---------- Bibliothèque : gestion ---------- */
+function openLibrary() {
+    const lib = loadLibrary();
+    document.getElementById('lib-list').innerHTML = lib.length
+        ? lib.map(x => `<div class="lib-item"><img src="${x.data}"><input type="text" value="${esc(x.name)}" onchange="renameLib('${x.id}',this.value)"><button class="lib-del" onclick="deleteLib('${x.id}')">Supprimer</button></div>`).join('')
+        : '<p style="color:var(--text-muted)">Aucun logo enregistré pour l\'instant. Importez ou collez une image dans une fiche.</p>';
+    document.getElementById('lib-modal').classList.add('open');
+}
+function closeLibrary() { document.getElementById('lib-modal').classList.remove('open'); }
+function renameLib(id, name) { const lib = loadLibrary(); const it = lib.find(x => x.id === id); if (it) { it.name = name.slice(0,40); saveLibrary(lib); refreshLibrarySelects(); } }
+function deleteLib(id) { saveLibrary(loadLibrary().filter(x => x.id !== id)); refreshLibrarySelects(); renderStorage(); openLibrary(); }
+
+/* ---------- Aide & journal des nouveautés ---------- */
+const APP_VERSION = '2.7';
+const SEEN_KEY = 'pharma_seen_version';
+const CHANGELOG = [
+    { v:'2.7', d:'juillet 2026', items:[
+        'Correction de l\'export PDF : contenu décalé vers la droite et tronqué, et pages blanches intercalées. La génération utilise désormais une mise en page de capture dédiée (alignement, marges et ombres neutralisés).' ] },
+    { v:'2.6', d:'juillet 2026', items:[
+        'Optimisations : collecte des données une seule fois par rendu, sauvegarde ignorée quand rien n\'a changé (moins d\'écritures disque), et la saisie dans la page Répartition ne re-génère plus l\'aperçu du rapport ni la date de dernière saisie des challenges.' ] },
+    { v:'2.5', d:'juillet 2026', items:[
+        'Période globale du rapport : du début le plus ancien des challenges en cours à la date de fin la plus fréquente (ex. 3 fins au 31/08 et 1 au 30/09 → 31/08). Les challenges expirés sont ignorés.' ] },
+    { v:'2.4', d:'juillet 2026', items:[
+        'Affichage adapté au mobile : mise en page en colonne, aperçu du rapport mis à l\'échelle de l\'écran, tableau de répartition défilable, boutons et grilles réorganisés.',
+        'Logo de l\'application et icône d\'onglet (favicon).',
+        'Fichier livré vierge : aucune donnée d\'exemple pré-remplie au premier lancement.' ] },
+    { v:'2.3', d:'juin 2026', items:[
+        'Retrait des modèles de barèmes propres à un fournisseur : la rémunération « € par boîte » se paramètre désormais librement (tranches, booster, minimum).',
+        'Préparation à la publication (dépôt GitHub : README, licence, journal des versions).' ] },
+    { v:'2.2', d:'juin 2026', items:[
+        'Répartition : ajout de laboratoires/challenges directement dans le dispatch (lignes libres), et pondération par les heures travaillées avec un référentiel temps plein paramétrable (ex. 10 h / 35 h).' ] },
+    { v:'2.1', d:'juin 2026', items:[
+        'Répartition : case « Participe » pour inclure ou exclure une personne de la distribution en cours sans la retirer de l\'effectif ; ajout / retrait de personnes.' ] },
+    { v:'2.0', d:'juin 2026', items:[
+        'Nouvelle page « Répartition des gains » : sélection des challenges et de leurs montants, dispatch par personne (nom, prénom, email, poste), pondération par poste et par taux horaire (onglet Paramètres), et suivi total à verser / déjà versé / reste. Impression et export CSV dédiés.' ] },
+    { v:'1.9', d:'juin 2026', items:[
+        'Rémunération « par produit » : saisie des boîtes vendues par produit (× barème), additionnée et comptée une fois le challenge validé. À défaut de détail par produit : 1 €/boîte vendue.' ] },
+    { v:'1.8', items:[
+        'Aide intégrée (bouton ⓘ) et journal des nouveautés.',
+        'Optimisations internes (calculs mis en cache) et neutralisation de l\'injection de formule à l\'export CSV.' ] },
+    { v:'1.7', items:['Gains acquis vs. gains estimés (projection de fin de période), récapitulatif global et estimation du déblocage du minimum.'] },
+    { v:'1.6', items:['Moteur de rémunération « € par boîte » : tranches marginales, booster et minimum conditionnant le paiement.'] },
+    { v:'1.5', items:['Paliers de challenge (stepper) et encart « Produits challengés » avec montants associés.'] },
+    { v:'1.4', items:['Saisie mensuelle alignée sur le logiciel métier, projection au rythme mensuel, suivi des mises à jour hebdomadaires et écart depuis la dernière saisie.'] },
+    { v:'1.3', items:['Refonte du PDF : identité officine, jauges de progression, page de couverture et podium.'] },
+    { v:'1.2', items:['Logos locaux (importer / glisser-déposer / coller), bibliothèque réutilisable, SVG vectoriel + compression, jauge de stockage.'] },
+    { v:'1.1', items:['Indicateur de rythme, mode comptoir (+1/+5), historique & tendance, nouvelle période, annulation de suppression, mode hors-ligne.'] },
+    { v:'1.0', items:['Version initiale : suivi des challenges, indicateurs clés, tri, export JSON/CSV, génération PDF.'] }
+];
+function openChangelog() {
+    document.getElementById('changelog-body').innerHTML =
+        `<h3>✨ Nouveautés — version ${APP_VERSION}</h3>` +
+        CHANGELOG.map(c => `<div class="cl-entry"><span class="cl-ver">v${c.v}</span>${c.d ? `<span class="cl-date">${c.d}</span>` : ''}<ul>${c.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`).join('') +
+        `<button class="main-btn btn-add" style="margin-top:14px;" onclick="closeModal('changelog-modal')">Fermer</button>`;
+    document.getElementById('changelog-modal').classList.add('open');
+    try { localStorage.setItem(SEEN_KEY, APP_VERSION); } catch (e) {}
+    document.getElementById('changelog-dot').classList.remove('on');
+}
+function openHelp() {
+    const S = (t, b) => `<div class="help-section"><h4>${t}</h4><p>${b}</p></div>`;
+    document.getElementById('help-body').innerHTML =
+        `<h3>ⓘ Aide — comment utiliser l'outil</h3>` +
+        S('1. Saisir un challenge', 'Cliquez sur <span class="k">Ajouter un labo</span>, puis renseignez le laboratoire, la cible, les dates, l\'objectif et le réalisé. Tout s\'enregistre automatiquement dans ce navigateur.') +
+        S('2. Saisie mensuelle', 'Votre logiciel métier donne les ventes par mois : ouvrez <span class="k">Saisie mensuelle</span>, cochez la case, et reportez chaque mois. Le total et la projection se calculent seuls.') +
+        S('3. Mise à jour du mercredi', 'Le bandeau du haut indique la dernière saisie et vous alerte au-delà de 7 jours. Le bouton <span class="k">+1 / +5</span> incrémente le réalisé en un clic au comptoir.') +
+        S('4. Rémunération', 'Dans <span class="k">Rémunération du challenge</span>, « € par boîte » permet un tarif marginal par tranches avec un <span class="k">minimum</span> optionnel (sans lui, rémunération nulle) et un booster (tranche à tarif majoré). « <span class="k">Par produit</span> » additionne (boîtes vendues × montant) de chaque produit, avec 1 €/boîte par défaut si le détail n\'est pas saisi. « Prime par paliers » couvre les bonus cumulatifs (type Cerave).') +
+        S('5. Gains estimés', 'Chaque fiche affiche le gain <span class="k">acquis</span> (réalisé actuel) et <span class="k">estimé</span> (au rythme projeté). Sous le minimum, l\'outil indique combien de boîtes manquent et ce que leur franchissement débloque. Le total figure sur la couverture du PDF.') +
+        S('6. Logos', 'Importez une image, glissez-la sur la vignette ou collez-la (Ctrl+V). Elle est stockée localement (fonctionne hors-ligne) et réutilisable via la <span class="k">Bibliothèque</span>.') +
+        S('7. Rapport PDF', 'Le bouton <span class="k">Télécharger le PDF</span> génère le rapport (couverture + fiches). Hors-ligne, il bascule automatiquement sur l\'impression du navigateur (Enregistrer en PDF).') +
+        S('8. Sauvegarde & transfert', 'Utilisez <span class="k">Sauvegarder (.json)</span> puis <span class="k">Charger</span> pour transférer vos données (logos, historique et répartition inclus) vers un autre poste. L\'<span class="k">export CSV</span> ouvre les chiffres dans Excel.') +
+        S('9. Répartition des gains', 'L\'onglet <span class="k">💰 Répartition</span> (en haut) permet de distribuer les gains à l\'équipe : cochez les challenges concernés, ajoutez les personnes (nom, email, poste), et l\'outil calcule la part de chacun selon la <span class="k">pondération par poste</span> réglée dans « Paramètres » (et, en option, le taux horaire). Cochez « Payé » pour suivre le <span class="k">déjà versé</span> et le <span class="k">reste à verser</span>. Boutons Imprimer et CSV dédiés.') +
+        `<button class="main-btn btn-add" style="margin-top:14px;" onclick="closeModal('help-modal')">Fermer</button>`;
+    document.getElementById('help-modal').classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+/* ---------- Adaptation mobile de l'aperçu A4 ---------- */
+function fitPreview() {
+    const pc = document.getElementById('preview-container'); if (!pc) return;
+    const page = pc.querySelector('.a4-page');
+    if (!page) { pc.style.zoom = ''; return; }
+    const avail = Math.min(document.documentElement.clientWidth, window.innerWidth) - 20;
+    const w = 794; // 210mm ≈ 794px
+    const z = Math.min(1, avail / w);
+    pc.style.zoom = z < 0.999 ? z : '';
+}
+window.addEventListener('resize', fitPreview);
+window.addEventListener('orientationchange', fitPreview);
+
+/* ---------- Page Répartition ---------- */
+const REP_KEY = 'pharma_repartition_v1';
+const POSTES = [['pharmacien','Pharmacien'],['preparateur','Préparateur'],['rayonniste','Rayonniste'],['etudiant','Étudiant']];
+const DEFAULT_REP = { settings:{ coef:{ pharmacien:1.5, preparateur:1.2, rayonniste:1, etudiant:0.8 }, useHours:false, baseHours:35 }, challenges:{}, customChallenges:[], people:[] };
+let repState = null;
+function repLoad() {
+    let s;
+    try { const r = localStorage.getItem(REP_KEY); s = r ? JSON.parse(r) : null; } catch (e) { s = null; }
+    if (!s || !s.settings) s = JSON.parse(JSON.stringify(DEFAULT_REP));
+    // valeurs par défaut / migration
+    if (s.settings.baseHours == null) s.settings.baseHours = 35;
+    if (s.settings.useHours == null) s.settings.useHours = !!s.settings.useTaux;
+    if (!Array.isArray(s.customChallenges)) s.customChallenges = [];
+    if (!s.challenges) s.challenges = {};
+    if (!Array.isArray(s.people)) s.people = [];
+    s.people.forEach(p => { if (p.heures == null && p.taux != null) p.heures = p.taux; });
+    return s;
+}
+function repSave() { try { localStorage.setItem(REP_KEY, JSON.stringify(repState)); } catch (e) {} }
+function posteLabel(v) { const f = POSTES.find(x => x[0] === v); return f ? f[1] : v; }
+
+function switchView(v) {
+    document.getElementById('view-challenges').style.display = v === 'challenges' ? 'block' : 'none';
+    document.getElementById('view-repartition').style.display = v === 'repartition' ? 'block' : 'none';
+    document.querySelectorAll('.navtab').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+    if (v === 'repartition') repRefresh();
+}
+function repTab(t) {
+    document.getElementById('rep-tab-rep').style.display = t === 'rep' ? 'block' : 'none';
+    document.getElementById('rep-tab-param').style.display = t === 'param' ? 'block' : 'none';
+    document.getElementById('reptab-rep').classList.toggle('active', t === 'rep');
+    document.getElementById('reptab-param').classList.toggle('active', t === 'param');
+}
+
+function repLabs() { return collectLabs().map(labModel); }
+function repRefresh() {
+    const labs = repLabs();
+    let chalHTML = labs.map(l => {
+        const gain = Math.round(estimateGains(l, projActuOf(l)).acquired * 100) / 100;
+        if (!repState.challenges[l.name]) repState.challenges[l.name] = { included: gain > 0, amount: gain };
+        const c = repState.challenges[l.name];
+        return `<div class="rep-chal">
+            <input type="checkbox" data-name="${esc(l.name)}" ${c.included ? 'checked' : ''} onchange="repChalToggle(this)" style="width:auto">
+            <span class="name">${esc(l.name)}</span>
+            <span class="gain-hint">gain calculé : ${fmtEur(gain)}</span>
+            <input type="number" min="0" step="0.01" data-name="${esc(l.name)}" value="${c.amount != null ? c.amount : ''}" oninput="repChalAmount(this)"> €
+        </div>`;
+    }).join('');
+    chalHTML += (repState.customChallenges || []).map(c => `<div class="rep-chal">
+            <input type="checkbox" data-id="${c.id}" ${c.included ? 'checked' : ''} onchange="repCustomToggle(this)" style="width:auto">
+            <input type="text" class="name" value="${esc(c.name)}" placeholder="Laboratoire / challenge (ajouté)" data-id="${c.id}" oninput="repCustomField(this,'name')" style="flex:1;min-width:120px;padding:7px;border:1px solid #cbd5e1;border-radius:6px;margin:0">
+            <input type="number" min="0" step="0.01" data-id="${c.id}" value="${c.amount != null ? c.amount : ''}" oninput="repCustomField(this,'amount')"> €
+            <button class="lib-del" onclick="removeCustomChal('${c.id}')">✕</button>
+        </div>`).join('');
+    if (!chalHTML) chalHTML = '<p style="color:var(--text-muted)">Aucun challenge. Ajoutez-en dans l\'onglet Challenges, ou « + Ajouter un laboratoire ».</p>';
+    document.getElementById('rep-challenges').innerHTML = chalHTML;
+    ['pharmacien','preparateur','rayonniste','etudiant'].forEach(k => { const el = document.getElementById('coef-' + k); if (el) el.value = repState.settings.coef[k] != null ? repState.settings.coef[k] : ''; });
+    document.getElementById('rep-use-hours').checked = !!repState.settings.useHours;
+    const bh = document.getElementById('rep-base-hours'); if (bh) bh.value = repState.settings.baseHours != null ? repState.settings.baseHours : 35;
+    repRenderPeople();
+    repRecalc();
+    repSave();
+}
+function repRenderPeople() {
+    const baseH = repState.settings.baseHours != null ? repState.settings.baseHours : 35;
+    document.getElementById('rep-people').innerHTML = repState.people.map(p => {
+        const opts = POSTES.map(([v, l]) => `<option value="${v}" ${p.poste === v ? 'selected' : ''}>${l}</option>`).join('');
+        const active = p.active !== false;
+        return `<tr class="${active ? '' : 'rep-inactive'}">
+            <td style="text-align:center"><input type="checkbox" ${active ? 'checked' : ''} onchange="repPerson('${p.id}','active',this.checked)" style="width:auto" title="Participe à la distribution en cours"></td>
+            <td><input type="text" value="${esc(p.nom)}" oninput="repPerson('${p.id}','nom',this.value)"></td>
+            <td><input type="text" value="${esc(p.prenom)}" oninput="repPerson('${p.id}','prenom',this.value)"></td>
+            <td><input type="email" value="${esc(p.email)}" oninput="repPerson('${p.id}','email',this.value)"></td>
+            <td><select onchange="repPerson('${p.id}','poste',this.value)">${opts}</select></td>
+            <td><div style="display:flex;align-items:center;gap:4px"><input type="number" min="0" step="0.5" placeholder="h" value="${p.heures != null ? p.heures : ''}" oninput="repPerson('${p.id}','heures',this.value)" style="max-width:62px"><span style="color:var(--text-muted);font-size:12px;white-space:nowrap">/ ${baseH}h</span></div></td>
+            <td class="share" id="share-${p.id}">0 €</td>
+            <td style="text-align:center"><input type="checkbox" ${p.paid ? 'checked' : ''} onchange="repPerson('${p.id}','paid',this.checked)" style="width:auto"></td>
+            <td><button class="lib-del" onclick="removePerson('${p.id}')">✕</button></td>
+        </tr>`;
+    }).join('') || '<tr><td colspan="9" style="color:var(--text-muted);padding:12px">Aucune personne. Cliquez sur « Ajouter une personne ».</td></tr>';
+}
+function repChalToggle(el) { repState.challenges[el.dataset.name].included = el.checked; repRecalc(); repSave(); }
+function repChalAmount(el) { repState.challenges[el.dataset.name].amount = parseFloat(el.value) || 0; repRecalc(); repSave(); }
+function addCustomChal() { repState.customChallenges.push({ id:'C' + Date.now() + Math.floor(Math.random()*1000), name:'', amount:0, included:true }); repSave(); repRefresh(); }
+function repCustomToggle(el) { const c = repState.customChallenges.find(x => x.id === el.dataset.id); if (c) { c.included = el.checked; repRecalc(); repSave(); } }
+function repCustomField(el, field) { const c = repState.customChallenges.find(x => x.id === el.dataset.id); if (!c) return; c[field] = field === 'amount' ? (parseFloat(el.value) || 0) : el.value; repRecalc(); repSave(); }
+function removeCustomChal(id) { repState.customChallenges = repState.customChallenges.filter(x => x.id !== id); repSave(); repRefresh(); }
+function repPerson(id, field, val) { const p = repState.people.find(x => x.id === id); if (!p) return; p[field] = val; if (field === 'active') repRenderPeople(); repRecalc(); repSave(); }
+function repCoef(k, v) { repState.settings.coef[k] = parseFloat(v) || 0; repRecalc(); repSave(); }
+function repUseHours(b) { repState.settings.useHours = b; repRecalc(); repSave(); }
+function repBaseHours(v) { repState.settings.baseHours = parseFloat(v) || 35; repRenderPeople(); repRecalc(); repSave(); }
+function addPerson() { repState.people.push({ id:'P' + Date.now() + Math.floor(Math.random()*1000), nom:'', prenom:'', email:'', poste:'preparateur', heures:'', active:true, paid:false }); repSave(); repRenderPeople(); repRecalc(); }
+function removePerson(id) { repState.people = repState.people.filter(p => p.id !== id); repSave(); repRenderPeople(); repRecalc(); }
+function repResetAmounts() {
+    repLabs().forEach(l => { const gain = Math.round(estimateGains(l, projActuOf(l)).acquired * 100) / 100; repState.challenges[l.name] = { included: gain > 0, amount: gain }; });
+    repSave(); repRefresh();
+}
+function repWeights() {
+    const useHours = repState.settings.useHours; const base = parseFloat(repState.settings.baseHours) || 35; const w = {}; let sum = 0;
+    repState.people.forEach(p => {
+        if (p.active === false) { w[p.id] = 0; return; }
+        const coef = parseFloat(repState.settings.coef[p.poste] || 0) || 0; const h = parseFloat(p.heures) || 0;
+        const weight = coef * ((useHours && h > 0) ? h / base : 1); w[p.id] = weight; sum += weight;
+    });
+    return { w, sum };
+}
+function repPool() {
+    let pool = 0;
+    repLabs().forEach(l => { const c = repState.challenges[l.name]; if (c && c.included) pool += (parseFloat(c.amount) || 0); });
+    (repState.customChallenges || []).forEach(c => { if (c.included) pool += (parseFloat(c.amount) || 0); });
+    return pool;
+}
+function repRecalc() {
+    const pool = repPool();
+    const el = document.getElementById('rep-pool-val'); if (el) el.textContent = fmtEur(pool);
+    const { w, sum } = repWeights();
+    let verse = 0;
+    repState.people.forEach(p => {
+        const active = p.active !== false;
+        const share = (active && sum > 0) ? pool * w[p.id] / sum : 0;
+        const s = document.getElementById('share-' + p.id); if (s) s.textContent = active ? fmtEur(share) : '—';
+        if (active && p.paid) verse += share;
+    });
+    const set = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val; };
+    set('rep-total-verser', fmtEur(pool));
+    set('rep-total-verse', fmtEur(verse));
+    set('rep-total-reste', fmtEur(pool - verse));
+}
+function printRepartition() { document.body.classList.add('printing-rep'); window.print(); }
+function exportRepCSV() {
+    const pool = repPool(); const { w, sum } = repWeights();
+    const rows = [["Participe","Nom","Prenom","Email","Poste","Heures","Part_EUR","Paye"]];
+    let verse = 0;
+    repState.people.forEach(p => {
+        const active = p.active !== false;
+        const share = (active && sum > 0) ? pool * w[p.id] / sum : 0;
+        if (active && p.paid) verse += share;
+        rows.push([active ? 'oui' : 'non', p.nom, p.prenom, p.email, posteLabel(p.poste), p.heures || '', active ? Math.round(share*100)/100 : '', p.paid ? 'oui' : 'non']);
+    });
+    rows.push([]); rows.push(["Total a verser", pool]);
+    rows.push(["Deja verse", Math.round(verse*100)/100]); rows.push(["Reste a verser", Math.round((pool - verse)*100)/100]);
+    const csv = rows.map(r => r.map(c => { let s = String(c); if (/^[=+@\t\r]/.test(s) || (/^-/.test(s) && isNaN(Number(s)))) s = "'" + s; return `"${s.replace(/"/g,'""')}"`; }).join(';')).join('\r\n');
+    download(new Blob(["\uFEFF" + csv], { type:"text/csv;charset=utf-8;" }), `repartition_${new Date().toISOString().slice(0,10)}.csv`);
+}
+
+/* ---------- Réordonnancement ---------- */
+function moveBlock(btn, dir) {
+    const block = btn.closest('.lab-input-group');
+    const ref = dir < 0 ? block.previousElementSibling : block.nextElementSibling;
+    if (!ref) return;
+    if (dir < 0) block.parentNode.insertBefore(block, ref); else block.parentNode.insertBefore(ref, block);
+    currentSort = 'manual'; reflectSortChips(); updateInfographic(); refreshSparklines();
+}
+function enableDrag(block) {
+    const handle = block.querySelector('.handle');
+    handle.addEventListener('mousedown', () => { block.draggable = true; });
+    block.addEventListener('dragstart', () => block.classList.add('dragging'));
+    block.addEventListener('dragend', () => { block.classList.remove('dragging'); block.draggable = false; currentSort='manual'; reflectSortChips(); updateInfographic(); refreshSparklines(); });
+}
+document.getElementById('inputs-container').addEventListener('dragover', e => {
+    e.preventDefault();
+    const container = e.currentTarget, dragging = container.querySelector('.dragging'); if (!dragging) return;
+    const after = getDragAfter(container, e.clientY);
+    if (after == null) container.appendChild(dragging); else container.insertBefore(dragging, after);
+});
+function getDragAfter(container, y) {
+    const els = [...container.querySelectorAll('.lab-input-group:not(.dragging)')];
+    return els.reduce((closest, child) => {
+        const box = child.getBoundingClientRect(), offset = y - box.top - box.height / 2;
+        if (offset < 0 && offset > closest.offset) return { offset, element: child };
+        return closest;
+    }, { offset: -Infinity }).element || null;
+}
+
+/* ---------- Tri ---------- */
+function setSort(mode) {
+    currentSort = mode;
+    if (mode !== 'manual') {
+        const container = document.getElementById('inputs-container');
+        const bs = blocks(), val = (b, s) => b.querySelector(s).value;
+        const pct = b => { const o = parseFloat(val(b,'.in-obj'))||0, a = parseFloat(val(b,'.in-actu'))||0; return o>0 ? a/o : Infinity; };
+        bs.sort((a, b) => {
+            if (mode === 'name') return (val(a,'.in-name')||'').localeCompare(val(b,'.in-name')||'','fr');
+            if (mode === 'progress') return pct(a) - pct(b);
+            if (mode === 'deadline') return (val(a,'.in-end')||'9999').localeCompare(val(b,'.in-end')||'9999');
+            return 0;
+        });
+        bs.forEach(b => container.appendChild(b));
+    }
+    reflectSortChips(); updateInfographic(); refreshSparklines();
+}
+function reflectSortChips() { document.querySelectorAll('.chip[data-sort]').forEach(c => c.classList.toggle('active', c.dataset.sort === currentSort)); }
+
+/* ---------- Calculs ---------- */
+function todayMidnight() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+function parseDate(s) { if (!s) return null; const d = new Date(s + 'T00:00:00'); return isNaN(d) ? null : d; }
+function daysLeft(endStr) { const e = parseDate(endStr); if (!e) return null; e.setHours(23,59,59); return Math.ceil((e - new Date()) / MS_DAY); }
+
+let _statsCache = new WeakMap();
+function computeStats(lab) {
+    if (_statsCache.has(lab)) return _statsCache.get(lab);
+    const r = _computeStatsRaw(lab);
+    _statsCache.set(lab, r);
+    return r;
+}
+function _computeStatsRaw(lab) {
+    const obj = lab.obj, actu = lab.actu, hasObj = obj > 0;
+    const percent = hasObj ? (actu / obj) * 100 : 0;
+    const start = parseDate(lab.start), end = parseDate(lab.end), now = todayMidnight();
+    const dleft = daysLeft(lab.end);
+    const suspect = hasObj && obj <= 1 && actu / obj > 50;
+    const r = { hasObj, percent, dleft, suspect, status:'na', projected:null, onTrack:null, perWeek:0, color:'#94a3b8', stat:'—', pace:'', basis:'' };
+    r.color = !hasObj ? '#94a3b8' : (percent >= 100 ? '#22c55e' : (percent >= 50 ? '#f59e0b' : '#ef4444'));
+    r.stat = !hasObj ? '—' : (percent >= 100 ? `✅ ${Math.round(percent)}%` : `${Math.round(percent)}%`);
+
+    if (!hasObj || !start || !end || end <= start) return r;
+    const totalDays = (end - start) / MS_DAY;
+    if (now < start) { r.status = 'upcoming'; r.pace = `🗓️ Démarre le ${formatDate(lab.start)}`; return r; }
+    const elapsed = Math.min(Math.max((now - start) / MS_DAY, 0), totalDays);
+    const remainingDays = Math.max(0, totalDays - elapsed);
+    const remaining = Math.max(0, obj - actu);
+
+    if (now > end) {
+        r.status = 'ended';
+        r.pace = percent >= 100 ? '🏁 Objectif atteint' : `🏁 Terminé à ${Math.round(percent)}%`;
+        return r;
+    }
+    r.status = 'running';
+
+    // Projection : priorité au rythme mensuel réel si la saisie mensuelle est active.
+    const months = monthsBetween(lab.start, lab.end);
+    if (lab.monthlyMode && months.length) {
+        const complete = months.filter(ym => monthLastDay(ym) < now);
+        if (complete.length) {
+            const knownSum = complete.reduce((a, ym) => a + (lab.months[ym] || 0), 0);
+            r.projected = Math.round((knownSum / complete.length) * months.length);
+            r.basis = `rythme mensuel (${complete.length}/${months.length} mois)`;
+        }
+    }
+    if (r.projected == null) {
+        r.projected = elapsed > 0 ? Math.round(actu + (actu / elapsed) * remainingDays) : actu;
+        r.basis = 'rythme quotidien';
+    }
+    r.onTrack = r.projected >= obj;
+    r.perWeek = (remainingDays > 0 && remaining > 0) ? Math.ceil(remaining / (remainingDays / 7)) : 0;
+    if (percent >= 100) r.pace = '🎯 Objectif déjà atteint';
+    else if (r.onTrack) r.pace = `📈 Dans les temps (~${r.projected})`;
+    else r.pace = `📉 ~${r.projected} projeté · +${r.perWeek}/sem pour réussir`;
+    return r;
+}
+
+function labModel(raw) {
+    return { name:raw.lab||'---', gamme:raw.gamme||'---', obj:parseFloat(raw.obj)||0, actu:parseFloat(raw.actuel)||0,
+             logo:raw.logo, start:raw.start, end:raw.end, monthlyMode:raw.monthlyMode, months:raw.months||{},
+             payout:resolvePayout(raw), products:raw.products||[] };
+}
+function resolvePayout(raw) {
+    if (raw.payout && raw.payout.type) return raw.payout;
+    if (raw.tiers && raw.tiers.length) return { type:'tiers', tiers:raw.tiers };   // compat ancien format
+    return { type:'none' };
+}
+
+/* ---------- Lignes éditables ---------- */
+function tierRowHTML(t = {}) {
+    return `<div class="kvrow"><input type="number" min="0" class="t-seuil" placeholder="Seuil (unités)" value="${t.seuil != null ? t.seuil : ''}"><input type="number" min="0" step="0.01" class="t-prime" placeholder="Prime €" value="${t.prime != null ? t.prime : ''}"><button type="button" onclick="delRow(this)" title="Retirer">✕</button></div>`;
+}
+function bracketRowHTML(b = {}) {
+    return `<div class="kvrow"><input type="number" min="1" class="b-from" placeholder="À partir de (boîte n°)" value="${b.from != null ? b.from : ''}"><input type="number" min="0" step="0.01" class="b-rate" placeholder="€ / boîte" value="${b.rate != null ? b.rate : ''}"><button type="button" onclick="delRow(this)" title="Retirer">✕</button></div>`;
+}
+function prodRowHTML(p = {}) {
+    return `<div class="kvrow"><input type="text" class="p-name" placeholder="Produit / gamme" value="${esc(p.name)}"><input type="number" min="0" step="0.01" class="p-amt" placeholder="€/boîte" value="${p.amount != null ? p.amount : ''}"><input type="number" min="0" class="p-qty" placeholder="Boîtes vendues" value="${p.qty != null ? p.qty : ''}"><button type="button" onclick="delRow(this)" title="Retirer">✕</button></div>`;
+}
+function addTierRow(btn) { btn.closest('.subpanel').querySelector('.tier-rows').insertAdjacentHTML('beforeend', tierRowHTML()); markUpdated(); updateInfographic(); }
+function addBracketRow(btn) { btn.closest('.subpanel').querySelector('.bracket-rows').insertAdjacentHTML('beforeend', bracketRowHTML()); markUpdated(); updateInfographic(); }
+function addProdRow(btn) { btn.closest('.subpanel').querySelector('.prod-rows').insertAdjacentHTML('beforeend', prodRowHTML()); markUpdated(); updateInfographic(); }
+function delRow(btn) { btn.closest('.kvrow').remove(); markUpdated(); updateInfographic(); }
+
+/* ---------- Panneau rémunération : init / bascule / preset ---------- */
+function initPayout(g, payout) {
+    const type = payout.type || 'none';
+    g.querySelector('.pay-type').value = type;
+    g.querySelector('.tier-rows').innerHTML = (payout.tiers || []).map(tierRowHTML).join('');
+    const brk = (payout.brackets && payout.brackets.length) ? payout.brackets : (type === 'perbox' ? [{ from:1 }] : []);
+    g.querySelector('.bracket-rows').innerHTML = brk.map(bracketRowHTML).join('');
+    g.querySelector('.pay-min').value = payout.min != null ? payout.min : '';
+    g.querySelector('.pay-level').value = payout.level || '';
+    if (type === 'perproduct') {
+        g.querySelector('.pp-min').value = payout.min != null ? payout.min : '';
+        g.querySelector('.pp-level').value = payout.level || '';
+    }
+    togglePayUI(g, type);
+}
+function togglePayUI(g, type) {
+    g.querySelector('.pay-tiers').style.display = type === 'tiers' ? 'block' : 'none';
+    g.querySelector('.pay-perbox').style.display = type === 'perbox' ? 'block' : 'none';
+    g.querySelector('.pay-perproduct').style.display = type === 'perproduct' ? 'block' : 'none';
+}
+function onPayType(sel) {
+    const g = sel.closest('.lab-input-group');
+    togglePayUI(g, sel.value);
+    if (sel.value === 'perbox' && !g.querySelector('.bracket-rows .kvrow')) g.querySelector('.bracket-rows').innerHTML = bracketRowHTML({ from:1 });
+    if (sel.value === 'tiers' && !g.querySelector('.tier-rows .kvrow')) g.querySelector('.tier-rows').innerHTML = tierRowHTML();
+    if (sel.value === 'perproduct') {
+        const pr = g.querySelector('.prod-rows');
+        if (!pr.querySelector('.kvrow')) pr.innerHTML = prodRowHTML();
+        const det = pr.closest('details'); if (det) det.open = true;
+    }
+    markUpdated(); updateInfographic();
+}
+
+/* ---------- Calcul de la rémunération ---------- */
+function fmtEur(n) { return (Math.round(n * 100) / 100).toLocaleString('fr-FR', { minimumFractionDigits:0, maximumFractionDigits:2 }) + ' €'; }
+function computePayout(actu, brackets) {
+    const bs = (brackets || []).filter(b => b.rate > 0).map(b => ({ from:Math.max(1, b.from || 1), rate:b.rate })).sort((a, b) => a.from - b.from);
+    if (!bs.length) return 0;
+    let total = 0;
+    for (let i = 0; i < bs.length; i++) {
+        const start = bs[i].from, end = (i + 1 < bs.length) ? bs[i + 1].from - 1 : Infinity;
+        if (actu < start) break;
+        const count = Math.min(actu, end) - start + 1;
+        if (count > 0) total += count * bs[i].rate;
+    }
+    return total;
+}
+function remStats(lab) {
+    const p = lab.payout || { type:'none' };
+    if (p.type === 'perbox') {
+        const min = p.min || 0, validated = min > 0 ? lab.actu >= min : true;
+        const rem = validated ? computePayout(lab.actu, p.brackets) : 0;
+        const bs = (p.brackets || []).filter(b => b.rate > 0).sort((a, b) => a.from - b.from);
+        const boosterFrom = bs.length > 1 ? bs[bs.length - 1].from : null;
+        return { type:'perbox', rem, validated, min, level:p.level, boosterFrom, inBooster: boosterFrom && lab.actu >= boosterFrom, missing: Math.max(0, min - lab.actu) };
+    }
+    if (p.type === 'perproduct') {
+        const min = p.min || 0, validated = min > 0 ? lab.actu >= min : true;
+        const sum = (lab.products || []).reduce((a, pr) => a + ((pr.qty || 0) * (pr.amount || 0)), 0);
+        return { type:'perproduct', validated, min, missing: Math.max(0, min - lab.actu), level:p.level, sum, fallback: sum === 0 };
+    }
+    if (p.type === 'tiers') {
+        const tiers = (p.tiers || []).filter(t => t.seuil > 0).sort((a, b) => a.seuil - b.seuil);
+        let prime = 0, current = null, next = null;
+        tiers.forEach(t => { if (lab.actu >= t.seuil) { prime += (t.prime || 0); current = t; } else if (!next) next = t; });
+        return { type:'tiers', tiers, current, next, prime, remaining: next ? next.seuil - lab.actu : 0 };
+    }
+    return { type:'none', rem:0 };
+}
+function tierNote(t) {
+    const parts = [t.current ? `Palier ${t.current.seuil} atteint` : 'Aucun palier atteint'];
+    if (t.next) parts.push(`prochain ${t.next.seuil} (+${t.remaining})`);
+    if (t.prime > 0) parts.push(`${fmtEur(t.prime)} acquis`);
+    return '🎯 ' + parts.join(' · ');
+}
+// Gains acquis (réalisé actuel) et estimés (projection de fin de période).
+function estimateGains(lab, projActu) {
+    const p = lab.payout || { type:'none' };
+    if (p.type === 'perbox') {
+        const min = p.min || 0;
+        const acquired = (min > 0 ? lab.actu >= min : true) ? computePayout(lab.actu, p.brackets) : 0;
+        const projValid = (min > 0 ? projActu >= min : true);
+        const projected = projValid ? computePayout(projActu, p.brackets) : 0;
+        const unlock = min > 0 ? computePayout(min, p.brackets) : 0;
+        return { type:'perbox', acquired, projected, projValid, unlock };
+    }
+    if (p.type === 'perproduct') {
+        const min = p.min || 0;
+        const sum = (lab.products || []).reduce((a, pr) => a + ((pr.qty || 0) * (pr.amount || 0)), 0);
+        const base = sum > 0 ? sum : lab.actu;                       // défaut : 1 €/boîte vendue
+        const validNow = min > 0 ? lab.actu >= min : true;
+        const validProj = min > 0 ? projActu >= min : true;
+        const acquired = validNow ? base : 0;
+        const projBase = sum > 0 ? (lab.actu > 0 ? sum * (projActu / lab.actu) : sum) : projActu;
+        const projected = validProj ? projBase : 0;
+        const unlock = sum > 0 ? sum : (min || lab.actu);
+        return { type:'perproduct', acquired, projected, unlock, fallback: sum === 0 };
+    }
+    if (p.type === 'tiers') {
+        const tiers = (p.tiers || []).filter(t => t.seuil > 0);
+        const sum = n => tiers.reduce((a, t) => a + (n >= t.seuil ? (t.prime || 0) : 0), 0);
+        return { type:'tiers', acquired:sum(lab.actu), projected:sum(projActu) };
+    }
+    return { type:'none', acquired:0, projected:0 };
+}
+function projActuOf(lab) { const s = computeStats(lab); return s.projected != null ? s.projected : lab.actu; }
+
+/* ---------- Aperçu ---------- */
+function updateInfographic() {
+    _statsCache = new WeakMap();
+    const preview = document.getElementById('preview-container');
+    preview.innerHTML = '';
+    const rawLabs = collectLabs();
+    const labs = rawLabs.map(labModel);
+
+    validateBlocks(); renderDeltas(labs); renderKPIs(labs); renderEmptyState(labs.length); saveState(rawLabs);
+
+    const mainTitle = document.getElementById('main-title-input').value;
+    const period = periodLabel(labs);
+    const withSummary = document.getElementById('summary-toggle').checked && labs.length > 0;
+    const cardPages = Math.ceil(labs.length / MAX_CARDS_PER_PAGE);
+    const offset = withSummary ? 1 : 0, totalPages = offset + cardPages, pages = [];
+
+    if (withSummary) pages.push(buildSummaryPage(labs, mainTitle, period, 1, totalPages));
+    for (let i = 0; i < labs.length; i += MAX_CARDS_PER_PAGE)
+        pages.push(buildCardPage(labs.slice(i, i + MAX_CARDS_PER_PAGE), mainTitle, period, offset + Math.floor(i/MAX_CARDS_PER_PAGE) + 1, totalPages));
+
+    pages.forEach((p, idx) => {
+        preview.appendChild(p);
+        if (idx < pages.length - 1) { const b = document.createElement('div'); b.className = 'html2pdf__page-break'; preview.appendChild(b); }
+    });
+    if (typeof fitPreview === 'function') fitPreview();
+}
+
+/* ---------- Éléments de design du rapport ---------- */
+function crossMark(size, color) { return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="${color}"><rect x="9.2" y="3" width="5.6" height="18" rx="1.8"/><rect x="3" y="9.2" width="18" height="5.6" rx="1.8"/></svg>`; }
+
+function donutSVG(percent, color) {
+    const r = 33, c = 2 * Math.PI * r, fill = Math.max(0, Math.min(percent, 100)) / 100 * c;
+    return `<svg width="84" height="84" viewBox="0 0 84 84">
+        <circle cx="42" cy="42" r="${r}" fill="none" stroke="#e6ebe8" stroke-width="9"/>
+        <circle cx="42" cy="42" r="${r}" fill="none" stroke="${color}" stroke-width="9" stroke-linecap="round" stroke-dasharray="${fill.toFixed(2)} ${(c-fill).toFixed(2)}" transform="rotate(-90 42 42)"/>
+    </svg>`;
+}
+
+function statusVisual(s) {
+    if (!s.hasObj) return { color:'#94a3b8', soft:'#f1f5f4', label:'Sans objectif' };
+    if (s.percent >= 100) return { color:'#059669', soft:'#e7f5ef', label:'Objectif atteint' };
+    if (s.status === 'ended') return { color:'#dc2626', soft:'#fcebea', label:'Manqué' };
+    if (s.status === 'upcoming') return { color:'#64748b', soft:'#f1f5f4', label:'À venir' };
+    if (s.onTrack) return { color:'#059669', soft:'#e7f5ef', label:'Dans les temps' };
+    return { color:'#d97706', soft:'#fbf1e3', label:'En retard' };
+}
+
+function periodLabel(labs) {
+    // Période affichée : du début le plus ancien des challenges EN COURS
+    // à la date de fin la plus fréquente (ex. 3 fins au 31/08 et 1 au 30/09 → 31/08).
+    const today = new Date().toISOString().slice(0, 10);
+    let pool = labs.filter(l => l.end && l.end >= today);
+    if (!pool.length) pool = labs;                               // repli : tout est expiré
+    const starts = pool.map(l => l.start).filter(Boolean).sort();
+    const ends = pool.map(l => l.end).filter(Boolean);
+    if (!starts.length || !ends.length) return '';
+    const freq = {};
+    ends.forEach(e => { freq[e] = (freq[e] || 0) + 1; });
+    const end = Object.keys(freq).sort((a, b) => freq[b] - freq[a] || a.localeCompare(b))[0];
+    return `${formatDate(starts[0])} – ${formatDate(end)}`;
+}
+
+function logoSrc(logo) {
+    return logo ? (logo.startsWith('data:') ? logo : `https://images.weserv.nl/?url=${encodeURIComponent(logo.replace(/^https?:\/\//,''))}&n=-1`) : LOGO_PLACEHOLDER;
+}
+
+function masthead(title, period, pageNo, totalPages, label) {
+    return `<div class="mast">
+        <div class="mast-l">
+            <div class="mast-badge">${crossMark(20,'#fff')}</div>
+            <div><h1>${esc(title)}</h1><div class="sub">${period ? 'Période ' + period + ' · ' : ''}Édité le ${new Date().toLocaleDateString('fr-FR')}</div></div>
+        </div>
+        <div class="page-pill">${label ? label + ' · ' : ''}Page ${pageNo} / ${totalPages}</div>
+    </div>`;
+}
+function pfoot() { return `<div class="pfoot"><span>Document interne · Confidentialité Pharmacie</span><span class="gc">${crossMark(12,'#047857')} Challenges Pharmacie</span></div>`; }
+
+function buildCardPage(pageLabs, mainTitle, period, pageNo, totalPages) {
+    const page = document.createElement('div'); page.className = 'a4-page';
+    const cards = pageLabs.map(lab => {
+        const s = computeStats(lab), v = statusVisual(s);
+        const pc = s.hasObj ? Math.round(s.percent) : null;
+        const centre = pc == null ? '—' : (s.percent >= 100 ? '✓' : `${pc}<small>%</small>`);
+        const dl = daysLeft(lab.end);
+        const dayChip = dl == null ? '' : (dl < 0 ? `<span class="chip-p exp">Expiré</span>` : dl === 0 ? `<span class="chip-p soon">Dernier jour</span>` : dl <= 7 ? `<span class="chip-p soon">J-${dl}</span>` : `<span class="chip-p">J-${dl}</span>`);
+        const rs = remStats(lab);
+        const projActu = s.projected != null ? s.projected : lab.actu;
+        const g2 = estimateGains(lab, projActu);
+        let payHTML = '';
+        if (rs.type === 'tiers' && rs.tiers.length) {
+            const proj = (g2.projected > g2.acquired) ? ` · ≈ ${fmtEur(g2.projected)} estimés` : '';
+            payHTML = `<div class="tier-block">
+                    <div class="tier-segs">${rs.tiers.map(x => `<div class="seg" style="${lab.actu >= x.seuil ? 'background:' + v.color : ''}"></div>`).join('')}</div>
+                    <div class="tier-labels">${rs.tiers.map(x => `<span>${x.seuil}</span>`).join('')}</div>
+                    <div class="tier-note">${tierNote(rs)}${proj}</div>
+                </div>`;
+        } else if (rs.type === 'perbox' || rs.type === 'perproduct') {
+            const minLine = rs.min
+                ? (rs.validated
+                    ? `<div class="pay-min ok">Minimum trimestriel ${rs.min} atteint ✓</div>`
+                    : `<div class="pay-min ko">Min. trim. ${rs.min} non atteint — manque ${rs.missing} → débloque ≈ ${fmtEur(g2.unlock)}</div>`)
+                : '';
+            const tag = rs.type === 'perproduct'
+                ? (rs.level ? ` · ${esc(rs.level)}` : '') + (g2.fallback ? ' · défaut 1 €/boîte' : ' · par produit')
+                : (rs.level ? ` · ${esc(rs.level)}` : '') + (rs.inBooster ? ' ⚡' : '');
+            payHTML = `<div class="pay-block">
+                    <div class="pay-amt">💶 ${g2.acquired > 0 ? fmtEur(g2.acquired) : '—'} acquis${tag}</div>
+                    <div class="pay-proj">≈ ${fmtEur(g2.projected)} estimés en fin de période</div>
+                    ${minLine}
+                </div>`;
+        }
+        const prods = lab.products || [];
+        const prodHTML = prods.length ? `<div class="prods">
+                    <span class="eyebrow" style="display:block;margin-bottom:4px">Produits challengés</span>
+                    <div class="prods-box">${prods.slice(0,2).map(p => `<div class="prods-row"><span>${esc(p.name)}${p.qty ? ` ×${p.qty}` : ''}</span><span class="amt">${p.qty ? fmtEur(p.qty * p.amount) : fmtEur(p.amount)}</span></div>`).join('')}${prods.length > 2 ? `<div class="prods-more">+${prods.length-2} autre(s)</div>` : ''}</div>
+                </div>`
+            : (rs.type === 'none' ? `<div class="pcard-target"><span class="eyebrow">Cible</span><span class="tval">${esc(lab.gamme)}</span></div>` : '');
+        return `
+            <div class="pcard" style="--st:${v.color};--st-soft:${v.soft}">
+                <div class="pcard-head">
+                    <div class="pcard-name">${esc(lab.name)}</div>
+                    <img class="pcard-logo" src="${logoSrc(lab.logo)}" crossorigin="anonymous" referrerpolicy="no-referrer" onerror="this.src='${LOGO_PLACEHOLDER}'">
+                </div>
+                <div class="pcard-main">
+                    <div class="gauge">${donutSVG(s.hasObj ? s.percent : 0, s.hasObj ? v.color : '#cbd5d0')}<div class="val"><div class="pc">${centre}</div></div></div>
+                    <div class="pcard-readout">
+                        <div class="big">${lab.actu}<span> / ${lab.obj}</span></div>
+                        <div class="eyebrow" style="margin-top:4px">Réalisé / Objectif</div>
+                        <span class="st-pill">${v.label}</span>
+                    </div>
+                </div>
+                ${payHTML}
+                ${prodHTML}
+                <div class="pcard-foot">
+                    <div class="chips"><span class="chip-p">📅 ${formatDate(lab.start)} → ${formatDate(lab.end)}</span>${dayChip}</div>
+                    ${s.pace ? `<div class="pace2">${s.pace}</div>` : ''}
+                </div>
+            </div>`;
+    }).join('');
+    page.innerHTML = masthead(mainTitle, period, pageNo, totalPages, '') + `<div class="cards-grid">${cards}</div>` + pfoot();
+    return page;
+}
+
+function buildSummaryPage(labs, mainTitle, period, pageNo, totalPages) {
+    const k = kpiValues(labs);
+    const ranked = labs.map(l => ({ l, s: computeStats(l) })).filter(x => x.s.hasObj).sort((a, b) => b.s.percent - a.s.percent);
+    const podium = ranked.slice(0, 3);
+    const order = [podium[1], podium[0], podium[2]], heights = [66, 90, 52], medal = {0:'🥇',1:'🥈',2:'🥉'};
+    const podiumHTML = order.map((x, i) => {
+        if (!x) return '<div class="col"></div>';
+        const v = statusVisual(x.s);
+        return `<div class="col"><div class="medal">${medal[podium.indexOf(x)]}</div><div class="nm">${esc(x.l.name)}</div><div class="bar" style="height:${heights[i]}px;background:${v.color}">${Math.round(x.s.percent)}%</div></div>`;
+    }).join('');
+
+    const rows = ranked.map(x => {
+        const v = statusVisual(x.s), pct = Math.round(x.s.percent);
+        return `<tr>
+            <td class="nm">${esc(x.l.name)}</td>
+            <td><div class="rbar"><i style="width:${Math.min(pct,100)}%;background:${v.color}"></i></div></td>
+            <td style="font-weight:800">${pct}%</td>
+            <td>${x.l.actu} / ${x.l.obj}</td>
+            <td>${formatDate(x.l.end)}</td>
+            <td><span class="st-pill" style="--st:${v.color};--st-soft:${v.soft}">${v.label}</span></td>
+        </tr>`;
+    }).join('');
+
+    const watchNames = labs.map(l => ({ l, s: computeStats(l) }))
+        .filter(x => x.s.hasObj && x.s.status === 'running' && x.s.percent < 100 && (x.s.onTrack === false || (x.s.dleft != null && x.s.dleft <= 7)))
+        .map(x => x.l.name);
+    const watch = watchNames.length ? `<div class="watch">⚠️ <b>À surveiller :</b> ${watchNames.map(esc).join(' · ')} — rythme insuffisant ou échéance proche.</div>` : '';
+
+    const tiles = [
+        { n:k.total, l:'Challenges', c:'var(--ink)' },
+        { n:`${k.achieved}/${k.withObj}`, l:'Objectifs atteints', c:'#059669' },
+        { n:`${k.avg}%`, l:'Complétion moyenne', c: k.avg>=75?'#059669':(k.avg>=50?'#d97706':'#dc2626') }
+    ];
+    tiles.push(k.hasPayout
+        ? { n:fmtEur(k.totalProj), l:'Gains estimés (fin)', c:'#047857' }
+        : (prevSnapshot
+            ? { n:`${k.delta>=0?'+':''}${k.delta}`, l:`Depuis le ${formatDate(prevSnapshot.date)}`, c: k.delta>0?'#059669':'var(--rmut)' }
+            : { n:k.behind, l:'En retard sur le rythme', c: k.behind?'#d97706':'var(--ink)' }));
+    const tilesHTML = tiles.map(t => `<div class="kpi-tile"><div class="n" style="color:${t.c}">${t.n}</div><div class="l">${t.l}</div></div>`).join('');
+
+    const div = document.createElement('div'); div.className = 'a4-page';
+    div.innerHTML = `
+        <div class="cover-mast">
+            <div class="row">
+                <div class="cover-badge">${crossMark(28,'#fff')}</div>
+                <div class="page-pill">Synthèse · Page ${pageNo} / ${totalPages}</div>
+            </div>
+            <h1>${esc(mainTitle)}</h1>
+            <div class="sub">${period ? 'Période ' + period + '  ·  ' : ''}Édité le ${new Date().toLocaleDateString('fr-FR')}</div>
+        </div>
+        <div class="kpi-band">${tilesHTML}</div>
+        ${k.hasPayout ? `<div class="gains-line">💶 Gains acquis à ce jour : <b>${fmtEur(k.totalAcq)}</b> &nbsp;·&nbsp; estimés en fin de période (au rythme actuel) : <b>${fmtEur(k.totalProj)}</b></div>` : ''}
+        ${podium.length ? `<div class="sec-title">Podium</div><div class="podium2">${podiumHTML}</div>` : ''}
+        ${watch}
+        <div class="sec-title">Classement détaillé</div>
+        <table class="rtable">
+            <thead><tr><th>Laboratoire</th><th>Avancement</th><th>%</th><th>Réalisé</th><th>Échéance</th><th>Statut</th></tr></thead>
+            <tbody>${rows}</tbody>
+        </table>
+        <div style="margin-top:auto">${pfoot()}</div>`;
+    return div;
+}
+
+function timeBadge(endStr) {
+    const d = daysLeft(endStr);
+    if (d === null) return '';
+    if (d < 0) return `<span class="badge time-badge expired">⏱️ Expiré</span>`;
+    if (d === 0) return `<span class="badge time-badge soon">⏱️ Dernier jour</span>`;
+    if (d <= 7) return `<span class="badge time-badge soon">⏱️ J-${d}</span>`;
+    return `<span class="badge time-badge ok">⏱️ J-${d}</span>`;
+}
+
+function kpiValues(labs) {
+    let achieved=0, sumCapped=0, endingSoon=0, expired=0, withObj=0, behind=0;
+    labs.forEach(l => {
+        const s = computeStats(l);
+        if (s.dleft !== null && s.dleft < 0) expired++;
+        else if (s.dleft !== null && s.dleft <= 7) endingSoon++;
+        if (s.hasObj) { withObj++; if (s.percent >= 100) achieved++; sumCapped += Math.min(s.percent, 100); if (s.status === 'running' && s.onTrack === false) behind++; }
+    });
+    const avg = withObj ? Math.round(sumCapped / withObj) : 0;
+    let delta = 0;
+    if (prevSnapshot) labs.forEach(l => { const m = prevSnapshot.labs.find(x => x.lab === l.name); if (m) delta += (l.actu - m.actu); });
+    let totalAcq = 0, totalProj = 0, hasPayout = false;
+    labs.forEach(l => { const p = l.payout; if (p && p.type && p.type !== 'none') { hasPayout = true; const g = estimateGains(l, projActuOf(l)); totalAcq += g.acquired; totalProj += g.projected; } });
+    return { total:labs.length, achieved, withObj, avg, avgColor: avg>=75?'var(--success)':(avg>=50?'var(--warning)':'var(--danger)'), endingSoon, expired, behind, delta, totalAcq, totalProj, hasPayout };
+}
+
+function renderKPIs(labs) {
+    const k = kpiValues(labs);
+    const items = [
+        { num:k.total, lbl:'Challenges', color:'var(--primary)' },
+        { num:`${k.achieved}/${k.withObj}`, lbl:'Objectifs atteints', color:'var(--success)' },
+        { num:`${k.avg}%`, lbl:'Complétion moyenne', color:k.avgColor },
+        { num:k.behind, lbl:'En retard', color:k.behind?'var(--warning)':'var(--secondary)' },
+        { num:k.endingSoon, lbl:'Se terminent < 7 j', color:k.endingSoon?'var(--warning)':'var(--secondary)' }
+    ];
+    if (prevSnapshot) items.push({ num:`${k.delta>=0?'+':''}${k.delta}`, lbl:`Depuis le ${formatDate(prevSnapshot.date)}`, color:k.delta>0?'var(--success)':'var(--secondary)' });
+    else items.push({ num:k.expired, lbl:'Expirés', color:k.expired?'var(--danger)':'var(--secondary)' });
+    if (k.hasPayout) items.push({ num:fmtEur(k.totalProj), lbl:'Gains estimés', color:'var(--success)' });
+    document.getElementById('kpi-bar').innerHTML = items.map(i => `<div class="kpi"><div class="num" style="color:${i.color}">${i.num}</div><div class="lbl">${i.lbl}</div></div>`).join('');
+}
+
+function renderDeltas(labs) {
+    blocks().forEach((g, i) => {
+        const badge = g.querySelector('.delta-badge');
+        const name = labs[i].name;
+        if (!prevSnapshot || name === '---') { badge.textContent = ''; badge.className = 'delta-badge delta-flat'; return; }
+        const m = prevSnapshot.labs.find(x => x.lab === name);
+        if (!m) { badge.textContent = ''; return; }
+        const d = labs[i].actu - m.actu;
+        badge.textContent = (d > 0 ? '+' : '') + d;
+        badge.className = 'delta-badge ' + (d > 0 ? 'delta-up' : 'delta-flat');
+        badge.title = `Évolution depuis le ${formatDate(prevSnapshot.date)}`;
+    });
+}
+
+function renderEmptyState(count) {
+    document.getElementById('empty-state').innerHTML = count ? '' : `<div class="empty-state">Aucun challenge. Cliquez sur « Ajouter un labo » ou « Charger un fichier » pour commencer.</div>`;
+}
+
+/* ---------- Garde-fous ---------- */
+function validateBlocks() {
+    blocks().forEach(g => {
+        const start = g.querySelector('.in-start'), end = g.querySelector('.in-end');
+        const obj = parseFloat(g.querySelector('.in-obj').value) || 0, actu = parseFloat(g.querySelector('.in-actu').value) || 0;
+        const msg = g.querySelector('.block-msg'), notes = [];
+        end.classList.remove('invalid');
+        if (start.value && end.value && end.value < start.value) { end.classList.add('invalid'); notes.push(`<span class="err">⚠️ La date de fin précède le début.</span>`); }
+        if (obj > 0 && obj <= 1 && actu / obj > 50) notes.push(`<span class="warn">⚠️ Objectif = ${obj} : probable erreur de saisie.</span>`);
+        msg.innerHTML = notes.join(' ');
+    });
+}
+
+/* ---------- Historique / sparkline / mises à jour ---------- */
+function loadHistory() { try { const r = localStorage.getItem(HISTORY_KEY); return r ? JSON.parse(r) : []; } catch (e) { return []; } }
+function saveHistory(h) { try { localStorage.setItem(HISTORY_KEY, JSON.stringify(h)); } catch (e) {} }
+function previousSnapshot() { const today = new Date().toISOString().slice(0,10); const h = loadHistory().filter(e => e.date < today); return h.length ? h[h.length-1] : null; }
+
+function captureSnapshot(manual) {
+    const today = new Date().toISOString().slice(0,10);
+    const labs = collectLabs().filter(l => l.lab).map(l => ({ lab:l.lab, actu:parseFloat(l.actuel)||0, obj:parseFloat(l.obj)||0 }));
+    if (!labs.length) { if (manual) alert("Aucun challenge à enregistrer."); return; }
+    let h = loadHistory().filter(e => e.date !== today);
+    h.push({ date:today, labs }); h = h.slice(-60); saveHistory(h);
+    refreshSparklines();
+    if (manual) showToast(`Point d'historique enregistré (${today}).`, "OK");
+}
+function autoWeeklySnapshot() {
+    const h = loadHistory();
+    const last = h.length ? parseDate(h[h.length-1].date) : null;
+    if (!last || (todayMidnight() - last) >= 7 * MS_DAY) captureSnapshot(false);
+}
+
+function seriesFor(name) { return loadHistory().map(e => { const m = e.labs.find(x => x.lab === name); return m ? m.actu : null; }).filter(v => v !== null); }
+function sparkSVG(values) {
+    if (values.length < 2) return '<span style="color:#cbd5e1">pas encore de données</span>';
+    const w = 120, h = 26, max = Math.max(...values, 1), min = Math.min(...values), span = (max - min) || 1;
+    const pts = values.map((v, i) => `${((i/(values.length-1))*(w-4)+2).toFixed(1)},${(h-2-((v-min)/span)*(h-6)).toFixed(1)}`).join(' ');
+    const col = values[values.length-1] >= values[0] ? '#22c55e' : '#ef4444';
+    return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><polyline points="${pts}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+}
+function refreshSparklines() { blocks().forEach(g => { const name = g.querySelector('.in-name').value; g.querySelector('.spark-svg').innerHTML = name ? sparkSVG(seriesFor(name)) : '—'; }); }
+
+function markUpdated() { lastUpdate = new Date().toISOString(); }
+function renderUpdateBanner() {
+    const b = document.getElementById('update-banner');
+    if (!lastUpdate) { b.className = 'update-banner'; return; }
+    const days = Math.floor((Date.now() - new Date(lastUpdate)) / MS_DAY);
+    const when = new Date(lastUpdate).toLocaleDateString('fr-FR', { weekday:'short', day:'2-digit', month:'2-digit' });
+    if (days >= 7) b.className = 'update-banner warn', b.innerHTML = `⏰ Dernière mise à jour : ${when} (il y a ${days} j). Pensez à actualiser les ventes (point hebdo du mercredi).`;
+    else b.className = 'update-banner info', b.innerHTML = `✔ Données à jour — dernière saisie : ${when}.`;
+}
+
+/* ---------- Nouvelle période ---------- */
+function newPeriod() {
+    const labs = collectLabs();
+    if (!labs.length) { alert("Aucun challenge à reconduire."); return; }
+    if (!confirm("Reconduire ces challenges pour une nouvelle période ?\n\n• Un point d'historique de la période actuelle est enregistré\n• Le « réalisé » et la saisie mensuelle repassent à 0\n• Les dates sont décalées d'une durée équivalente\n\nObjectifs et gammes conservés.")) return;
+    captureSnapshot(false);
+    blocks().forEach((g, i) => {
+        const l = labs[i];
+        const start = parseDate(l.start), end = parseDate(l.end);
+        if (start && end && end > start) {
+            const dur = end - start, ns = new Date(end.getTime() + MS_DAY), ne = new Date(ns.getTime() + dur);
+            g.querySelector('.in-start').value = ns.toISOString().slice(0,10);
+            g.querySelector('.in-end').value = ne.toISOString().slice(0,10);
+        }
+        g.querySelector('.months-data').value = '{}';
+        g.querySelector('.in-actu').value = 0;
+        syncMonths(g);
+    });
+    prevSnapshot = previousSnapshot();
+    markUpdated(); updateInfographic(); refreshSparklines(); renderUpdateBanner();
+    showToast("Nouvelle période créée. Ajustez les dates si besoin.", "OK");
+}
+
+/* ---------- Divers ---------- */
+function formatDate(s) { const d = parseDate(s); if (!d) return "??/??"; return d.toLocaleDateString('fr-FR', { day:'2-digit', month:'2-digit', year:'2-digit' }); }
+function esc(v) { if (v === undefined || v === null) return ''; return String(v).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+let _lastSavedJSON = null;
+function saveState(rawLabs) {
+    try {
+        const json = JSON.stringify({ title:document.getElementById('main-title-input').value, labs:rawLabs || collectLabs(), lastUpdate });
+        if (json === _lastSavedJSON) return;           // rien n'a changé : pas d'écriture ni de re-rendu
+        _lastSavedJSON = json;
+        localStorage.setItem(STORAGE_KEY, json);
+        const el = document.getElementById('save-state');
+        if (el) el.textContent = '✔ Enregistré automatiquement à ' + new Date().toLocaleTimeString('fr-FR');
+        renderUpdateBanner();
+        renderStorage();
+    } catch (e) {}
+}
+function loadState() { try { const r = localStorage.getItem(STORAGE_KEY); return r ? JSON.parse(r) : null; } catch (e) { return null; } }
+
+/* ---------- Import / export ---------- */
+function exportToJSON() { download(new Blob([JSON.stringify(collectData(), null, 2)], { type:"application/json" }), `challenges_${new Date().toISOString().slice(0,10)}.json`); }
+function exportToCSV() {
+    const rows = [["Laboratoire","Gamme","Debut","Fin","Objectif","Realise","Progression_%","Projection","Base_projection","Jours_restants","Statut","Remun_type","Niveau","Min_trim","Valide","Gains_acquis_EUR","Gains_estimes_EUR","Produits_bareme"]];
+    collectLabs().forEach(l => { const lab = labModel(l), s = computeStats(lab), rs = remStats(lab);
+        const g = estimateGains(lab, s.projected != null ? s.projected : lab.actu);
+        const prods = (lab.products || []).map(p => `${p.name}: ${p.amount}€`).join(' | ');
+        const niveau = rs.type === 'perbox' ? (rs.level || '') : (rs.type === 'perproduct' ? (rs.level || 'par produit') : (rs.type === 'tiers' ? 'paliers' : ''));
+        const minT = (rs.type === 'perbox' || rs.type === 'perproduct') ? rs.min : '';
+        const valide = (rs.type === 'perbox' || rs.type === 'perproduct') ? (rs.validated ? 'oui' : 'non') : '';
+        const acq = rs.type !== 'none' ? g.acquired : '';
+        const est = rs.type !== 'none' ? g.projected : '';
+        rows.push([l.lab, l.gamme, l.start, l.end, lab.obj, lab.actu, s.hasObj?Math.round(s.percent):'', s.projected ?? '', s.basis, s.dleft ?? '', s.status, rs.type, niveau, minT, valide, acq, est, prods]); });
+    const csv = rows.map(r => r.map(c => {
+        let s = String(c);
+        if (/^[=+@\t\r]/.test(s) || (/^-/.test(s) && isNaN(Number(s)))) s = "'" + s;   // anti-injection de formule
+        return `"${s.replace(/"/g, '""')}"`;
+    }).join(';')).join('\r\n');
+    download(new Blob(["\uFEFF" + csv], { type:"text/csv;charset=utf-8;" }), `challenges_${new Date().toISOString().slice(0,10)}.csv`);
+}
+function importFromFile(input) {
+    const file = input.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        try {
+            const config = JSON.parse(e.target.result);
+            document.getElementById('inputs-container').innerHTML = '';
+            document.getElementById('main-title-input').value = config.title || "Challenges Pharmacie";
+            (config.labs || []).forEach(lab => appendLabBlock(lab));
+            if (Array.isArray(config.history)) saveHistory(config.history);
+            if (config.lastUpdate) lastUpdate = config.lastUpdate;
+            if (config.repartition && config.repartition.settings) { repState = config.repartition; repSave(); }
+            prevSnapshot = previousSnapshot();
+            currentSort = 'manual'; reflectSortChips();
+            updateInfographic(); refreshSparklines(); renderUpdateBanner();
+        } catch (err) { alert("Fichier illisible. Sélectionnez un export .json (ou un ancien .db) généré par cet outil."); }
+    };
+    reader.readAsText(file); input.value = '';
+}
+function download(blob, filename) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+/* ---------- PDF (repli impression hors-ligne) ---------- */
+function generatePDF() {
+    const element = document.getElementById('preview-container');
+    if (typeof html2pdf === 'undefined') { showToast("Mode hors-ligne : utilisez la fenêtre d'impression (Enregistrer en PDF).", "OK"); window.print(); return; }
+    const opt = { margin:0, filename:`Rapport_Challenges_${new Date().toISOString().slice(0,10)}.pdf`, image:{ type:'jpeg', quality:0.98 },
+        html2canvas:{ scale:2, useCORS:true, scrollY:0, windowWidth:840 }, jsPDF:{ unit:'mm', format:'a4', orientation:'portrait' }, pagebreak:{ mode:['css','legacy'] } };
+    const prevZoom = element.style.zoom; element.style.zoom = '';   // taille réelle pour la capture (mobile)
+    document.body.classList.add('pdf-capture');                     // alignement gauche, marges/ombres neutralisées
+    window.scrollTo(0,0);
+    const done = () => { document.body.classList.remove('pdf-capture'); element.style.zoom = prevZoom; fitPreview(); };
+    html2pdf().set(opt).from(element).save().then(done).catch(done);
+}
+</script>
+</body>
+</html>
