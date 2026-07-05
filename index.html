@@ -260,6 +260,12 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .carte-svg .tuile:hover rect{filter:brightness(1.08)}
 .carte-svg text{pointer-events:none}
 
+.region-bloc{margin-top:12px}
+.region-nom{font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;color:var(--encre2);font-weight:600;margin-bottom:6px}
+.region-tuiles{display:flex;flex-wrap:wrap;gap:6px}
+.tuile-monde{border-radius:9px;padding:9px 13px;font-weight:700;border:1px solid;cursor:pointer;font-size:.84rem;font-family:inherit}
+.tuile-monde:active{transform:translateY(1px)}
+
 /* ================= OPTIMISATION MOBILE (iPhone / PWA) ================= */
 header{padding-top:calc(14px + env(safe-area-inset-top))}
 @media (max-width:640px){
@@ -537,6 +543,7 @@ function fmtDate(iso){
   const d = new Date(iso); if(isNaN(d)) return iso;
   return d.toLocaleDateString("fr-FR");
 }
+function lienNumistaFR(u){ return u ? String(u).replace("//en.numista.com","//fr.numista.com") : u; }
 function uuid(){
   return (crypto.randomUUID) ? crypto.randomUUID()
     : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{
@@ -964,7 +971,7 @@ async function sauverFormulaire(id){
     grade:$("#f-grade").value||null, notesGrade:lire("notesGrade"),
     prixAchat:lire("prixAchat",1), dateAchat:lire("dateAchat"),
     coteEstimee:lire("coteEstimee",1), dateCote:lire("dateCote"), sourceCote:lire("sourceCote"),
-    numeroKM:lire("numeroKM"), lienNumista:lire("lienNumista"), notes:lire("notes"),
+    numeroKM:lire("numeroKM"), lienNumista:lienNumistaFR(lire("lienNumista")), notes:lire("notes"),
     photoAvers:photosTemp.photoAvers, photoRevers:photosTemp.photoRevers,
     photoTranche:photosTemp.photoTranche, miniature:photosTemp.miniature
   });
@@ -1037,6 +1044,7 @@ async function importerTexte(){
     if(!brut || !brut.nom){ ignorees++; continue; }
     const p={...brut};
     if(!p.id) p.id=uuid();
+    if(p.lienNumista) p.lienNumista = lienNumistaFR(p.lienNumista);
     if(!p.ajoute) p.ajoute=new Date().toISOString().slice(0,10);
     const i=etat.pieces.findIndex(x=>x.id===p.id);
     if(i>=0){
@@ -1280,6 +1288,13 @@ $("#grillePieces").addEventListener("keydown",e=>{
         await detecterSerie(p);
         await dbSauver(p);
       }
+    }
+  }
+  /* Normalisation des liens Numista vers la version française */
+  for(const p of etat.pieces){
+    if(p.lienNumista && p.lienNumista.includes("//en.numista.com")){
+      p.lienNumista = lienNumistaFR(p.lienNumista);
+      await dbSauver(p);
     }
   }
   rafraichir();
@@ -1721,6 +1736,48 @@ document.addEventListener("click", e=>{
 /* =====================================================================
    v5 — Carte d'Europe interactive (dénombrement par pays)
 ===================================================================== */
+const MONDE = {
+  "Asie":{
+    JP:{nom:"Japon",alias:["japon","japan","nippon"]},
+    CN:{nom:"Chine",alias:["chine","china"]},
+    IN:{nom:"Inde",alias:["inde","india"]},
+    KR:{nom:"Corée du Sud",alias:["coree","korea"]},
+    TH:{nom:"Thaïlande",alias:["thailande","thailand"]},
+    VN:{nom:"Vietnam",alias:["vietnam","viet nam"]},
+    ID:{nom:"Indonésie",alias:["indonesie","indonesia"]},
+    HK:{nom:"Hong Kong",alias:["hong kong","hong-kong"]}
+  },
+  "Amériques":{
+    US:{nom:"États-Unis",alias:["etats-unis","etats unis","usa","united states"]},
+    CA:{nom:"Canada",alias:["canada"]},
+    MX:{nom:"Mexique",alias:["mexique","mexico"]},
+    BR:{nom:"Brésil",alias:["bresil","brazil"]},
+    AR:{nom:"Argentine",alias:["argentine","argentina"]},
+    PE:{nom:"Pérou",alias:["perou","peru"]},
+    CL:{nom:"Chili",alias:["chili","chile"]}
+  },
+  "Afrique & Moyen-Orient":{
+    MA:{nom:"Maroc",alias:["maroc","morocco"]},
+    DZ:{nom:"Algérie",alias:["algerie","algeria"]},
+    TN:{nom:"Tunisie",alias:["tunisie","tunisia"]},
+    EG:{nom:"Égypte",alias:["egypte","egypt"]},
+    ZA:{nom:"Afrique du Sud",alias:["afrique du sud","south africa"]},
+    IL:{nom:"Israël",alias:["israel"]},
+    TR:{nom:"Turquie",alias:["turquie","turkey"]},
+    AE:{nom:"Émirats arabes unis",alias:["emirats","dubai"]}
+  },
+  "Océanie":{
+    AU:{nom:"Australie",alias:["australie","australia"]},
+    NZ:{nom:"Nouvelle-Zélande",alias:["nouvelle-zelande","nouvelle zelande","new zealand"]}
+  }
+};
+function trouverMonde(pays){
+  const n = normTxt(pays||""); if(!n) return null;
+  for(const [region,liste] of Object.entries(MONDE))
+    for(const [code,p] of Object.entries(liste))
+      if(p.alias.some(al=>n===al||n.includes(al))) return {region,code,nom:p.nom};
+  return null;
+}
 function allerVue(nom){
   document.querySelectorAll(".onglet").forEach(x=>x.classList.toggle("actif",x.dataset.vue===nom));
   document.querySelectorAll(".vue").forEach(v=>v.classList.toggle("active",v.id==="vue-"+nom));
@@ -1736,11 +1793,13 @@ function couleurTuile(n){
 function rendreCarte(){
   const el=$("#cartePays"); if(!el) return;
   const ps = etat.pieces.filter(p=>!p.vendu);
-  const compte={}, autres={};
+  const compte={}, regions={}, autres={};
   for(const p of ps){
     const q = parseInt(p.quantite)||1;
     const code = trouverCodePays(p.pays);
-    if(code) compte[code]=(compte[code]||0)+q;
+    if(code){ compte[code]=(compte[code]||0)+q; continue; }
+    const m = trouverMonde(p.pays);
+    if(m){ regions[m.region]=regions[m.region]||{}; regions[m.region][m.code]=(regions[m.region][m.code]||0)+q; }
     else if(p.pays) autres[p.pays]=(autres[p.pays]||0)+q;
   }
   const S=34,G=4,PAS=S+G;
@@ -1755,12 +1814,28 @@ function rendreCarte(){
       <text x="${x+S/2}" y="${y+26}" text-anchor="middle" font-size="${n>99?10:13}" font-weight="700" fill="${c.t}" font-family="inherit">${n||""}</text>
     </g>`;
   }).join("");
-  el.innerHTML = `<svg class="carte-svg" viewBox="0 0 ${(maxX+1)*PAS-G} ${(maxY+1)*PAS-G}" role="img" aria-label="Carte des pièces par pays">${tuiles}</svg>`;
+  el.innerHTML = `<svg class="carte-svg" viewBox="-2 -2 ${(maxX+1)*PAS-G+4} ${(maxY+1)*PAS-G+4}" role="img" aria-label="Carte des pièces par pays">${tuiles}</svg>`;
   const autresEl=$("#cartAutres");
-  const entA=Object.entries(autres).sort((a,b)=>b[1]-a[1]);
-  autresEl.innerHTML = entA.length
-    ? `<p class="vide-note" style="margin-top:10px">Hors carte : ${entA.map(([p,n])=>`${esc(p)} (${n})`).join(" · ")}</p>`
-    : "";
+  let htmlMonde="";
+  for(const [region,liste] of Object.entries(MONDE)){
+    const possedes = Object.keys(liste).filter(c=>regions[region] && regions[region][c]);
+    if(!possedes.length) continue;
+    htmlMonde += `<div class="region-bloc"><div class="region-nom">${esc(region)}</div><div class="region-tuiles">`+
+      possedes.sort((x,y)=>regions[region][y]-regions[region][x]).map(c=>{
+        const n=regions[region][c], col=couleurTuile(n);
+        return `<button class="tuile-monde" data-r="${esc(region)}" data-c="${c}" style="background:${col.f};border-color:${col.s};color:${col.t}">${esc(liste[c].nom)} · ${n}</button>`;
+      }).join("")+`</div></div>`;
+  }
+  const entA=Object.entries(autres).sort((x,y)=>y[1]-x[1]);
+  if(entA.length) htmlMonde += `<p class="vide-note" style="margin-top:10px">Autres : ${entA.map(([p,n])=>`${esc(p)} (${n})`).join(" · ")}</p>`;
+  autresEl.innerHTML = htmlMonde;
+  if(!autresEl._lie){
+    autresEl._lie=true;
+    autresEl.addEventListener("click",e=>{
+      const b=e.target.closest(".tuile-monde");
+      if(b) filtrerParAlias(MONDE[b.dataset.r][b.dataset.c].alias, MONDE[b.dataset.r][b.dataset.c].nom);
+    });
+  }
   if(!el._lie){
     el._lie=true;
     el.addEventListener("click",e=>{
@@ -1769,9 +1844,10 @@ function rendreCarte(){
     });
   }
 }
-function filtrerParPaysCode(code){
-  const vals=[...new Set(etat.pieces.filter(p=>!p.vendu && trouverCodePays(p.pays)===code).map(p=>p.pays))];
-  if(!vals.length){ toast("Aucune pièce de "+PAYS[code].nom+" pour l'instant"); return; }
+function filtrerParPaysCode(code){ filtrerParAlias(PAYS[code].alias, PAYS[code].nom); }
+function filtrerParAlias(alias, nom){
+  const vals=[...new Set(etat.pieces.filter(p=>!p.vendu && alias.some(al=>{const x=normTxt(p.pays||"");return x===al||x.includes(al);})).map(p=>p.pays))];
+  if(!vals.length){ toast("Aucune pièce de "+nom+" pour l'instant"); return; }
   allerVue("collection");
   majFiltres();
   $("#recherche").value="";
@@ -1779,7 +1855,7 @@ function filtrerParPaysCode(code){
   const sel=$("#filtrePays");
   if([...sel.options].some(o=>o.value===vals[0])) sel.value=vals[0];
   rendreCollection();
-  toast(PAYS[code].nom+" : filtre appliqué");
+  toast(nom+" : filtre appliqué");
 }
 </script>
 </body>
