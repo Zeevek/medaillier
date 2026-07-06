@@ -266,6 +266,20 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .tuile-monde{border-radius:9px;padding:9px 13px;font-weight:700;border:1px solid;cursor:pointer;font-size:.84rem;font-family:inherit}
 .tuile-monde:active{transform:translateY(1px)}
 
+/* ---------- Module fiscalité ---------- */
+.fisc-encart{background:#F1EEE4;border:1px solid #DED9CB;border-radius:10px;padding:12px 14px;margin:12px 0}
+.fisc-tete{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--encre2);font-weight:600;margin-bottom:8px}
+.fisc-ligne{display:flex;justify-content:space-between;gap:10px;padding:5px 0;font-size:.9rem;border-bottom:1px dashed var(--ligne)}
+.fisc-ligne:last-child{border-bottom:none}
+.fisc-actif{font-weight:700;color:var(--vert)}
+.fisc-actif::after{content:" ✓";color:var(--vert)}
+.fisc-net{font-weight:700;border-top:2px solid var(--ligne);border-bottom:none;margin-top:4px;padding-top:8px}
+.fisc-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.fisc-table{width:100%;border-collapse:collapse;font-size:.84rem;min-width:520px}
+.fisc-table th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--encre2);padding:6px 8px;border-bottom:1px solid var(--ligne)}
+.fisc-table td{padding:7px 8px;border-bottom:1px solid var(--ligne)}
+.fisc-table .num{text-align:right}
+
 /* ================= OPTIMISATION MOBILE (iPhone / PWA) ================= */
 header{padding-top:calc(14px + env(safe-area-inset-top))}
 @media (max-width:640px){
@@ -352,6 +366,7 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   <button class="onglet" data-vue="series">Séries</button>
   <button class="onglet" data-vue="registre">Registre des ventes</button>
   <button class="onglet" data-vue="wishlist">Wishlist</button>
+  <button class="onglet" data-vue="fiscalite">Fiscalité</button>
 </nav>
 
 <div class="bandeau-wrap"><div class="bandeau-sauvegarde" id="bandeauSauvegarde">
@@ -441,6 +456,11 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
       <div class="panneau"><h3>Bilan des cessions</h3><div id="bilanVentes"></div></div>
     </div>
     <div class="panneau"><h3>Ventes réalisées</h3><div id="listeVentes"></div></div>
+  </section>
+
+  <!-- ================= FISCALITÉ ================= -->
+  <section class="vue" id="vue-fiscalite">
+    <div id="vueFiscaliteCorps"></div>
   </section>
 
   <!-- ================= WISHLIST ================= -->
@@ -768,6 +788,7 @@ function rafraichir(){
   if(typeof rendreSeries==="function") rendreSeries();
   if(typeof rendreRegistre==="function") rendreRegistre();
   if(typeof rendreWishlist==="function") rendreWishlist();
+  if(typeof rendreFiscalite==="function") rendreFiscalite();
 }
 </script>
 <script>
@@ -1577,16 +1598,22 @@ function ouvrirVente(id){
   const p = etat.pieces.find(x=>x.id===id); if(!p) return;
   ouvrirModale("Vendre — "+p.nom, `
     <div class="form-grille">
-      <div class="champ"><label>Prix de vente (€) *</label><input id="v-prix" type="number" step="any" value="${coteRetenue(p)??""}"></div>
-      <div class="champ"><label>Date de vente</label><input id="v-date" type="date" value="${new Date().toISOString().slice(0,10)}"></div>
+      <div class="champ"><label>Prix de vente (€) *</label><input id="v-prix" type="number" step="any" value="${coteRetenue(p)??""}" oninput="majFiscVenteLive('${p.id}')"></div>
+      <div class="champ"><label>Date de vente</label><input id="v-date" type="date" value="${new Date().toISOString().slice(0,10)}" onchange="majFiscVenteLive('${p.id}')"></div>
       <div class="champ"><label>Acheteur / plateforme</label><input id="v-acheteur" placeholder="eBay, Numista, particulier…"></div>
       <div class="champ champ-large"><label>Notes</label><input id="v-notes"></div>
     </div>
+    <div id="fiscVenteLive">${encartFiscalVente(p, coteRetenue(p)??0, new Date().toISOString().slice(0,10))}</div>
     <div class="note-info">La pièce sortira de la valeur de la collection et rejoindra le registre des ventes. Rien n'est supprimé : la fiche et ses photos restent consultables (filtre « Vendues »).</div>
     <div class="form-actions">
       <button class="btn-clair" onclick="ouvrirDetail('${p.id}')">Annuler</button>
       <button class="btn-or" onclick="confirmerVente('${p.id}')">Enregistrer la vente</button>
     </div>`);
+}
+function majFiscVenteLive(id){
+  const p = etat.pieces.find(x=>x.id===id); if(!p) return;
+  const prix = $("#v-prix").value, date = $("#v-date").value;
+  const box = $("#fiscVenteLive"); if(box) box.innerHTML = encartFiscalVente(p, prix, date);
 }
 async function confirmerVente(id){
   const p = etat.pieces.find(x=>x.id===id); if(!p) return;
@@ -1858,5 +1885,180 @@ function filtrerParAlias(alias, nom){
   toast(nom+" : filtre appliqué");
 }
 </script>
+<script>
+"use strict";
+/* =====================================================================
+   v6 — Fiscalité française de la revente de métaux précieux (règles 2026)
+   Sources : CGI art. 150 VI à 150 VM ; economie.gouv.fr ; BOFiP.
+   Fourni à titre informatif — ne remplace pas un conseil fiscal.
+===================================================================== */
+const FISC = {
+  TFMP_METAUX: 0.115,   // pièces or/argent postérieures à 1800 : 11,5 % du prix de cession
+  TFMP_BIJOUX: 0.065,   // objets/bijoux > 5000 € : 6,5 %
+  SEUIL_BIJOUX: 5000,   // exonération bijoux/objets sous ce montant par cession
+  TPV_TAUX: 0.376,      // régime réel plus-value : 37,6 % (19 % IR + 18,6 % PS) depuis 2026
+  ABATT_DEBUT: 3,       // abattement de 5 %/an à partir de la 3e année
+  ABATT_PAR_AN: 0.05,
+  EXO_ANS: 22           // exonération totale à 22 ans
+};
+/* Une pièce est-elle un « métal précieux » au sens fiscal ? (or/argent postérieur à 1800) */
+function estMetalPrecieuxFiscal(p){
+  return (p.metal==="or"||p.metal==="argent") && (parseInt(p.annee)||0) >= 1801;
+}
+function anneesDetention(dateAchat, dateVente){
+  if(!dateAchat) return null;
+  const a=new Date(dateAchat), b=dateVente?new Date(dateVente):new Date();
+  if(isNaN(a)) return null;
+  let ans=b.getFullYear()-a.getFullYear();
+  const m=b.getMonth()-a.getMonth();
+  if(m<0 || (m===0 && b.getDate()<a.getDate())) ans--;
+  return Math.max(0, ans);
+}
+function tauxAbattement(ans){
+  if(ans==null || ans<FISC.ABATT_DEBUT) return 0;
+  return Math.min(1, (ans-FISC.ABATT_DEBUT+1)*FISC.ABATT_PAR_AN);
+}
+/* Calcul comparatif des deux régimes pour une cession */
+function calculFiscal(p, prixVente, dateVente){
+  const prix = parseFloat(prixVente);
+  if(isNaN(prix) || prix<=0) return null;
+  const metalFisc = estMetalPrecieuxFiscal(p);
+  const prixAchat = parseFloat(p.prixAchat);
+  const aJustif = !isNaN(prixAchat) && !!p.dateAchat;   // preuve d'achat = prix + date
+  const ans = anneesDetention(p.dateAchat, dateVente);
+  const res = { metalFisc, aJustif, ans, prix };
+
+  // --- Régime forfaitaire (TFMP) ---
+  if(metalFisc){
+    res.forfaitaire = { applicable:true, taux:FISC.TFMP_METAUX, taxe:prix*FISC.TFMP_METAUX, exo:false,
+      libelle:"Taxe forfaitaire métaux précieux (11,5 %)" };
+  } else {
+    // bijoux/objets : exonération sous 5000 €, sinon 6,5 %
+    if(prix<=FISC.SEUIL_BIJOUX){
+      res.forfaitaire = { applicable:true, taux:0, taxe:0, exo:true,
+        libelle:"Objet de collection ≤ 5 000 € — exonéré" };
+    } else {
+      res.forfaitaire = { applicable:true, taux:FISC.TFMP_BIJOUX, taxe:prix*FISC.TFMP_BIJOUX, exo:false,
+        libelle:"Taxe forfaitaire objets précieux (6,5 %)" };
+    }
+  }
+
+  // --- Régime réel (plus-value), seulement si justificatifs ---
+  if(aJustif){
+    const pv = Math.max(0, prix - prixAchat);
+    const ab = tauxAbattement(ans);
+    const pvImposable = pv * (1-ab);
+    const exoTotale = ans!=null && ans>=FISC.EXO_ANS;
+    res.reel = {
+      applicable:true, pv, ans, abattement:ab,
+      pvImposable: exoTotale?0:pvImposable,
+      taxe: exoTotale?0: pvImposable*FISC.TPV_TAUX,
+      taux:FISC.TPV_TAUX, exoTotale,
+      libelle: exoTotale ? "Plus-value exonérée (détention ≥ 22 ans)"
+                         : "Régime réel plus-value (37,6 %"+(ab>0?`, abattement ${Math.round(ab*100)} %`:"")+")"
+    };
+  } else {
+    res.reel = { applicable:false, raison:"Sans justificatif de prix ET date d'achat, le régime réel n'est pas ouvert : seul le forfaitaire s'applique." };
+  }
+
+  // --- Recommandation ---
+  const options=[];
+  if(res.forfaitaire.applicable) options.push({cle:"forfaitaire", taxe:res.forfaitaire.taxe, obj:res.forfaitaire});
+  if(res.reel.applicable) options.push({cle:"reel", taxe:res.reel.taxe, obj:res.reel});
+  options.sort((a,b)=>a.taxe-b.taxe);
+  res.meilleur = options[0] ? options[0].cle : "forfaitaire";
+  res.net = prix - (options[0] ? options[0].taxe : res.forfaitaire.taxe);
+  return res;
+}
+function ligneFisc(lib, montant, actif){
+  return `<div class="fisc-ligne ${actif?"fisc-actif":""}"><span>${lib}</span><span class="num">${fmtEuro(montant)}</span></div>`;
+}
+/* Encart affiché dans la modale de vente */
+function encartFiscalVente(p, prixVente, dateVente){
+  const r = calculFiscal(p, prixVente, dateVente);
+  if(!r) return "";
+  let corps="";
+  const fMeilleur = r.meilleur==="forfaitaire", rMeilleur = r.meilleur==="reel";
+  corps += ligneFisc(r.forfaitaire.libelle, r.forfaitaire.taxe, fMeilleur);
+  if(r.reel.applicable) corps += ligneFisc(r.reel.libelle, r.reel.taxe, rMeilleur);
+  else corps += `<p class="vide-note" style="margin:6px 0">${r.reel.raison}</p>`;
+  const eco = (r.forfaitaire.applicable && r.reel.applicable)
+    ? Math.abs(r.forfaitaire.taxe - r.reel.taxe) : 0;
+  return `<div class="fisc-encart">
+    <div class="fisc-tete">Estimation fiscale (résident français)</div>
+    ${corps}
+    <div class="fisc-ligne fisc-net"><span>Net estimé après taxe</span><span class="num">${fmtEuro(r.net)}</span></div>
+    <p class="vide-note" style="margin-top:6px">
+      ${r.forfaitaire.exo ? "Cession exonérée sous 5 000 €. " : ""}
+      Régime conseillé : <strong>${r.meilleur==="forfaitaire"?"forfaitaire":"réel (plus-value)"}</strong>${eco>0?` (économie ≈ ${fmtEuro(eco)})`:""}.
+      ${r.metalFisc ? "Pièce or/argent postérieure à 1800 : taxe forfaitaire dès le 1er euro." : ""}
+      Déclaration sous 1 mois (formulaire 2091-SD forfaitaire, ou 2092/2048-M plus-value).
+    </p>
+  </div>`;
+}
+/* Vue synthèse fiscale de la collection */
+function rendreFiscalite(){
+  const el=$("#vueFiscaliteCorps"); if(!el) return;
+  const metaux = etat.pieces.filter(p=>!p.vendu && (p.metal==="or"||p.metal==="argent"));
+  const ventes = etat.pieces.filter(p=>p.vendu);
+  let html = `<div class="note-info">
+    <strong>Fiscalité française de la revente de métaux précieux (règles 2026).</strong>
+    Les pièces d'or et d'argent postérieures à 1800 sont des « métaux précieux » au sens fiscal.
+    À la revente, deux régimes : la <strong>taxe forfaitaire (11,5 %)</strong> sur le prix de vente, applicable sans justificatif et dès le 1er euro ;
+    ou, si vous justifiez prix ET date d'achat, le <strong>régime réel</strong> sur la plus-value (37,6 %), avec abattement de 5 %/an dès la 3ᵉ année et exonération à 22 ans.
+    Les pièces antérieures à 1801 et non-précieuses relèvent des objets de collection (exonérés sous 5 000 € par cession).
+    Ceci est informatif et ne remplace pas un conseil fiscal.
+  </div>`;
+
+  // Simulation « si je vendais tout aujourd'hui à la cote »
+  if(metaux.length){
+    let tForf=0, tReelDispo=0, nSansJustif=0;
+    const lignes = metaux.map(p=>{
+      const cote=coteRetenue(p);
+      const r=calculFiscal(p, cote, null);
+      if(!r) return "";
+      tForf += r.forfaitaire.taxe;
+      if(!r.aJustif) nSansJustif++;
+      const best = r.meilleur==="reel" ? r.reel.taxe : r.forfaitaire.taxe;
+      tReelDispo += best;
+      return `<tr>
+        <td>${esc(p.nom)}</td>
+        <td class="num">${fmtEuro(cote)}</td>
+        <td class="num">${r.ans==null?"—":r.ans+" an"+(r.ans>1?"s":"")}</td>
+        <td class="num">${fmtEuro(r.forfaitaire.taxe)}</td>
+        <td class="num">${r.reel.applicable?fmtEuro(r.reel.taxe):"—"}</td>
+        <td><span class="chip-grade">${r.meilleur==="forfaitaire"?"Forfait.":"Réel"}</span></td>
+      </tr>`;
+    }).join("");
+    html += `<div class="panneau" style="margin-top:14px"><h3>Simulation — vente de tous les métaux précieux à la cote actuelle</h3>
+      <div class="fisc-table-wrap"><table class="fisc-table">
+        <thead><tr><th>Pièce</th><th>Cote</th><th>Détention</th><th>Forfait.</th><th>Réel</th><th>Optimal</th></tr></thead>
+        <tbody>${lignes}</tbody>
+      </table></div>
+      <div class="fisc-ligne fisc-net" style="margin-top:10px"><span>Taxe totale au régime optimal</span><span class="num">${fmtEuro(tReelDispo)}</span></div>
+      ${nSansJustif?`<p class="vide-note">${nSansJustif} pièce(s) sans justificatif complet (prix + date) : seul le forfaitaire leur est ouvert. Renseignez le prix et la date d'achat pour débloquer le régime réel.</p>`:""}
+    </div>`;
+  } else {
+    html += `<p class="vide-note" style="margin-top:14px">Aucune pièce d'or ou d'argent en collection pour l'instant.</p>`;
+  }
+
+  // Récap des ventes déjà réalisées
+  if(ventes.length){
+    const lignes = ventes.map(p=>{
+      const r=calculFiscal(p, p.vendu.prix, p.vendu.date);
+      const taxe = r ? (r.meilleur==="reel"?r.reel.taxe:r.forfaitaire.taxe) : 0;
+      return `<tr><td>${esc(p.nom)}</td><td class="num">${fmtDate(p.vendu.date)}</td>
+        <td class="num">${fmtEuro(p.vendu.prix)}</td><td class="num">${r&&r.metalFisc?fmtEuro(taxe):"hors champ"}</td></tr>`;
+    }).join("");
+    html += `<div class="panneau" style="margin-top:14px"><h3>Ventes réalisées — taxe estimée</h3>
+      <div class="fisc-table-wrap"><table class="fisc-table">
+        <thead><tr><th>Pièce</th><th>Date</th><th>Prix</th><th>Taxe est.</th></tr></thead>
+        <tbody>${lignes}</tbody></table></div>
+      <p class="vide-note">Rappel : déclaration dans le mois suivant chaque cession.</p></div>`;
+  }
+  el.innerHTML = html;
+}
+</script>
+
 </body>
 </html>
