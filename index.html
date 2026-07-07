@@ -215,6 +215,12 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   box-shadow:inset 0 0 0 3px var(--or), var(--ombre);
 }
 .tranche-bloc{margin:0 0 16px}
+.photo-rouleau{width:100%;max-width:260px;height:230px;margin:0 auto;border-radius:12px;
+  background:#EDE9DC center/contain no-repeat;cursor:pointer;position:relative;
+  display:flex;align-items:center;justify-content:center;color:var(--encre2);font-size:.85rem;
+  box-shadow:inset 0 0 0 3px var(--velours), var(--ombre)}
+.badge-lot{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;
+  background:var(--velours);color:var(--or-clair);vertical-align:middle;letter-spacing:.03em}
 .tranche-bloc .lib{text-align:center;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--encre2);margin-top:6px}
 
 /* ---------- v2 : bandeau, graphique, lots, impression ---------- */
@@ -757,7 +763,7 @@ function rendreCollection(){
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
-      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:""}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
+      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
       <div class="piece-bas">
         ${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}
         <span class="piece-cote num">${fmtEuro(coteRetenue(p))}</span>
@@ -814,8 +820,8 @@ function ouvrirDetail(id){
   ouvrirModale(p.nom, `
     <div class="detail-photos">${photoDiv(p.photoAvers,"Avers")}${photoDiv(p.photoRevers,"Revers")}</div>
     ${p.photoTranche?`<div class="tranche-bloc">
-      <div class="photo-tranche" style="background-image:url('${p.photoTranche}')" data-zoom="Tranche"></div>
-      <div class="lib">Tranche</div></div>`:""}
+      <div class="${p.estLot?"photo-rouleau":"photo-tranche"}" style="background-image:url('${p.photoTranche}')" data-zoom="${p.estLot?"Rouleau / lot":"Tranche"}"></div>
+      <div class="lib">${p.estLot?"Rouleau / lot":"Tranche"}</div></div>`:""}
     <div class="bandeau-valeur">
       <div class="bloc"><div class="v num">${fmtEuro(coteRetenue(p))}</div><div class="l">Cote retenue</div></div>
       <div class="bloc"><div class="v num">${fmtEuro(parseFloat(p.prixAchat))}</div><div class="l">Prix d'achat</div></div>
@@ -833,7 +839,7 @@ function ouvrirDetail(id){
       <div><dt>Tranche</dt><dd>${esc(p.tranche||"—")}${p.varianteTranche?` <span class="chip-grade">Tranche ${esc(p.varianteTranche)}</span>`:""}</dd></div>
       <div><dt>Grade</dt><dd>${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:"—"} ${esc(p.notesGrade||"")}</dd></div>
       <div><dt>Référence</dt><dd>${esc(p.numeroKM||"—")}</dd></div>
-      <div><dt>Quantité</dt><dd>${parseInt(p.quantite)||1}${(parseInt(p.quantite)||1)>1?" (lot — prix et cote pour le lot entier)":""}</dd></div>
+      <div><dt>${p.estLot?"Composition du lot":"Quantité"}</dt><dd>${p.estLot?`Rouleau / ensemble scellé de ${parseInt(p.quantite)||1} pièces — compté comme 1 objet`:(parseInt(p.quantite)||1)+((parseInt(p.quantite)||1)>1?" (lot — prix et cote pour le lot entier)":"")}</dd></div>
       <div><dt>Emplacement</dt><dd>${esc(p.emplacement||"—")}</dd></div>
       <div><dt>Achat</dt><dd>${fmtDate(p.dateAchat)}</dd></div>
       <div><dt>Cote établie le</dt><dd>${fmtDate(p.dateCote)} ${coteAncienne(p)?'<span class="pastille-alerte">à rafraîchir</span>':""}</dd></div>
@@ -890,8 +896,8 @@ function ouvrirFormulaire(id){
   ouvrirModale(p?"Modifier la pièce":"Nouvelle pièce", `
     <div class="photos-form">${slot("photoAvers","Avers")}${slot("photoRevers","Revers")}</div>
     <div class="tranche-bloc">
-      <div class="photo-tranche" id="slot-photoTranche" style="cursor:pointer;${photosTemp.photoTranche?`background-image:url('${photosTemp.photoTranche}')`:""}">${photosTemp.photoTranche?"":"📷 Tranche — cliquer"}</div>
-      <div class="lib">Photo de tranche (bandeau panoramique)</div>
+      <div class="${p?.estLot?"photo-rouleau":"photo-tranche"}" id="slot-photoTranche" style="cursor:pointer;${photosTemp.photoTranche?`background-image:url('${photosTemp.photoTranche}')`:""}">${photosTemp.photoTranche?"":(p?.estLot?"📷 Rouleau / lot — cliquer":"📷 Tranche — cliquer")}</div>
+      <div class="lib" id="lib-photoTranche">${p?.estLot?"Photo du rouleau / lot":"Photo de tranche (bandeau panoramique)"}</div>
       <input type="file" accept="image/*" id="fichier-photoTranche" hidden>
     </div>
     <div class="form-grille">
@@ -918,7 +924,11 @@ function ouvrirFormulaire(id){
       </select></div>
       <div class="champ"><label>Grade</label><select id="f-grade"><option value=""></option>${GRADES.map(g=>`<option ${p?.grade===g?"selected":""}>${g}</option>`).join("")}</select></div>
       <div class="champ"><label>Justification du grade</label><input id="f-notesGrade" value="${v("notesGrade")}"></div>
-      <div class="champ"><label>Quantité (lot)</label><input id="f-quantite" type="number" min="1" value="${esc(p?.quantite??1)}"></div>
+      <div class="champ"><label>Nombre de pièces</label><input id="f-quantite" type="number" min="1" value="${esc(p?.quantite??1)}"></div>
+      <div class="champ"><label>Type</label><select id="f-estLot">
+        <option value="" ${!p?.estLot?"selected":""}>Pièce unique</option>
+        <option value="1" ${p?.estLot?"selected":""}>Lot scellé / rouleau (compté comme 1)</option>
+      </select></div>
       <div class="champ"><label>Emplacement</label><input id="f-emplacement" value="${v("emplacement")}" placeholder="Classeur 1 case B3, coffre…"></div>
       <div class="champ"><label>Série</label><input id="f-serie" list="listeNomsSeries" value="${v("serie")}" placeholder="Bundesländer, Hercule…"><datalist id="listeNomsSeries">${etat.series.map(se=>`<option value="${esc(se.nom)}">`).join("")}</datalist></div>
       <div class="champ"><label>Élément de la série</label><input id="f-serieItem" value="${v("serieItem")}" placeholder="2012 · Bavière"></div>
@@ -936,6 +946,14 @@ function ouvrirFormulaire(id){
       <button class="btn-clair" onclick="fermerModale()">Annuler</button>
       <button class="btn-or" onclick="sauverFormulaire('${p?.id||""}')">Enregistrer</button>
     </div>`);
+  const selLot=$("#f-estLot");
+  if(selLot) selLot.addEventListener("change",()=>{
+    const lot = selLot.value==="1";
+    const slot=$("#slot-photoTranche"), lib=$("#lib-photoTranche");
+    slot.className = lot?"photo-rouleau":"photo-tranche";
+    lib.textContent = lot?"Photo du rouleau / lot":"Photo de tranche (bandeau panoramique)";
+    if(!photosTemp.photoTranche) slot.textContent = lot?"📷 Rouleau / lot — cliquer":"📷 Tranche — cliquer";
+  });
   for(const cle of ["photoAvers","photoRevers","photoTranche"]){
     const slotEl=$("#slot-"+cle), inp=$("#fichier-"+cle);
     slotEl.addEventListener("click",()=>inp.click());
@@ -986,7 +1004,7 @@ async function sauverFormulaire(id){
     valeurFaciale:lire("valeurFaciale"), metal:$("#f-metal").value,
     titre:lire("titre",1), poids:lire("poids",1), diametre:lire("diametre",1),
     tirage:lire("tirage",1),
-    quantite:Math.max(1,parseInt($("#f-quantite").value)||1), emplacement:lire("emplacement"),
+    quantite:Math.max(1,parseInt($("#f-quantite").value)||1), estLot:$("#f-estLot").value==="1", emplacement:lire("emplacement"),
     serie:lire("serie"), serieItem:lire("serieItem"), doublon:$("#f-doublon").value==="1",
     axeFrappe:$("#f-axeFrappe").value||null, tranche:lire("tranche"), varianteTranche:$("#f-varianteTranche").value||null,
     grade:$("#f-grade").value||null, notesGrade:lire("notesGrade"),
@@ -1094,7 +1112,7 @@ Merci de : 1) l'identifier, 2) estimer son grade (échelle française B/TB/TTB/S
 {"type":"piece","version":1,"piece":{
   "nom":"", "pays":"", "annee":null, "atelier":"", "valeurFaciale":"",
   "metal":"or|argent|cuivre|bronze|nickel|cupronickel|autre",
-  "titre":null, "poids":null, "diametre":null, "tirage":null, "quantite":1,
+  "titre":null, "poids":null, "diametre":null, "tirage":null, "quantite":1, "estLot":false,
   "axeFrappe":"monnaie|medaille", "tranche":"", "varianteTranche":"A|B ou vide",
   "grade":"", "notesGrade":"",
   "prixAchat":null, "dateAchat":"",
@@ -1157,7 +1175,7 @@ function exporterCSV(){
     const c=coteRetenue(p), a=parseFloat(p.prixAchat), pv=plusValue(p), m=valeurMetal(p);
     if(!p.vendu){ if(!isNaN(a)) tA+=a; if(c!=null) tC+=c; if(m!=null) tM+=m; }
     lignes.push([
-      csvCellule(p.nom), csvCellule(p.pays), p.annee??"", parseInt(p.quantite)||1,
+      csvCellule(p.nom), csvCellule(p.pays), p.annee??"", (p.estLot?"lot ":"")+(parseInt(p.quantite)||1),
       METAUX[p.metal]||p.metal||"", p.grade||"",
       p.vendu?"Vendue":(p.doublon?"Doublon":"Collection"), csvCellule(p.emplacement),
       csvNombre(a), p.vendu?"":csvNombre(c), p.vendu?"":csvNombre(pv), p.vendu?"":csvNombre(m),
@@ -1822,7 +1840,7 @@ function rendreCarte(){
   const ps = etat.pieces.filter(p=>!p.vendu);
   const compte={}, regions={}, autres={};
   for(const p of ps){
-    const q = parseInt(p.quantite)||1;
+    const q = p.estLot ? 1 : (parseInt(p.quantite)||1);
     const code = trouverCodePays(p.pays);
     if(code){ compte[code]=(compte[code]||0)+q; continue; }
     const m = trouverMonde(p.pays);
