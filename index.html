@@ -1401,11 +1401,11 @@ document.querySelectorAll(".onglet").forEach(o=>o.addEventListener("click",()=>{
 function surClic(id, fn){ const el=$("#"+id); if(el) el.addEventListener("click", fn); }
 function surInput(id, fn){ const el=$("#"+id); if(el) el.addEventListener("input", fn); }
 surClic("btnAjouter", ()=>ouvrirFormulaire(""));
-surClic("btnImport", ouvrirImport);
-surClic("btnExport", ouvrirExport);
-surClic("btnCours", ouvrirCours);
-surClic("btnRecherche", ouvrirRecherche);
-["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, rendreCollection));
+surClic("btnImport", ()=>ouvrirImport());
+surClic("btnExport", ()=>ouvrirExport());
+surClic("btnCours", ()=>ouvrirCours());
+surClic("btnRecherche", ()=>ouvrirRecherche());
+["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, ()=>rendreCollection()));
 let _debRech;
 surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
 (function(){ const g=$("#grillePieces"); if(!g) return;
