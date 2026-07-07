@@ -236,6 +236,16 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .serie-item-lab{overflow:hidden;text-overflow:ellipsis}
 .serie-item-cpt{font-weight:700;white-space:nowrap;font-size:.82rem}
 .serie-vars{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.rech-champ{width:100%;font-size:16px;padding:12px 14px;border:1px solid var(--ligne);border-radius:10px;background:#fff;margin-bottom:12px}
+.rech-section{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--encre2);font-weight:700;margin:14px 0 6px}
+.rech-item{display:flex;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--ligne);border-radius:10px;margin-bottom:6px;cursor:pointer;background:#fff}
+.rech-item:hover{border-color:var(--or)}
+.rech-vignette{width:42px;height:42px;border-radius:50%;background:#EDE9DC center/cover no-repeat;flex:none;display:flex;align-items:center;justify-content:center;color:var(--encre2)}
+.rech-corps{flex:1;min-width:0}
+.rech-nom{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rech-sous{font-size:.78rem;color:var(--encre2)}
+.rech-tag{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:20px;background:#EFE8D3;color:var(--or-fonce);white-space:nowrap}
+.rech-tag.cata{background:#E7EDE6;color:var(--vert)}
 .cl-entree{background:var(--carte);border:1px solid var(--ligne);border-radius:var(--rayon);padding:14px 16px;margin-bottom:12px;box-shadow:var(--ombre)}
 .cl-tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
 .cl-badge{font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:20px}
@@ -391,6 +401,7 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
     </svg>
     <div class="titre-app serif">Le Médaillier<small>Collection numismatique</small></div>
     <div class="header-actions">
+      <button class="btn-discret" id="btnRecherche">🔍 Rechercher</button>
       <button class="btn-discret" id="btnCours">Cours métaux</button>
       <button class="btn-discret" id="btnImport">Importer JSON</button>
       <button class="btn-discret" id="btnExport">Exporter</button>
@@ -459,6 +470,8 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
       <select id="filtreMetal"><option value="">Tous métaux</option></select>
       <select id="filtreGrade"><option value="">Tous grades</option></select>
       <select id="filtreEmplacement"><option value="">Tous emplacements</option></select>
+      <select id="filtreMonnaie"><option value="">Toutes monnaies</option></select>
+      <select id="filtreNature"><option value="">Toutes natures</option></select>
       <select id="filtreStatut">
         <option value="collection">En collection</option>
         <option value="doublons">Doublons (échange)</option>
@@ -641,6 +654,27 @@ function valeurMetal(p){
   const t = titre > 1 ? titre/1000 : titre;   // accepte 900 ou 0.900
   return poids * t * (etat.cours[p.metal] || 0) * (parseInt(p.quantite)||1);
 }
+/* Inférence de la monnaie et de la nature d'une pièce */
+function inferMonnaie(p){
+  const f = normTxt((p.valeurFaciale||"")+" "+(p.nom||""));
+  if(/euro|€|cent/.test(f)) return "Euro";
+  if(/franc/.test(f)){ const a=parseInt(p.annee)||0; return (a && a<1960)?"Ancien franc":"Franc français"; }
+  if(/yen|円/.test(f)) return "Yen";
+  if(/dollar|\$/.test(f)) return "Dollar";
+  if(/livre|pound|£/.test(f)) return "Livre sterling";
+  if(/mark|pfennig/.test(f)) return "Mark";
+  if(/peseta/.test(f)) return "Peseta";
+  if(/lire|lira/.test(f)) return "Lire";
+  return null;
+}
+function inferNature(p){
+  const t = normTxt((p.nom||"")+" "+(p.valeurFaciale||""));
+  if(/commemorat/.test(t)) return /2\s*(euro|€)/.test(t) ? "Commémorative 2€" : "Commémorative";
+  if(/\b(bu|be|belle epreuve|brillant universel|proof)\b/.test(t)) return "Numismatique (BU/BE)";
+  if(/lingot|once|bullion/.test(t)) return "Bullion / investissement";
+  if(/jeton|medaille/.test(t)) return "Jeton / médaille";
+  return "Circulante courante";
+}
 function coteRetenue(p){
   const c = parseFloat(p.coteEstimee);
   const m = valeurMetal(p);
@@ -778,6 +812,7 @@ function rendreCollection(){
   const q = $("#recherche").value.trim().toLowerCase();
   const fp = $("#filtrePays").value, fm = $("#filtreMetal").value, fg = $("#filtreGrade").value, fe = $("#filtreEmplacement").value;
   const fs = $("#filtreStatut").value;
+  const fmo = $("#filtreMonnaie").value, fna = $("#filtreNature").value;
   let liste = etat.pieces.filter(p=>{
     if(fs==="collection" && p.vendu) return false;
     if(fs==="doublons" && (!p.doublon || p.vendu)) return false;
@@ -786,8 +821,10 @@ function rendreCollection(){
     if(fm && p.metal!==fm) return false;
     if(fg && p.grade!==fg) return false;
     if(fe && p.emplacement!==fe) return false;
+    if(fmo && (p.monnaie||inferMonnaie(p))!==fmo) return false;
+    if(fna && (p.nature||inferNature(p))!==fna) return false;
     if(q){
-      const blob = [p.nom,p.pays,p.annee,p.numeroKM,p.atelier,p.valeurFaciale,p.tranche,p.emplacement,p.notes].join(" ").toLowerCase();
+      const blob = [p.nom,p.pays,p.annee,p.numeroKM,p.atelier,p.valeurFaciale,p.monnaie,p.nature,p.tranche,p.emplacement,p.notes].join(" ").toLowerCase();
       if(!blob.includes(q)) return false;
     }
     return true;
@@ -836,6 +873,14 @@ function majFiltres(){
   const selE=$("#filtreEmplacement"), vE=selE.value;
   selE.innerHTML=`<option value="">Tous emplacements</option>`+empl.map(e=>`<option>${esc(e)}</option>`).join("");
   selE.value = empl.includes(vE)?vE:"";
+  const monn=[...new Set(etat.pieces.map(p=>p.monnaie||inferMonnaie(p)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+  const selMo=$("#filtreMonnaie"), vMo=selMo.value;
+  selMo.innerHTML=`<option value="">Toutes monnaies</option>`+monn.map(m=>`<option>${esc(m)}</option>`).join("");
+  selMo.value = monn.includes(vMo)?vMo:"";
+  const nat=[...new Set(etat.pieces.map(p=>p.nature||inferNature(p)).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+  const selNa=$("#filtreNature"), vNa=selNa.value;
+  selNa.innerHTML=`<option value="">Toutes natures</option>`+nat.map(m=>`<option>${esc(m)}</option>`).join("");
+  selNa.value = nat.includes(vNa)?vNa:"";
 }
 function rafraichir(){
   majFiltres(); rendreDashboard(); rendreCollection();
@@ -881,6 +926,7 @@ function ouvrirDetail(id){
       <div><dt>Pays</dt><dd>${esc(p.pays||"—")}</dd></div>
       <div><dt>Année</dt><dd>${esc(p.annee||"—")}${p.atelier?" · atelier "+esc(libelleAtelier(p)):""}</dd></div>
       <div><dt>Valeur faciale</dt><dd>${esc(p.valeurFaciale||"—")}</dd></div>
+      <div><dt>Monnaie · nature</dt><dd>${esc(p.monnaie||inferMonnaie(p)||"—")}${(p.nature||inferNature(p))?" · "+esc(p.nature||inferNature(p)):""}</dd></div>
       <div><dt>Métal · titre</dt><dd>${METAUX[p.metal]||esc(p.metal||"—")}${p.titre?" · "+esc(p.titre)+"‰".replace("‰",p.titre>1?" ‰":""):""}</dd></div>
       <div><dt>Poids · Ø</dt><dd>${p.poids?esc(p.poids)+" g":"—"}${p.diametre?" · "+esc(p.diametre)+" mm":""}</dd></div>
       <div><dt>Tirage</dt><dd>${p.tirage?Number(p.tirage).toLocaleString("fr-FR"):"—"}</dd></div>
@@ -955,6 +1001,8 @@ function ouvrirFormulaire(id){
       <div class="champ"><label>Année</label><input id="f-annee" type="number" value="${v("annee")}"></div>
       <div class="champ"><label>Atelier</label><input id="f-atelier" value="${v("atelier")}" placeholder="A (Paris)"></div>
       <div class="champ"><label>Valeur faciale</label><input id="f-valeurFaciale" value="${v("valeurFaciale")}"></div>
+      <div class="champ"><label>Monnaie</label><input id="f-monnaie" list="listeMonnaies" value="${v("monnaie")}" placeholder="Euro, Franc…"><datalist id="listeMonnaies"><option value="Euro"><option value="Franc français"><option value="Ancien franc"><option value="Yen"><option value="Dollar"><option value="Livre sterling"></datalist></div>
+      <div class="champ"><label>Nature</label><input id="f-nature" list="listeNatures" value="${v("nature")}" placeholder="Circulante, Commémorative…"><datalist id="listeNatures"><option value="Circulante courante"><option value="Commémorative"><option value="Commémorative 2€"><option value="Numismatique (BU/BE)"><option value="Bullion / investissement"><option value="Jeton / médaille"></datalist></div>
       <div class="champ"><label>Métal</label><select id="f-metal">${Object.entries(METAUX).map(([k,l])=>`<option value="${k}" ${p?.metal===k?"selected":""}>${l}</option>`).join("")}</select></div>
       <div class="champ"><label>Titre (‰ ou 0.xxx)</label><input id="f-titre" type="number" step="any" value="${v("titre")}" placeholder="900"></div>
       <div class="champ"><label>Poids (g)</label><input id="f-poids" type="number" step="any" value="${v("poids")}"></div>
@@ -1051,7 +1099,7 @@ async function sauverFormulaire(id){
   const p = id ? {...etat.pieces.find(x=>x.id===id)} : {id:uuid(), ajoute:new Date().toISOString().slice(0,10)};
   Object.assign(p,{
     nom, pays:lire("pays"), annee:lire("annee",1), atelier:lire("atelier"),
-    valeurFaciale:lire("valeurFaciale"), metal:$("#f-metal").value,
+    valeurFaciale:lire("valeurFaciale"), monnaie:lire("monnaie")||inferMonnaie({valeurFaciale:$("#f-valeurFaciale").value,pays:$("#f-pays").value,annee:parseInt($("#f-annee").value)}), nature:lire("nature")||inferNature({nom:$("#f-nom").value,valeurFaciale:$("#f-valeurFaciale").value}), metal:$("#f-metal").value,
     titre:lire("titre",1), poids:lire("poids",1), diametre:lire("diametre",1),
     tirage:lire("tirage",1),
     quantite:Math.max(1,parseInt($("#f-quantite").value)||1), estLot:$("#f-estLot").value==="1", emplacement:lire("emplacement"),
@@ -1331,7 +1379,8 @@ $("#btnAjouter").addEventListener("click",()=>ouvrirFormulaire(""));
 $("#btnImport").addEventListener("click",ouvrirImport);
 $("#btnExport").addEventListener("click",ouvrirExport);
 $("#btnCours").addEventListener("click",ouvrirCours);
-["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreStatut","tri"].forEach(id=>
+$("#btnRecherche").addEventListener("click",ouvrirRecherche);
+["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>
   $("#"+id).addEventListener("input",rendreCollection));
 let _debRech;
 $("#recherche").addEventListener("input",()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
@@ -1387,6 +1436,13 @@ $("#grillePieces").addEventListener("keydown",e=>{
     }
   }
   await chargerCatalogue();
+  /* Migration : classer les pièces existantes par monnaie et nature */
+  for(const p of etat.pieces){
+    let modifie=false;
+    if(!p.monnaie){ const m=inferMonnaie(p); if(m){ p.monnaie=m; modifie=true; } }
+    if(!p.nature){ const nn=inferNature(p); if(nn){ p.nature=nn; modifie=true; } }
+    if(modifie) await dbSauver(p);
+  }
   /* Re-scan : rattacher les pièces déjà enregistrées aux séries (dont les modèles ajoutés depuis) */
   for(const p of etat.pieces){
     if(!p.serie) await detecterSerie(p);
@@ -2353,8 +2409,10 @@ function preRemplirCatalogue(){
 <script>
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "7.0";
+const VERSION_ACTUELLE = "8.0";
 const CHANGELOG = [
+  { v:"8.0", type:"majeure", date:"2026-07", titre:"Recherche & classification",
+    points:["Recherche globale : dans la collection ET la base de données de référence","Ajout d'une pièce directement depuis un résultat du catalogue","Classification par monnaie (Euro, Franc, Ancien franc…) par pays","Nature des pièces (circulante courante, commémorative, BU/BE…)","Filtres monnaie et nature dans la collection"] },
   { v:"7.0", type:"majeure", date:"2026-07", titre:"Variations, tranches & base de données",
     points:["Séries à variations multi-axes : ateliers (Allemagne A/D/F/G/J) ET tranches","Axe tranche A/B automatique : une tranche connue implique l'autre","Base de données de référence téléchargée et mise en cache","Bouton « Pré-remplir ⚡ » depuis le catalogue","Particularités par pays (ex. Grèce 2002)"] },
   { v:"6.0", type:"majeure", date:"2026-07", titre:"Ateliers allemands & séries bilatérales",
@@ -2382,6 +2440,103 @@ function rendreChangelog(){
       </div>
       <ul class="cl-points">${c.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
     </div>`).join("");
+}
+</script>
+<script>
+"use strict";
+/* =====================================================================
+   v8 — Recherche globale (collection + base de données catalogue)
+===================================================================== */
+function ouvrirRecherche(){
+  ouvrirModale("Rechercher", `
+    <input type="search" class="rech-champ" id="rechChamp" placeholder="Nom, pays, année, thème, KM#…" autocomplete="off">
+    <div id="rechResultats"><p class="vide-note">Tapez pour chercher dans votre collection et dans le catalogue de référence.</p></div>`);
+  const champ=$("#rechChamp");
+  champ.focus();
+  let deb;
+  champ.addEventListener("input",()=>{ clearTimeout(deb); deb=setTimeout(()=>lancerRecherche(champ.value),160); });
+}
+function lancerRecherche(q){
+  const el=$("#rechResultats"); if(!el) return;
+  const t=normTxt(q.trim());
+  if(t.length<2){ el.innerHTML=`<p class="vide-note">Tapez au moins 2 caractères.</p>`; return; }
+
+  // 1) Collection
+  const dansColl = etat.pieces.filter(p=>{
+    const blob=normTxt([p.nom,p.pays,p.annee,p.numeroKM,p.atelier,p.valeurFaciale,p.monnaie,p.nature,p.serie,p.notes].join(" "));
+    return blob.includes(t);
+  }).slice(0,25);
+
+  // 2) Catalogue de référence
+  let dansCata=[];
+  if(etat.catalogue && Array.isArray(etat.catalogue.pieces)){
+    dansCata = etat.catalogue.pieces.filter(e=>{
+      const m=e.match||{};
+      const blob=normTxt([e.nom,e.notes,(m.mots||[]).join(" "),m.pays,m.annee].join(" "));
+      return blob.includes(t);
+    }).slice(0,15);
+  }
+
+  let html="";
+  if(dansColl.length){
+    html += `<div class="rech-section">Dans ma collection (${dansColl.length})</div>`;
+    html += dansColl.map(p=>{
+      const img=p.miniature||p.photoAvers;
+      return `<div class="rech-item" onclick="fermerModale();ouvrirDetail('${p.id}')">
+        <div class="rech-vignette ${RIMS[p.metal]||"rim-autre"}" ${img?`style="background-image:url('${img}')"`:""}>${img?"":"🪙"}</div>
+        <div class="rech-corps"><div class="rech-nom">${esc(p.nom)}</div>
+          <div class="rech-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p.nature||inferNature(p))?" · "+esc(p.nature||inferNature(p)):""} · ${fmtEuro(coteRetenue(p))}</div></div>
+        <span class="rech-tag">Collection</span>
+      </div>`;
+    }).join("");
+  }
+  if(dansCata.length){
+    html += `<div class="rech-section">Dans le catalogue de référence (${dansCata.length})</div>`;
+    html += dansCata.map((e,i)=>{
+      const specs=[e.metal,e.poids?e.poids+" g":"",e.diametre?e.diametre+" mm":"",e.tirage?("tirage "+Number(e.tirage).toLocaleString("fr-FR")):""].filter(Boolean).join(" · ");
+      const variantes=[e.ateliers?("ateliers "+e.ateliers.join("/")):"",e.tranches?("tranches "+e.tranches.join("/")):""].filter(Boolean).join(" · ");
+      return `<div class="rech-item" onclick="detailCatalogue(${i})" data-cata="${i}">
+        <div class="rech-vignette">📖</div>
+        <div class="rech-corps"><div class="rech-nom">${esc(e.nom||e.cle)}</div>
+          <div class="rech-sous">${esc(specs||e.notes||"")}${variantes?" · "+esc(variantes):""}</div></div>
+        <span class="rech-tag cata">Catalogue</span>
+      </div>`;
+    }).join("");
+    window._rechCata = dansCata;
+  }
+  if(!dansColl.length && !dansCata.length){
+    html = `<p class="vide-note">Aucun résultat pour « ${esc(q)} ».${etat.catalogue?"":" (Catalogue non chargé — ouvrez l'app en ligne une fois.)"}</p>`;
+  }
+  el.innerHTML = html;
+}
+function detailCatalogue(i){
+  const e = (window._rechCata||[])[i]; if(!e) return;
+  const lignes=[];
+  const add=(k,v)=>{ if(v!=null&&v!=="") lignes.push(`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`); };
+  add("Nom", e.nom);
+  add("Métal", e.metal); add("Poids", e.poids?e.poids+" g":null); add("Diamètre", e.diametre?e.diametre+" mm":null);
+  add("Tirage", e.tirage?Number(e.tirage).toLocaleString("fr-FR"):null);
+  add("Axe de frappe", e.axeFrappe); add("Référence", e.numeroKM);
+  add("Ateliers connus", e.ateliers?e.ateliers.join(", "):null);
+  add("Tranches connues", e.tranches?e.tranches.join(", "):null);
+  add("Particularité", e.ateliersEtrangers?e.ateliersEtrangers.join(", "):null);
+  add("Notes", e.notes);
+  ouvrirModale(e.nom||"Fiche catalogue", `
+    <dl class="fiche">${lignes.join("")}</dl>
+    ${e.lienNumista||e.lienNumistaFR?`<p style="margin-top:10px"><a href="${esc(e.lienNumista||e.lienNumistaFR)}" target="_blank" rel="noopener">Ouvrir sur Numista ↗</a></p>`:""}
+    <div class="form-actions">
+      <button class="btn-clair" onclick="ouvrirRecherche()">← Retour</button>
+      <button class="btn-or" onclick="ajouterDepuisCatalogue(${i})">Ajouter à ma collection</button>
+    </div>`);
+}
+function ajouterDepuisCatalogue(i){
+  const e = (window._rechCata||[])[i]; if(!e) return;
+  ouvrirFormulaire("");
+  if(e.nom) $("#f-nom").value=e.nom;
+  if(e.match&&e.match.pays) $("#f-pays").value=e.match.pays;
+  if(e.match&&e.match.annee) $("#f-annee").value=e.match.annee;
+  setTimeout(()=>{ if(typeof preRemplirCatalogue==="function") preRemplirCatalogue(); }, 50);
+  toast("Fiche pré-remplie — complétez et enregistrez");
 }
 </script>
 </body>
