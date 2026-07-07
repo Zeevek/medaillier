@@ -639,6 +639,7 @@ function dbConfigEcrire(cle,valeur){
 
 /* ---------------- Utilitaires ---------------- */
 const $ = s=>document.querySelector(s);
+function normTxt(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
 function esc(s){ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 function fmtEuro(n){
   if(n==null || isNaN(n)) return "—";
@@ -1501,7 +1502,6 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
 ===================================================================== */
 
 /* ---------------- Modèles de séries connus ---------------- */
-function normTxt(s){ return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase(); }
 
 const PAYS = {
   IS:{nom:"Islande",alias:["islande","iceland"],t:[0,0]},
