@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "maj": "2026-07-05",
+  "description": "Base de données de référence du Médaillier — specs et variantes pré-enregistrées. Étendable dans le temps.",
+  "specsCommunes": {
+    "2euro": { "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille" }
+  },
+  "pieces": [
+    {
+      "cle": "commune-2012-euro",
+      "match": { "annee": 2012, "mots": ["10 ans de l'euro", "euro fiduciaire", "2002-2012", "ten years", "10 jahre"] },
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
+      "tranches": ["A", "B"],
+      "notes": "Émission commune zone euro (17 pays). Dessin H. Andexlinger. Deux types de tranche A/B connus.",
+      "lienNumistaFR": "https://fr.numista.com/catalogue/index.php?r=10+ans+euro"
+    },
+    {
+      "cle": "commune-2007-rome",
+      "match": { "annee": 2007, "mots": ["traite de rome", "treaty of rome"] },
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
+      "tranches": ["A", "B"],
+      "notes": "Émission commune 50 ans du Traité de Rome (13 pays)."
+    },
+    {
+      "cle": "fr-2019-mur-berlin",
+      "match": { "pays": "France", "annee": 2019, "mots": ["mur de berlin", "chute du mur", "mauerfall"] },
+      "nom": "2 euros commémorative France — 30 ans de la chute du mur de Berlin",
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 15000000,
+      "axeFrappe": "medaille", "numeroKM": "KM# 2765",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces160246.html",
+      "tranches": ["A", "B"],
+      "notes": "Commune franco-allemande. Design J. Jimenez, graffiti d'après S. Gimajev (East Side Gallery)."
+    },
+    {
+      "cle": "de-2019-mur-berlin",
+      "match": { "pays": "Allemagne", "annee": 2019, "mots": ["mur de berlin", "chute du mur", "mauerfall"] },
+      "nom": "2 euros commémorative Allemagne — 30 ans de la chute du mur de Berlin",
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 30000000,
+      "axeFrappe": "medaille", "numeroKM": "KM# 379",
+      "ateliers": ["A", "D", "F", "G", "J"],
+      "tranches": ["A", "B"],
+      "notes": "Commune franco-allemande. Frappée dans les 5 ateliers (A Berlin, D Munich, F Stuttgart, G Karlsruhe, J Hambourg)."
+    },
+    {
+      "cle": "fr-2013-elysee",
+      "match": { "pays": "France", "annee": 2013, "mots": ["elysee", "traite de l'elysee"] },
+      "nom": "2 euros commémorative France — 50 ans du Traité de l'Élysée",
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75,
+      "axeFrappe": "medaille", "tranches": ["A", "B"],
+      "notes": "Commune franco-allemande."
+    },
+    {
+      "cle": "de-2013-elysee",
+      "match": { "pays": "Allemagne", "annee": 2013, "mots": ["elysee", "freundschaftsvertrag"] },
+      "nom": "2 euros commémorative Allemagne — 50 ans du Traité de l'Élysée",
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75,
+      "axeFrappe": "medaille", "ateliers": ["A", "D", "F", "G", "J"], "tranches": ["A", "B"],
+      "notes": "Commune franco-allemande. 5 ateliers."
+    },
+    {
+      "cle": "fr-2025-notre-dame-rouleau",
+      "match": { "pays": "France", "annee": 2025, "mots": ["notre-dame", "notre dame"] },
+      "nom": "2 euros commémorative France — Notre-Dame de Paris",
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 24000000,
+      "axeFrappe": "medaille", "numeroKM": "KM# 3810",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces521871.html",
+      "tranches": ["A", "B"],
+      "notes": "Réouverture de Notre-Dame. Rouleaux : violet UNC (960 000) et bleu FDC (8 000)."
+    },
+    {
+      "cle": "de-bundeslander",
+      "match": { "pays": "Allemagne", "mots": ["bundesland", "bundeslander", "schleswig", "hamburg", "bayern", "baviere", "hessen", "sachsen", "berlin", "brandenburg"] },
+      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
+      "ateliers": ["A", "D", "F", "G", "J"], "tranches": ["A", "B"],
+      "notes": "Série des Bundesländer : une pièce par Land, frappée dans les 5 ateliers."
+    },
+    {
+      "cle": "gr-2002-etoile",
+      "match": { "pays": "Grèce", "annee": 2002 },
+      "notes": "Particularité : certaines 2 € grecques 2002 portent une lettre atelier étrangère (S=Finlande, F=France, E=Espagne) dans une étoile — variante recherchée.",
+      "ateliersEtrangers": ["S (Finlande)", "F (France)", "E (Espagne)"]
+    }
+  ]
+}

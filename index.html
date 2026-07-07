@@ -1,4 +1,15 @@
 <!DOCTYPE html>
+<!--
+  ============================================================================
+  LE MÉDAILLIER — Application de gestion de collection numismatique
+  © 2026 Kévin François Cagnat — Tous droits réservés.
+
+  Usage personnel autorisé. Usage commercial, reproduction, redistribution et
+  réutilisation du code ou du contenu INTERDITS sans autorisation écrite de
+  l'auteur. Voir le fichier LICENSE. Ce code étant public pour des raisons
+  techniques (GitHub Pages), aucune licence de réutilisation n'est concédée.
+  ============================================================================
+-->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -219,6 +230,28 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   background:#EDE9DC center/contain no-repeat;cursor:pointer;position:relative;
   display:flex;align-items:center;justify-content:center;color:var(--encre2);font-size:.85rem;
   box-shadow:inset 0 0 0 3px var(--velours), var(--ombre)}
+.serie-liste{display:flex;flex-direction:column;gap:2px}
+.serie-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 4px;border-bottom:1px dashed var(--ligne);font-size:.86rem}
+.serie-item:last-child{border-bottom:none}
+.serie-item-lab{overflow:hidden;text-overflow:ellipsis}
+.serie-item-cpt{font-weight:700;white-space:nowrap;font-size:.82rem}
+.serie-vars{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.cl-entree{background:var(--carte);border:1px solid var(--ligne);border-radius:var(--rayon);padding:14px 16px;margin-bottom:12px;box-shadow:var(--ombre)}
+.cl-tete{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.cl-badge{font-weight:700;font-size:.8rem;padding:2px 10px;border-radius:20px}
+.cl-maj{background:linear-gradient(160deg,var(--or-clair),var(--or));color:#2A2510}
+.cl-min{background:#E7EDE6;color:var(--vert)}
+.cl-titre{font-weight:600}
+.cl-date{margin-left:auto;color:var(--encre2);font-size:.8rem}
+.cl-points{margin:0;padding-left:20px;font-size:.9rem;line-height:1.6}
+.cl-points li{margin-bottom:2px}
+.serie-item-multi{grid-template-columns:1fr;gap:4px}
+.serie-axes{display:flex;flex-direction:column;gap:4px}
+.axe-bloc{display:grid;grid-template-columns:64px auto 1fr;gap:6px;align-items:center}
+.axe-nom{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--encre2)}
+.var-pastille{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 4px;border-radius:6px;font-size:.68rem;font-weight:700;background:#EEEAE0;color:#A9A08A;border:1px solid #E0D8C4}
+.var-pastille.var-ok{background:linear-gradient(160deg,var(--or-clair),var(--or));color:#2A2510;border-color:var(--or-fonce)}
+.chip-mini{font-size:.7rem;padding:2px 8px;border-radius:20px;background:#F3E7C9;color:#7A5D1E;border:1px solid #DCC073}
 .badge-lot{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;
   background:var(--velours);color:var(--or-clair);vertical-align:middle;letter-spacing:.03em}
 .tranche-bloc .lib{text-align:center;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--encre2);margin-top:6px}
@@ -373,6 +406,7 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   <button class="onglet" data-vue="registre">Registre des ventes</button>
   <button class="onglet" data-vue="wishlist">Wishlist</button>
   <button class="onglet" data-vue="fiscalite">Fiscalité</button>
+  <button class="onglet" data-vue="changelog">Nouveautés</button>
 </nav>
 
 <div class="bandeau-wrap"><div class="bandeau-sauvegarde" id="bandeauSauvegarde">
@@ -451,7 +485,8 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   <section class="vue" id="vue-series">
     <div class="outils">
       <span class="vide-note">Suivez la complétion de vos séries. Les pièces sont rattachées automatiquement quand c'est possible (Länder allemands, émissions communes…), ou manuellement depuis leur fiche.</span>
-      <button class="btn-or" style="margin-left:auto" onclick="ouvrirNouvelleSerie()">+ Nouvelle série</button>
+      <button class="btn-clair" style="margin-left:auto" onclick="rescannerSeries()">↻ Rescanner mes pièces</button>
+      <button class="btn-or" onclick="ouvrirNouvelleSerie()">+ Nouvelle série</button>
     </div>
     <div id="listeSeries"></div>
   </section>
@@ -476,6 +511,18 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
       <button class="btn-or" style="margin-left:auto" onclick="ouvrirWish()">+ Ajouter une pièce recherchée</button>
     </div>
     <div class="panneau"><div id="listeWishlist"></div></div>
+  </section>
+
+  <!-- ================= CHANGELOG ================= -->
+  <section class="vue" id="vue-changelog">
+    <div class="panneau" style="margin-bottom:14px"><h3>Le Médaillier — versions</h3><p class="vide-note" id="clFooter"></p></div>
+    <div id="listeChangelog"></div>
+    <div class="panneau" style="margin-top:14px">
+      <p class="vide-note" style="text-align:center;line-height:1.6">
+        <strong>© 2026 Kévin François Cagnat — Tous droits réservés.</strong><br>
+        Usage personnel autorisé. Usage commercial, reproduction et réutilisation interdits sans autorisation écrite.
+      </p>
+    </div>
   </section>
 </main>
 
@@ -509,6 +556,7 @@ const etat = {
   historique: [],                                 // instantanés {d,v,m,n}
   series: [],                                     // séries suivies {id,nom,attendus:[]}
   wishlist: [],                                   // pièces recherchées
+  catalogue: null,                                // base de données de référence (base-donnees.json)
   vue: "dashboard"
 };
 
@@ -795,6 +843,7 @@ function rafraichir(){
   if(typeof rendreRegistre==="function") rendreRegistre();
   if(typeof rendreWishlist==="function") rendreWishlist();
   if(typeof rendreFiscalite==="function") rendreFiscalite();
+  if(typeof rendreChangelog==="function") rendreChangelog();
 }
 </script>
 <script>
@@ -845,7 +894,7 @@ function ouvrirDetail(id){
       <div><dt>Cote établie le</dt><dd>${fmtDate(p.dateCote)} ${coteAncienne(p)?'<span class="pastille-alerte">à rafraîchir</span>':""}</dd></div>
       <div><dt>Source cote</dt><dd>${esc(p.sourceCote||"—")}</dd></div>
       <div><dt>Numista</dt><dd>${p.lienNumista?`<a href="${esc(p.lienNumista)}" target="_blank" rel="noopener">ouvrir la fiche ↗</a>`:"—"}</dd></div>
-      <div><dt>Série</dt><dd>${p.serie?esc(p.serie)+(p.serieItem?" — "+esc(p.serieItem):""):"—"}</dd></div>
+      <div><dt>Série</dt><dd>${p.serie?esc(p.serie)+(p.serieItem?" — "+esc(p.serieItem):"")+(variationPiece(p)?" · "+esc(variationPiece(p)):""):"—"}</dd></div>
       ${p.notes?`<div class="champ-large" style="grid-column:1/-1"><dt>Notes</dt><dd style="font-weight:400">${esc(p.notes)}</dd></div>`:""}
     </dl>
     ${p.vendu?`<div class="note-info" style="background:#F7E6E1;border-color:#E0B4A8">
@@ -944,6 +993,7 @@ function ouvrirFormulaire(id){
     </div>
     <div class="form-actions">
       <button class="btn-clair" onclick="fermerModale()">Annuler</button>
+      <button class="btn-clair" onclick="preRemplirCatalogue()">Pré-remplir ⚡</button>
       <button class="btn-or" onclick="sauverFormulaire('${p?.id||""}')">Enregistrer</button>
     </div>`);
   const selLot=$("#f-estLot");
@@ -1336,6 +1386,25 @@ $("#grillePieces").addEventListener("keydown",e=>{
       await dbSauver(p);
     }
   }
+  await chargerCatalogue();
+  /* Re-scan : rattacher les pièces déjà enregistrées aux séries (dont les modèles ajoutés depuis) */
+  for(const p of etat.pieces){
+    if(!p.serie) await detecterSerie(p);
+  }
+  /* Migration variations : backfill de l'atelier allemand pour les pièces déjà en série,
+     et re-détection des anciens items bilatéraux "Allemagne — X (Ville)" → item "Allemagne" + variation */
+  for(const p of etat.pieces){
+    if(p.serie && trouverCodePays(p.pays)==="DE" && !p.serieVariation){
+      const at = atelierAllemand(p);
+      if(at){ p.serieVariation = at.lettre+" ("+at.ville+")"; await dbSauver(p); }
+    }
+    if(p.serieItem && /^Allemagne — [ADFGJ] /.test(p.serieItem)){
+      const at = atelierAllemand(p) || (p.serieItem.match(/^Allemagne — ([ADFGJ]) \(([^)]+)\)/) ? {lettre:RegExp.$1, ville:RegExp.$2} : null);
+      p.serieItem = "Allemagne";
+      if(at && !p.serieVariation) p.serieVariation = at.lettre+" ("+at.ville+")";
+      await dbSauver(p);
+    }
+  }
   rafraichir();
   majBandeauSauvegarde();
   /* Migration : générer les miniatures manquantes (une seule fois) */
@@ -1412,24 +1481,39 @@ function libelleAtelier(p){
   const at = atelierAllemand(p);
   return at ? (at.lettre+" ("+at.ville+")") : (p.atelier||"");
 }
-/* Liste des éléments attendus d'un modèle de série (commun / bilatéral / classique) */
-function attendusModele(mod){
-  if(mod.commun) return mod.zone.map(c=>PAYS[c].nom);
-  if(mod.bilateral){
-    const out=[];
-    for(const m of mod.membres){
-      if(m.mints) for(const L of Object.keys(ATELIERS_DE)) out.push("Allemagne — "+L+" ("+ATELIERS_DE[L]+")");
-      else out.push(m.item);
-    }
-    return out;
-  }
-  return (mod.attendus||[]).map(a=>a.label);
+/* Libellés des 5 ateliers allemands, utilisés comme variations d'un item */
+const ATELIERS_DE_LABELS = Object.entries(ATELIERS_DE).map(([L,v])=>L+" ("+v+")");
+/* Variation d'une pièce (atelier allemand, ou variation manuelle saisie) */
+function variationPiece(p){
+  const at = atelierAllemand(p);
+  if(at) return at.lettre+" ("+at.ville+")";
+  return p.serieVariation || null;
 }
+/* Items d'un modèle, chacun avec ses variations éventuelles.
+   → [{label, variations:[...]}] ; variations vide = item simple (pas de sous-catégorie) */
+function axeAtelier(){ return {id:"atelier", nom:"Atelier", valeurs:ATELIERS_DE_LABELS.slice()}; }
+function itemsDeModele(mod){
+  if(!mod) return null;
+  if(mod.commun) return mod.zone.map(c=>({label:PAYS[c].nom, axes: c==="DE"?[axeAtelier()]:[]}));
+  if(mod.bilateral) return mod.membres.map(m=>({label:m.item, axes:(m.variations&&m.variations.length)?[axeAtelier()]:[]}));
+  return (mod.attendus||[]).map(it=>({label:it.label, axes:(mod.variationsDefaut||it.variations)?[axeAtelier()]:[]}));
+}
+/* Valeur d'une pièce sur un axe de variation donné */
+function valeurAxe(p, axeId){
+  if(axeId==="atelier"){ const at=atelierAllemand(p); return at?(at.lettre+" ("+at.ville+")"):null; }
+  if(axeId==="tranche"){ return p.varianteTranche || null; }
+  return null;
+}
+/* Retrouver le modèle par le nom de série (pour enrichir une série stockée) */
+function modeleParNom(nom){ return SERIES_MODELES.find(m=>m.nom===nom) || null; }
+/* Liste plate des libellés d'items (stockée dans series.attendus) */
+function attendusModele(mod){ const it=itemsDeModele(mod); return it?it.map(x=>x.label):[]; }
 
 const SERIES_MODELES = [
   {
     nom:"2 € Bundesländer I (Allemagne 2006-2022)",
     pays:/allemagne|germany|deutschland/i,
+    variationsDefaut: ATELIERS_DE_LABELS,
     attendus:[
       {label:"2006 · Schleswig-Holstein (Holstentor)", a:2006, mots:["schleswig","holstentor"]},
       {label:"2007 · Mecklembourg-Poméranie (Château de Schwerin)", a:2007, mots:["mecklembourg","mecklenburg","schwerin"]},
@@ -1452,6 +1536,7 @@ const SERIES_MODELES = [
   {
     nom:"2 € Bundesländer II (Allemagne 2023-…)",
     pays:/allemagne|germany|deutschland/i,
+    variationsDefaut: ATELIERS_DE_LABELS,
     attendus:[
       {label:"2023 · Hambourg (Elbphilharmonie)", a:2023, mots:["hambourg","hamburg","elbphilharmonie"]},
       {label:"2024 · Mecklembourg-Poméranie (Königsstuhl)", a:2024, mots:["mecklembourg","mecklenburg","konigsstuhl"]},
@@ -1488,13 +1573,13 @@ const SERIES_MODELES = [
     nom:"2 € commune franco-allemande — Traité de l'Élysée 2013",
     bilateral:true, a:2013,
     mots:["elysee","traite de l'elysee","50 ans du traite","freundschaftsvertrag","50 jahre"],
-    membres:[ {code:"FR", item:"France"}, {code:"DE", mints:true} ]
+    membres:[ {code:"FR", item:"France"}, {code:"DE", item:"Allemagne", variations:ATELIERS_DE_LABELS} ]
   },
   {
     nom:"2 € commune franco-allemande — Chute du mur de Berlin 2019",
     bilateral:true, a:2019,
     mots:["mur de berlin","chute du mur","mauerfall"],
-    membres:[ {code:"FR", item:"France"}, {code:"DE", mints:true} ]
+    membres:[ {code:"FR", item:"France"}, {code:"DE", item:"Allemagne", variations:ATELIERS_DE_LABELS} ]
   }
 ];
 
@@ -1510,6 +1595,7 @@ async function detecterSerie(p){
       const code = trouverCodePays(p.pays) || mod.zone.find(c=>PAYS[c].alias.some(al=>nomN.includes(al)));
       if(code && mod.zone.includes(code)){
         p.serie = mod.nom; p.serieItem = PAYS[code].nom;
+        p.serieVariation = (code==="DE") ? (atelierAllemand(p) ? (atelierAllemand(p).lettre+" ("+atelierAllemand(p).ville+")") : null) : null;
         await assurerSerie(mod.nom);
         await dbSauver(p);
         return mod.nom;
@@ -1522,12 +1608,11 @@ async function detecterSerie(p){
       const code = trouverCodePays(p.pays);
       const membre = mod.membres.find(x=>x.code===code);
       if(!membre) continue;
-      let item;
-      if(membre.mints){
+      p.serie = mod.nom; p.serieItem = membre.item;
+      if(membre.variations && membre.variations.length){
         const at = atelierAllemand(p);
-        item = at ? ("Allemagne — "+at.lettre+" ("+at.ville+")") : "Allemagne — atelier à préciser";
-      } else item = membre.item;
-      p.serie = mod.nom; p.serieItem = item;
+        p.serieVariation = at ? (at.lettre+" ("+at.ville+")") : null;
+      } else p.serieVariation = null;
       await assurerSerie(mod.nom);
       await dbSauver(p);
       return mod.nom;
@@ -1537,6 +1622,7 @@ async function detecterSerie(p){
       if(item.a && parseInt(p.annee)!==item.a) continue;
       if(item.mots.some(m=>nomN.includes(m)) && (facialeOK || !mod.pays)){
         p.serie = mod.nom; p.serieItem = item.label;
+        p.serieVariation = (mod.variationsDefaut && atelierAllemand(p)) ? (atelierAllemand(p).lettre+" ("+atelierAllemand(p).ville+")") : (item.variations?null:null);
         await assurerSerie(mod.nom);
         await dbSauver(p);
         return mod.nom;
@@ -1560,6 +1646,27 @@ async function assurerSerie(nom){
 function piecesDeSerie(s){
   return etat.pieces.filter(p=>!p.vendu && p.serie===s.nom);
 }
+function itemsDeSerie(s){
+  const mod = modeleParNom(s.nom);
+  if(mod) return itemsDeModele(mod);
+  return (s.attendus||[]).map(l=>({label:l, axes:[]}));
+}
+/* Axes actifs d'un item : ceux du modèle + tranche A/B si une pièce en a une (ou si le catalogue le déclare) */
+function axesActifs(it, piecesItem){
+  const axes = (it.axes||[]).map(a=>({...a, valeurs:a.valeurs.slice()}));
+  const aTranche = piecesItem.some(p=>p.varianteTranche);
+  if(aTranche && !axes.some(a=>a.id==="tranche")) axes.push({id:"tranche", nom:"Tranche", valeurs:["A","B"]});
+  return axes;
+}
+function matchItem(items, serieItem, nom){
+  if(!serieItem){
+    // repli : retrouver l'item par le nom de la pièce
+    return items.find(it=> normTxt(nom).includes(normTxt(it.label.split("(")[0].split("·").pop()||"").trim())) || null;
+  }
+  return items.find(it=> normTxt(it.label)===normTxt(serieItem)
+    || normTxt(it.label).includes(normTxt(serieItem))
+    || normTxt(serieItem).includes(normTxt(it.label))) || null;
+}
 function rendreSeries(){
   const el=$("#listeSeries"); if(!el) return;
   if(!etat.series.length){
@@ -1567,27 +1674,77 @@ function rendreSeries(){
     return;
   }
   el.innerHTML = etat.series.map(s=>{
+    const items = itemsDeSerie(s);
     const ps = piecesDeSerie(s);
-    const possedes = new Set();
+    // Regrouper les pièces par item
+    const parItem = new Map(items.map(it=>[it.label,{it, pieces:[]}]));
     let horsListe = 0;
     for(const p of ps){
-      const cible = s.attendus.find(a=> normTxt(a)===normTxt(p.serieItem||"") || (p.serieItem && normTxt(a).includes(normTxt(p.serieItem))) || normTxt(p.nom).includes(normTxt(a.split("(")[0].split("·").pop()||"").trim()) );
-      if(cible) possedes.add(cible); else horsListe++;
+      const it = matchItem(items, p.serieItem, p.nom);
+      if(!it){ horsListe++; continue; }
+      parItem.get(it.label).pieces.push(p);
     }
-    const tot = s.attendus.length;
-    const pct = tot ? Math.round(possedes.size/tot*100) : null;
-    const chips = s.attendus.map(a=>{
-      const ok = possedes.has(a);
-      const enWish = !ok && etat.wishlist.some(w=>normTxt(w.nom).includes(normTxt(a).slice(0,20)));
-      return `<span class="chip-grade" ${ok?"":`data-wish="${esc(a)}" data-serie="${esc(s.nom)}" role="button" tabindex="0" title="${enWish?"Déjà dans la wishlist":"Cliquer pour ajouter à la wishlist"}" style="cursor:pointer;`} ${ok?`style="background:#DCEBDB;border-color:#A9CCA6;color:#2F5A36"`:enWish?`background:#F3E7C9;border-color:#DCC073;color:#7A5D1E"`:`background:#EEEAE0;color:#8A857A"`}>${ok?"✓ ":enWish?"☆ ":"✗ "}${esc(a)}</span>`;
-    }).join(" ");
+    // Décompte global
+    let itemsOwned=0, totVariations=0, ownedVariations=0;
+    let axeMax=0, axeExemple="";
+    for(const [,e] of parItem){
+      if(e.pieces.length>0) itemsOwned++;
+      const axes = axesActifs(e.it, e.pieces);
+      if(axes.length){
+        for(const ax of axes){
+          totVariations += ax.valeurs.length;
+          const own = new Set();
+          for(const p of e.pieces){ const v=valeurAxe(p,ax.id); if(v && ax.valeurs.some(vv=>normTxt(vv)===normTxt(v))) own.add(normTxt(v)); }
+          ownedVariations += own.size;
+          if(ax.valeurs.length>axeMax){ axeMax=ax.valeurs.length; axeExemple=ax.nom.toLowerCase()+"s"; }
+        }
+      } else {
+        totVariations += 1;
+        if(e.pieces.length>0) ownedVariations += 1;
+      }
+    }
+    const totItems = items.length;
+    const aVariations = totVariations>totItems;
+    const pct = totVariations ? Math.round(ownedVariations/totVariations*100) : 0;
+
+    const lignes = items.map(it=>{
+      const e = parItem.get(it.label);
+      const ownIt = e.pieces.length>0;
+      const axes = axesActifs(it, e.pieces);
+      if(axes.length){
+        const blocsAxes = axes.map(ax=>{
+          const own = new Set();
+          for(const p of e.pieces){ const v=valeurAxe(p,ax.id); if(v) own.add(normTxt(v)); }
+          const nOwn = ax.valeurs.filter(vv=>own.has(normTxt(vv))).length;
+          const pastilles = ax.valeurs.map(vv=>{
+            const ownV = own.has(normTxt(vv));
+            const court = vv.split(" ")[0];
+            return `<span class="var-pastille ${ownV?"var-ok":""}" title="${esc(ax.nom)} ${esc(vv)}">${esc(court)}</span>`;
+          }).join("");
+          return `<span class="axe-bloc"><span class="axe-nom">${esc(ax.nom)}</span>
+            <span class="serie-item-cpt num ${nOwn===ax.valeurs.length?"pv-pos":(nOwn>0?"":"vide-note")}">${nOwn}/${ax.valeurs.length}</span>
+            <span class="serie-vars">${pastilles}</span></span>`;
+        }).join("");
+        return `<div class="serie-item serie-item-multi">
+          <span class="serie-item-lab">${ownIt?"":"✗ "}${esc(it.label)}</span>
+          <span class="serie-axes">${blocsAxes}</span>
+        </div>`;
+      }
+      const enWish = !ownIt && etat.wishlist.some(w=>normTxt(w.nom).includes(normTxt(it.label).slice(0,20)));
+      return `<div class="serie-item">
+        <span class="serie-item-lab">${ownIt?"✓ ":(enWish?"☆ ":"✗ ")}${esc(it.label)}</span>
+        <span class="serie-item-cpt">${ownIt?`<span class="pv-pos">possédée</span>`:`<span class="chip-mini" data-wish="${esc(it.label)}" data-serie="${esc(s.nom)}" role="button" tabindex="0" style="cursor:pointer">${enWish?"dans wishlist":"+ wishlist"}</span>`}</span>
+      </div>`;
+    }).join("");
+
     return `<div class="panneau" style="margin-bottom:16px">
       <h3 style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
         <span>${esc(s.nom)}</span>
-        <span>${tot? possedes.size+" / "+tot+" ("+pct+" %)" : ps.length+" pièce(s)"}</span>
+        <span>${totItems? (aVariations? ownedVariations+" / "+totVariations+" variations" : itemsOwned+" / "+totItems)+" ("+pct+" %)" : ps.length+" pièce(s)"}</span>
       </h3>
-      ${tot?`<div class="barre-fond" style="margin-bottom:12px"><div class="barre-rempli" style="width:${Math.max(2,pct)}%"></div></div>`:""}
-      <div style="display:flex;flex-wrap:wrap;gap:6px;line-height:2">${chips||'<span class="vide-note">Pas de liste d\'éléments — série libre.</span>'}</div>
+      ${totItems?`<div class="barre-fond" style="margin-bottom:6px"><div class="barre-rempli" style="width:${Math.max(2,pct)}%"></div></div>`:""}
+      ${aVariations?`<p class="vide-note" style="margin-bottom:8px">${itemsOwned}/${totItems} modèles entamés${axeMax>1?" · variations comptées (ateliers, tranches…)":""}</p>`:""}
+      <div class="serie-liste">${lignes||'<span class="vide-note">Série libre (pas de liste d\'éléments).</span>'}</div>
       ${horsListe?`<p class="vide-note">+ ${horsListe} pièce(s) rattachée(s) hors liste.</p>`:""}
       ${s.note?`<p class="vide-note">${esc(s.note)}</p>`:""}
       <div class="form-actions">
@@ -1596,6 +1753,14 @@ function rendreSeries(){
       </div>
     </div>`;
   }).join("");
+}
+async function rescannerSeries(){
+  let n=0;
+  for(const p of etat.pieces){
+    if(!p.serie){ const det = await detecterSerie(p); if(det) n++; }
+  }
+  rafraichir();
+  toast(n ? (n+" pièce(s) rattachée(s) à une série ✓") : "Aucune nouvelle pièce à rattacher");
 }
 function ouvrirNouvelleSerie(idExist){
   const s = idExist ? etat.series.find(x=>x.id===idExist) : null;
@@ -2130,5 +2295,94 @@ function rendreFiscalite(){
 }
 </script>
 
+<script>
+"use strict";
+/* =====================================================================
+   v7 — Base de données de référence (catalogue) : pré-remplissage
+   Fichier base-donnees.json hébergé à côté de l'app (GitHub Pages).
+   Chargé quand en ligne, mis en cache pour usage hors-ligne.
+===================================================================== */
+async function chargerCatalogue(){
+  try{
+    if(location.protocol.startsWith("http")){
+      const r = await fetch("base-donnees.json", {cache:"no-cache"});
+      if(r.ok){
+        const d = await r.json();
+        etat.catalogue = d;
+        await dbConfigEcrire("catalogue", d);
+        return;
+      }
+    }
+  }catch(e){ /* hors-ligne : on retombe sur le cache */ }
+  const c = await dbConfigLire("catalogue");
+  if(c) etat.catalogue = c;
+}
+/* Recherche de la meilleure fiche catalogue pour une pièce (nom/pays/année) */
+function chercherCatalogue(nom, pays, annee){
+  if(!etat.catalogue || !Array.isArray(etat.catalogue.pieces)) return null;
+  const n = normTxt(nom||""), pc = trouverCodePays(pays), an = parseInt(annee)||null;
+  let best=null, bestScore=0;
+  for(const e of etat.catalogue.pieces){
+    const m = e.match||{};
+    let sc=0;
+    if(m.annee!=null){ if(an===m.annee) sc+=2; else continue; }
+    if(m.pays){ const mpc=trouverCodePays(m.pays); if(mpc && pc && mpc!==pc) continue; if(mpc && mpc===pc) sc+=2; }
+    if(Array.isArray(m.mots)){ if(m.mots.some(w=>n.includes(normTxt(w)))) sc+=3; }
+    if(sc>bestScore){ bestScore=sc; best=e; }
+  }
+  return bestScore>=3 ? best : null;
+}
+/* Pré-remplir le formulaire à partir du catalogue (ne remplit que les champs vides) */
+function preRemplirCatalogue(){
+  if(!etat.catalogue){ toast("Catalogue non chargé (nécessite une première ouverture en ligne)"); return; }
+  const nom=$("#f-nom").value, pays=$("#f-pays").value, annee=$("#f-annee").value;
+  const e = chercherCatalogue(nom, pays, annee);
+  if(!e){ toast("Aucune fiche catalogue correspondante"); return; }
+  const set=(id,val)=>{ const el=$("#"+id); if(el && !el.value && val!=null && val!=="") el.value=val; };
+  set("f-poids", e.poids); set("f-diametre", e.diametre); set("f-tirage", e.tirage);
+  set("f-numeroKM", e.numeroKM); set("f-lienNumista", e.lienNumista || e.lienNumistaFR);
+  if(e.metal){ const sel=$("#f-metal"); if(sel && (!sel.value||sel.value==="autre")) sel.value=e.metal; }
+  if(e.axeFrappe){ const sel=$("#f-axeFrappe"); if(sel && !sel.value) sel.value=e.axeFrappe; }
+  if(e.tranches && e.tranches.length && !$("#f-tranche").value){
+    $("#f-tranche").value = "Striée (variantes de tranche "+e.tranches.join("/")+" connues)";
+  }
+  if(!$("#f-notes").value && e.notes) $("#f-notes").value = e.notes;
+  toast("Pré-rempli depuis le catalogue ✓ (champs vides complétés)");
+}
+</script>
+<script>
+"use strict";
+/* Changelog — historique des versions du Médaillier */
+const VERSION_ACTUELLE = "7.0";
+const CHANGELOG = [
+  { v:"7.0", type:"majeure", date:"2026-07", titre:"Variations, tranches & base de données",
+    points:["Séries à variations multi-axes : ateliers (Allemagne A/D/F/G/J) ET tranches","Axe tranche A/B automatique : une tranche connue implique l'autre","Base de données de référence téléchargée et mise en cache","Bouton « Pré-remplir ⚡ » depuis le catalogue","Particularités par pays (ex. Grèce 2002)"] },
+  { v:"6.0", type:"majeure", date:"2026-07", titre:"Ateliers allemands & séries bilatérales",
+    points:["5 ateliers allemands (Berlin, Munich, Stuttgart, Karlsruhe, Hambourg)","Compteur par modèle « Thuringe 1/5 » avec pastilles","Séries bilatérales franco-allemandes (Élysée 2013, Mur de Berlin 2019)","Re-scan auto et manuel des pièces déjà enregistrées"] },
+  { v:"5.0", type:"majeure", date:"2026-07", titre:"Carte du monde & séries par pays",
+    points:["Carte d'Europe interactive, filtrage au toucher","Régions du monde extensibles (Asie, Amériques…)","Émissions communes éclatées par émission","Liens Numista en version française"] },
+  { v:"4.0", type:"majeure", date:"2026-07", titre:"Wishlist & optimisations",
+    points:["Wishlist connectée aux séries","Miniatures de photos, export JSON léger","Gestion des lots / rouleaux scellés (vue rouleau)"] },
+  { v:"3.0", type:"majeure", date:"2026-07", titre:"Ventes, séries & doublons",
+    points:["Registre des ventes avec plus-value réalisée","Suivi de séries avec détection automatique","Doublons pour l'échange, photo de tranche"] },
+  { v:"2.0", type:"majeure", date:"2026-07", titre:"Patrimoine & sauvegarde",
+    points:["Graphique d'évolution de la valeur, export CSV","Inventaire assurance imprimable (PDF)","Emplacement de rangement, rappel de sauvegarde"] },
+  { v:"1.0", type:"majeure", date:"2026-07", titre:"Première version",
+    points:["Collection avec fiches, photos, grades (échelle française)","Tableau de bord : valeur, plus-value, valeur métal","Import / export JSON, cours des métaux, fiscalité 2026"] }
+];
+function rendreChangelog(){
+  const el=$("#listeChangelog"); if(!el) return;
+  const f=$("#clFooter"); if(f) f.textContent="Version actuelle : "+VERSION_ACTUELLE+" — "+CHANGELOG.length+" versions publiées.";
+  el.innerHTML = CHANGELOG.map(c=>`
+    <div class="cl-entree">
+      <div class="cl-tete">
+        <span class="cl-badge ${c.type==="majeure"?"cl-maj":"cl-min"}">v${c.v}</span>
+        <span class="cl-titre">${esc(c.titre)}</span>
+        <span class="cl-date">${esc(c.date)}</span>
+      </div>
+      <ul class="cl-points">${c.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+    </div>`).join("");
+}
+</script>
 </body>
 </html>
