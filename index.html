@@ -763,7 +763,7 @@ function rendreCollection(){
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
-      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
+      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${atelierAllemand(p)?" · "+atelierAllemand(p).lettre:""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
       <div class="piece-bas">
         ${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}
         <span class="piece-cote num">${fmtEuro(coteRetenue(p))}</span>
@@ -830,7 +830,7 @@ function ouvrirDetail(id){
     </div>
     <dl class="fiche">
       <div><dt>Pays</dt><dd>${esc(p.pays||"—")}</dd></div>
-      <div><dt>Année</dt><dd>${esc(p.annee||"—")}${p.atelier?" · "+esc(p.atelier):""}</dd></div>
+      <div><dt>Année</dt><dd>${esc(p.annee||"—")}${p.atelier?" · atelier "+esc(libelleAtelier(p)):""}</dd></div>
       <div><dt>Valeur faciale</dt><dd>${esc(p.valeurFaciale||"—")}</dd></div>
       <div><dt>Métal · titre</dt><dd>${METAUX[p.metal]||esc(p.metal||"—")}${p.titre?" · "+esc(p.titre)+"‰".replace("‰",p.titre>1?" ‰":""):""}</dd></div>
       <div><dt>Poids · Ø</dt><dd>${p.poids?esc(p.poids)+" g":"—"}${p.diametre?" · "+esc(p.diametre)+" mm":""}</dd></div>
@@ -1401,6 +1401,30 @@ function trouverCodePays(pays){
   for(const [code,p] of Object.entries(PAYS)) if(p.alias.some(al=>n===al||n.includes(al))) return code;
   return null;
 }
+/* Ateliers monétaires allemands (chaque commémorative allemande = 5 frappes) */
+const ATELIERS_DE = { A:"Berlin", D:"Munich", F:"Stuttgart", G:"Karlsruhe", J:"Hambourg" };
+function atelierAllemand(p){
+  if(trouverCodePays(p.pays)!=="DE") return null;
+  const m = String(p.atelier||"").toUpperCase().match(/\b([ADFGJ])\b/);
+  return m ? { lettre:m[1], ville:ATELIERS_DE[m[1]] } : null;
+}
+function libelleAtelier(p){
+  const at = atelierAllemand(p);
+  return at ? (at.lettre+" ("+at.ville+")") : (p.atelier||"");
+}
+/* Liste des éléments attendus d'un modèle de série (commun / bilatéral / classique) */
+function attendusModele(mod){
+  if(mod.commun) return mod.zone.map(c=>PAYS[c].nom);
+  if(mod.bilateral){
+    const out=[];
+    for(const m of mod.membres){
+      if(m.mints) for(const L of Object.keys(ATELIERS_DE)) out.push("Allemagne — "+L+" ("+ATELIERS_DE[L]+")");
+      else out.push(m.item);
+    }
+    return out;
+  }
+  return (mod.attendus||[]).map(a=>a.label);
+}
 
 const SERIES_MODELES = [
   {
@@ -1459,6 +1483,18 @@ const SERIES_MODELES = [
     nom:"2 € commune 2022 — 35 ans du programme Erasmus",
     commun:true, a:2022, mots:["erasmus"],
     zone:["DE","AT","BE","CY","EE","ES","FI","FR","GR","IE","IT","LT","LU","LV","MT","NL","PT","SK","SI"]
+  },
+  {
+    nom:"2 € commune franco-allemande — Traité de l'Élysée 2013",
+    bilateral:true, a:2013,
+    mots:["elysee","traite de l'elysee","50 ans du traite","freundschaftsvertrag","50 jahre"],
+    membres:[ {code:"FR", item:"France"}, {code:"DE", mints:true} ]
+  },
+  {
+    nom:"2 € commune franco-allemande — Chute du mur de Berlin 2019",
+    bilateral:true, a:2019,
+    mots:["mur de berlin","chute du mur","mauerfall"],
+    membres:[ {code:"FR", item:"France"}, {code:"DE", mints:true} ]
   }
 ];
 
@@ -1480,6 +1516,22 @@ async function detecterSerie(p){
       }
       continue;
     }
+    if(mod.bilateral){
+      if(parseInt(p.annee)!==mod.a) continue;
+      if(!mod.mots.some(m=>nomN.includes(m))) continue;
+      const code = trouverCodePays(p.pays);
+      const membre = mod.membres.find(x=>x.code===code);
+      if(!membre) continue;
+      let item;
+      if(membre.mints){
+        const at = atelierAllemand(p);
+        item = at ? ("Allemagne — "+at.lettre+" ("+at.ville+")") : "Allemagne — atelier à préciser";
+      } else item = membre.item;
+      p.serie = mod.nom; p.serieItem = item;
+      await assurerSerie(mod.nom);
+      await dbSauver(p);
+      return mod.nom;
+    }
     if(mod.pays && !(mod.pays.test(p.pays||""))) continue;
     for(const item of mod.attendus){
       if(item.a && parseInt(p.annee)!==item.a) continue;
@@ -1498,7 +1550,7 @@ async function assurerSerie(nom){
   const mod = SERIES_MODELES.find(m=>m.nom===nom);
   etat.series.push({
     id:uuid(), nom,
-    attendus: mod ? (mod.commun ? mod.zone.map(c=>PAYS[c].nom) : mod.attendus.map(a=>a.label)) : [],
+    attendus: mod ? attendusModele(mod) : [],
     note: mod?.note||null
   });
   await dbConfigEcrire("series", etat.series);
@@ -1566,7 +1618,7 @@ function ouvrirNouvelleSerie(idExist){
   const selMod = $("#s-modele");
   if(selMod) selMod.addEventListener("change",()=>{
     const m = modelesDispo[parseInt(selMod.value)];
-    if(m){ $("#s-nom").value=m.nom; $("#s-attendus").value=(m.commun?m.zone.map(c=>PAYS[c].nom):m.attendus.map(a=>a.label)).join("\n"); }
+    if(m){ $("#s-nom").value=m.nom; $("#s-attendus").value=attendusModele(m).join("\n"); }
   });
 }
 async function sauverSerie(id){
