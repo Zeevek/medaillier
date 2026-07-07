@@ -392,6 +392,25 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
 </style>
 </head>
 <body>
+<script>
+/* Filet de sécurité : affiche les erreurs JS à l'écran (utile sur mobile, sans console) */
+(function(){
+  function bandeau(msg){
+    var b=document.getElementById("errBandeau");
+    if(!b){
+      b=document.createElement("div"); b.id="errBandeau";
+      b.style.cssText="position:fixed;left:0;right:0;bottom:0;z-index:9999;background:#B04A3A;color:#fff;font:13px/1.4 -apple-system,sans-serif;padding:10px 14px;white-space:pre-wrap;max-height:40vh;overflow:auto;box-shadow:0 -2px 10px rgba(0,0,0,.3)";
+      b.addEventListener("click",function(){ b.style.display="none"; });
+      (document.body||document.documentElement).appendChild(b);
+    }
+    b.style.display="block";
+    b.textContent="⚠ Erreur (touchez pour masquer) : "+msg;
+  }
+  window.addEventListener("error",function(e){ bandeau((e.message||"?")+"  ["+((e.filename||"").split("/").pop())+":"+(e.lineno||"?")+"]"); });
+  window.addEventListener("unhandledrejection",function(e){ bandeau("Promesse : "+((e.reason&&e.reason.message)||e.reason||"?")); });
+})();
+</script>
+
 <header>
   <div class="header-inner">
     <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
@@ -883,12 +902,15 @@ function majFiltres(){
   selNa.value = nat.includes(vNa)?vNa:"";
 }
 function rafraichir(){
-  majFiltres(); rendreDashboard(); rendreCollection();
-  if(typeof rendreSeries==="function") rendreSeries();
-  if(typeof rendreRegistre==="function") rendreRegistre();
-  if(typeof rendreWishlist==="function") rendreWishlist();
-  if(typeof rendreFiscalite==="function") rendreFiscalite();
-  if(typeof rendreChangelog==="function") rendreChangelog();
+  const secu=(nom,fn)=>{ try{ fn(); }catch(e){ console.error("Erreur "+nom+" :", e); } };
+  secu("majFiltres", majFiltres);
+  secu("dashboard", rendreDashboard);
+  secu("collection", rendreCollection);
+  if(typeof rendreSeries==="function") secu("séries", rendreSeries);
+  if(typeof rendreRegistre==="function") secu("registre", rendreRegistre);
+  if(typeof rendreWishlist==="function") secu("wishlist", rendreWishlist);
+  if(typeof rendreFiscalite==="function") secu("fiscalité", rendreFiscalite);
+  if(typeof rendreChangelog==="function") secu("changelog", rendreChangelog);
 }
 </script>
 <script>
@@ -1375,21 +1397,20 @@ document.querySelectorAll(".onglet").forEach(o=>o.addEventListener("click",()=>{
   document.querySelectorAll(".onglet").forEach(x=>x.classList.toggle("actif",x===o));
   document.querySelectorAll(".vue").forEach(v=>v.classList.toggle("active", v.id==="vue-"+o.dataset.vue));
 }));
-$("#btnAjouter").addEventListener("click",()=>ouvrirFormulaire(""));
-$("#btnImport").addEventListener("click",ouvrirImport);
-$("#btnExport").addEventListener("click",ouvrirExport);
-$("#btnCours").addEventListener("click",ouvrirCours);
-$("#btnRecherche").addEventListener("click",ouvrirRecherche);
-["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>
-  $("#"+id).addEventListener("input",rendreCollection));
+function surClic(id, fn){ const el=$("#"+id); if(el) el.addEventListener("click", fn); }
+function surInput(id, fn){ const el=$("#"+id); if(el) el.addEventListener("input", fn); }
+surClic("btnAjouter", ()=>ouvrirFormulaire(""));
+surClic("btnImport", ouvrirImport);
+surClic("btnExport", ouvrirExport);
+surClic("btnCours", ouvrirCours);
+surClic("btnRecherche", ouvrirRecherche);
+["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, rendreCollection));
 let _debRech;
-$("#recherche").addEventListener("input",()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
-$("#grillePieces").addEventListener("click",e=>{
-  const c=e.target.closest(".carte-piece"); if(c) ouvrirDetail(c.dataset.id);
-});
-$("#grillePieces").addEventListener("keydown",e=>{
-  if(e.key==="Enter"){ const c=e.target.closest(".carte-piece"); if(c) ouvrirDetail(c.dataset.id); }
-});
+surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
+(function(){ const g=$("#grillePieces"); if(!g) return;
+  g.addEventListener("click",e=>{ const c=e.target.closest(".carte-piece"); if(c) ouvrirDetail(c.dataset.id); });
+  g.addEventListener("keydown",e=>{ if(e.key==="Enter"){ const c=e.target.closest(".carte-piece"); if(c) ouvrirDetail(c.dataset.id); } });
+})();
 
 (async function init(){
   try{
