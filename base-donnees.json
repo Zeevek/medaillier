@@ -1,84 +1,1130 @@
 {
   "version": 1,
-  "maj": "2026-07-05",
+  "maj": "2026-07-08",
   "description": "Base de données de référence du Médaillier — specs et variantes pré-enregistrées. Étendable dans le temps.",
   "specsCommunes": {
-    "2euro": { "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille" }
+    "2euro": {
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille"
+    }
   },
   "pieces": [
     {
       "cle": "commune-2012-euro",
-      "match": { "annee": 2012, "mots": ["10 ans de l'euro", "euro fiduciaire", "2002-2012", "ten years", "10 jahre"] },
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
-      "tranches": ["A", "B"],
+      "match": {
+        "annee": 2012,
+        "mots": [
+          "10 ans de l'euro",
+          "euro fiduciaire",
+          "2002-2012",
+          "ten years",
+          "10 jahre"
+        ]
+      },
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Émission commune zone euro (17 pays). Dessin H. Andexlinger. Deux types de tranche A/B connus.",
       "lienNumistaFR": "https://fr.numista.com/catalogue/index.php?r=10+ans+euro"
     },
     {
       "cle": "commune-2007-rome",
-      "match": { "annee": 2007, "mots": ["traite de rome", "treaty of rome"] },
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
-      "tranches": ["A", "B"],
+      "match": {
+        "annee": 2007,
+        "mots": [
+          "traite de rome",
+          "treaty of rome"
+        ]
+      },
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Émission commune 50 ans du Traité de Rome (13 pays)."
     },
     {
       "cle": "fr-2019-mur-berlin",
-      "match": { "pays": "France", "annee": 2019, "mots": ["mur de berlin", "chute du mur", "mauerfall"] },
+      "match": {
+        "pays": "France",
+        "annee": 2019,
+        "mots": [
+          "mur de berlin",
+          "chute du mur",
+          "mauerfall"
+        ]
+      },
       "nom": "2 euros commémorative France — 30 ans de la chute du mur de Berlin",
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 15000000,
-      "axeFrappe": "medaille", "numeroKM": "KM# 2765",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "tirage": 15000000,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 2765",
       "lienNumista": "https://fr.numista.com/catalogue/pieces160246.html",
-      "tranches": ["A", "B"],
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Commune franco-allemande. Design J. Jimenez, graffiti d'après S. Gimajev (East Side Gallery)."
     },
     {
       "cle": "de-2019-mur-berlin",
-      "match": { "pays": "Allemagne", "annee": 2019, "mots": ["mur de berlin", "chute du mur", "mauerfall"] },
+      "match": {
+        "pays": "Allemagne",
+        "annee": 2019,
+        "mots": [
+          "mur de berlin",
+          "chute du mur",
+          "mauerfall"
+        ]
+      },
       "nom": "2 euros commémorative Allemagne — 30 ans de la chute du mur de Berlin",
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 30000000,
-      "axeFrappe": "medaille", "numeroKM": "KM# 379",
-      "ateliers": ["A", "D", "F", "G", "J"],
-      "tranches": ["A", "B"],
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "tirage": 30000000,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 379",
+      "ateliers": [
+        "A",
+        "D",
+        "F",
+        "G",
+        "J"
+      ],
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Commune franco-allemande. Frappée dans les 5 ateliers (A Berlin, D Munich, F Stuttgart, G Karlsruhe, J Hambourg)."
     },
     {
       "cle": "fr-2013-elysee",
-      "match": { "pays": "France", "annee": 2013, "mots": ["elysee", "traite de l'elysee"] },
+      "match": {
+        "pays": "France",
+        "annee": 2013,
+        "mots": [
+          "elysee",
+          "traite de l'elysee"
+        ]
+      },
       "nom": "2 euros commémorative France — 50 ans du Traité de l'Élysée",
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75,
-      "axeFrappe": "medaille", "tranches": ["A", "B"],
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Commune franco-allemande."
     },
     {
       "cle": "de-2013-elysee",
-      "match": { "pays": "Allemagne", "annee": 2013, "mots": ["elysee", "freundschaftsvertrag"] },
+      "match": {
+        "pays": "Allemagne",
+        "annee": 2013,
+        "mots": [
+          "elysee",
+          "freundschaftsvertrag"
+        ]
+      },
       "nom": "2 euros commémorative Allemagne — 50 ans du Traité de l'Élysée",
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75,
-      "axeFrappe": "medaille", "ateliers": ["A", "D", "F", "G", "J"], "tranches": ["A", "B"],
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "ateliers": [
+        "A",
+        "D",
+        "F",
+        "G",
+        "J"
+      ],
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Commune franco-allemande. 5 ateliers."
     },
     {
       "cle": "fr-2025-notre-dame-rouleau",
-      "match": { "pays": "France", "annee": 2025, "mots": ["notre-dame", "notre dame"] },
+      "match": {
+        "pays": "France",
+        "annee": 2025,
+        "mots": [
+          "notre-dame",
+          "notre dame"
+        ]
+      },
       "nom": "2 euros commémorative France — Notre-Dame de Paris",
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "tirage": 24000000,
-      "axeFrappe": "medaille", "numeroKM": "KM# 3810",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "tirage": 24000000,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3810",
       "lienNumista": "https://fr.numista.com/catalogue/pieces521871.html",
-      "tranches": ["A", "B"],
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Réouverture de Notre-Dame. Rouleaux : violet UNC (960 000) et bleu FDC (8 000)."
     },
     {
       "cle": "de-bundeslander",
-      "match": { "pays": "Allemagne", "mots": ["bundesland", "bundeslander", "schleswig", "hamburg", "bayern", "baviere", "hessen", "sachsen", "berlin", "brandenburg"] },
-      "metal": "cupronickel", "poids": 8.5, "diametre": 25.75, "axeFrappe": "medaille",
-      "ateliers": ["A", "D", "F", "G", "J"], "tranches": ["A", "B"],
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "bundesland",
+          "bundeslander",
+          "schleswig",
+          "hamburg",
+          "bayern",
+          "baviere",
+          "hessen",
+          "sachsen",
+          "berlin",
+          "brandenburg"
+        ]
+      },
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "ateliers": [
+        "A",
+        "D",
+        "F",
+        "G",
+        "J"
+      ],
+      "tranches": [
+        "A",
+        "B"
+      ],
       "notes": "Série des Bundesländer : une pièce par Land, frappée dans les 5 ateliers."
     },
     {
       "cle": "gr-2002-etoile",
-      "match": { "pays": "Grèce", "annee": 2002 },
+      "match": {
+        "pays": "Grèce",
+        "annee": 2002
+      },
       "notes": "Particularité : certaines 2 € grecques 2002 portent une lettre atelier étrangère (S=Finlande, F=France, E=Espagne) dans une étoile — variante recherchée.",
-      "ateliersEtrangers": ["S (Finlande)", "F (France)", "E (Espagne)"]
+      "ateliersEtrangers": [
+        "S (Finlande)",
+        "F (France)",
+        "E (Espagne)"
+      ]
+    },
+    {
+      "cle": "de-2169-2-euros-schleswig-holstein",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "schleswig",
+          "holstein"
+        ]
+      },
+      "nom": "2 euros Schleswig-Holstein",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 253",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2169.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964d34d1e98e5.11433162-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964d34e2987d4.70648715-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-2162-2-euros-trait-de-rome",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "traité",
+          "rome"
+        ]
+      },
+      "nom": "2 euros Traité de Rome",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 259",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2162.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964d56127a4c5.51752617-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964d562847006.63152249-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-2201-2-euros-mecklembourg-pomranie-occidental",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "mecklembourg",
+          "poméranie",
+          "occidentale"
+        ]
+      },
+      "nom": "2 euros Mecklembourg-Poméranie-Occidentale",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 260",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2201.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964d4b886c7b0.83631624-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964d4b9b0e0c3.70239672-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-2994-2-euros-hambourg",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "hambourg"
+        ]
+      },
+      "nom": "2 euros Hambourg",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 261",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2994.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/665d6c0535d166.88834166-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/665d6c06b22cf8.25525209-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-327881-2-euros-hambourg-erreur-1re-carte-au-rev",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "hambourg",
+          "erreur",
+          "carte",
+          "revers"
+        ]
+      },
+      "nom": "2 euros Hambourg (erreur : 1re carte au revers)",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# A261",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces327881.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/665d67767af642.52034385-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/665d67780f25d2.28759252-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-5053-2-euros-sarre",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "sarre"
+        ]
+      },
+      "nom": "2 euros Sarre",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 276",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces5053.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964d646e1c379.61073840-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964d647eabf81.79964224-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-5054-2-euros-union-conomique-et-montaire",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "union",
+          "économique",
+          "monétaire"
+        ]
+      },
+      "nom": "2 euros Union économique et monétaire",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 277",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces5054.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964d6faaa4763.25364336-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964d6fbc839c5.60074277-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-10069-2-euros-brme",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "brême"
+        ]
+      },
+      "nom": "2 euros Brême",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 285",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces10069.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c6c21ce8445.67279742-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c6c23309d19.10989170-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-18666-2-euros-rhnanie-du-nord-westphalie",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "rhénanie",
+          "nord",
+          "westphalie"
+        ]
+      },
+      "nom": "2 euros Rhénanie-du-Nord-Westphalie",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 293",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces18666.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c807da64858.05961836-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c807ec8e8f6.14974412-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-29694-2-euros-bavire",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "bavière"
+        ]
+      },
+      "nom": "2 euros Bavière",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 305",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces29694.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c80fbde7664.95878059-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c80fd10cb14.21641260-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-28321-2-euros-introduction-de-l-euro-10-ans",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "introduction",
+          "euro"
+        ]
+      },
+      "nom": "2 euros Introduction de l'euro (10 ans)",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 306",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces28321.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/63ca8d040401f3.10871746-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/63ca8d054f4fd2.53289562-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-42149-2-euros-bade-wrttemberg",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "bade",
+          "württemberg"
+        ]
+      },
+      "nom": "2 euros Bade-Württemberg",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 314",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces42149.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c82701875f5.38276696-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c82714eb803.33771552-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-41786-2-euros-trait-de-l-lyse",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "traité",
+          "élysée"
+        ]
+      },
+      "nom": "2 euros Traité de l'Élysée",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 315",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces41786.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964dcb0c5e701.49781680-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964dcb1d77dc8.71907194-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-53570-2-euros-basse-saxe",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "basse",
+          "saxe"
+        ]
+      },
+      "nom": "2 euros Basse-Saxe",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 334",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces53570.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c840a819189.09817032-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c840baaf5c7.35303126-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-69263-2-euros-hesse",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "hesse"
+        ]
+      },
+      "nom": "2 euros Hesse",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 336",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces69263.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628dc1f8e2a6d4.68325415-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628dc1fa315a23.95710021-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-69264-2-euros-runification-allemande",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "réunification",
+          "allemande"
+        ]
+      },
+      "nom": "2 euros Réunification allemande",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 337",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces69264.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/628c8560e54b00.37523665-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/628c85621a4388.83072341-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-76632-2-euros-drapeau-europen",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "drapeau",
+          "européen"
+        ]
+      },
+      "nom": "2 euros Drapeau européen",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 339",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces76632.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964dbb7a82ff7.41738252-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964dbb89d3bf6.88651189-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-80927-2-euros-saxe",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "saxe"
+        ]
+      },
+      "nom": "2 euros Saxe",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 347",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces80927.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/65abe2b973f135.30063829-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/65abe2bbd98173.08870809-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-102445-2-euros-rhnanie-palatinat",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "rhénanie",
+          "palatinat"
+        ]
+      },
+      "nom": "2 euros Rhénanie-Palatinat",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 356",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces102445.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964dafb6ffa96.34971750-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964dafc882458.77717394-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-132936-2-euros-helmut-schmidt",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "helmut",
+          "schmidt"
+        ]
+      },
+      "nom": "2 euros Helmut Schmidt",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 366",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces132936.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/2319-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/2320-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-132935-2-euros-berlin",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "berlin"
+        ]
+      },
+      "nom": "2 euros Berlin",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 367",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces132935.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/2317-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/2318-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-139058-2-euros-bundesrat",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "bundesrat"
+        ]
+      },
+      "nom": "2 euros Bundesrat",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 377",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces139058.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964da436ebb75.74811240-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964da44919351.72684830-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-180626-2-euros-chute-du-mur-de-berlin",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "chute",
+          "berlin"
+        ]
+      },
+      "nom": "2 euros Chute du mur de Berlin",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 429",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces180626.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/65abe3f39966e2.41789160-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/65abe3f68bb7a3.55668344-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-226447-2-euros-genuflexion-de-varsovie",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "genuflexion",
+          "varsovie"
+        ]
+      },
+      "nom": "2 euros Genuflexion de Varsovie",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 388",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces226447.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/5f96b92f57d462.56384535-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/5f96b92f9cfe40.89340525-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-193506-2-euros-brandebourg",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "brandebourg"
+        ]
+      },
+      "nom": "2 euros Brandebourg",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 389",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces193506.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/65abe4d63e8dc9.43883539-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/65abe4da32e544.18333309-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-267621-2-euros-saxe-anhalt",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "saxe",
+          "anhalt"
+        ]
+      },
+      "nom": "2 euros Saxe-Anhalt",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 400",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces267621.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/699316b0534d22.36970377-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/699316b1a85f48.53732703-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-314709-2-euros-thuringe",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "thuringe"
+        ]
+      },
+      "nom": "2 euros Thuringe",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 411",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces314709.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/65abe588d2f604.87869566-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/65abe58b89ac68.01805574-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-324867-2-euros-programme-erasmus",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "programme",
+          "erasmus"
+        ]
+      },
+      "nom": "2 euros Programme Erasmus",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 412",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces324867.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/694b6eb7676f60.98647851-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/694b6eb862a7a5.43728405-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-356441-2-euros-charlemagne",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "charlemagne"
+        ]
+      },
+      "nom": "2 euros Charlemagne",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 423",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces356441.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964defec4e9f7.47119857-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964deffeb63a7.14806909-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-352712-2-euros-philharmonie-de-l-elbe",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "philharmonie",
+          "elbe"
+        ]
+      },
+      "nom": "2 euros Philharmonie de l'Elbe",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 424",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces352712.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6964de03ddaf22.19408089-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6964de04e0ac83.37826501-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-394629-2-euros-parc-national-de-jasmund",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "parc",
+          "national",
+          "jasmund"
+        ]
+      },
+      "nom": "2 euros Parc national de Jasmund",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 439",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces394629.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/66b3154b568512.29718308-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/66b3154c8da1d3.13883943-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-396761-2-euros-constitution-de-l-empire-alleman",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "constitution",
+          "empire",
+          "allemand"
+        ]
+      },
+      "nom": "2 euros Constitution de l'Empire allemand",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 440",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces396761.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/681231afb8bc98.22167167-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/681231b0f3b1c2.72110076-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-439766-2-euros-boucle-de-la-sarre",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "boucle",
+          "sarre"
+        ]
+      },
+      "nom": "2 euros Boucle de la Sarre",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 454",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces439766.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/681238ba0f13f1.61531187-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/681238bb430989.68658717-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-448790-2-euros-unit-allemande",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "unité",
+          "allemande"
+        ]
+      },
+      "nom": "2 euros Unité allemande",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 455",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces448790.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6992fed24ccbf1.73287892-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6992fed34f7894.58014045-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-544530-2-euros-konrad-adenauer",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "konrad",
+          "adenauer"
+        ]
+      },
+      "nom": "2 euros Konrad Adenauer",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 464",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces544530.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6992fd06506521.46627148-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6992fd07534514.63288744-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "de-474550-2-euros-maison-du-climat-de-brme",
+      "match": {
+        "pays": "Allemagne",
+        "mots": [
+          "euros",
+          "maison",
+          "climat",
+          "brême"
+        ]
+      },
+      "nom": "2 euros Maison du Climat de Brême",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 465",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces474550.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6992fd952426b8.52663388-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6992fd96276923.95019620-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
     }
   ]
 }
