@@ -565,7 +565,23 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
 
 <div id="zonePrint"></div>
 <div class="toast" id="toast"></div>
+
+
+
+
+
+
+
+
+
+
+
 <script>
+
+/* ================================================================
+   BLOC UNIQUE — fusion de tous les modules (fiabilité de chargement)
+================================================================ */
+
 "use strict";
 /* =====================================================================
    LE MÉDAILLIER — v1.0
@@ -868,7 +884,7 @@ function rendreCollection(){
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
-      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${atelierAllemand(p)?" · "+atelierAllemand(p).lettre:""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
+      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
       <div class="piece-bas">
         ${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}
         <span class="piece-cote num">${fmtEuro(coteRetenue(p))}</span>
@@ -913,8 +929,9 @@ function rafraichir(){
   if(typeof rendreFiscalite==="function") secu("fiscalité", rendreFiscalite);
   if(typeof rendreChangelog==="function") secu("changelog", rendreChangelog);
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* ---------------- Modales ---------------- */
 function ouvrirModale(titre, html){
@@ -1143,8 +1160,9 @@ async function sauverFormulaire(id){
   fermerModale(); rafraichir();
   toast((id?"Pièce mise à jour":"Pièce ajoutée au médaillier") + (det?" — série « "+det+" »":""));
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* ---------------- Import JSON ---------------- */
 function ouvrirImport(){
@@ -1494,8 +1512,9 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
   }
   if(genere){ rendreCollection(); console.log(genere+" miniature(s) générée(s)"); }
 })();
-</script>
-<script>
+
+
+
 "use strict";
 /* =====================================================================
    v3 — Séries (avec détection automatique), registre des ventes, doublons
@@ -1699,7 +1718,8 @@ async function detecterSerie(p){
       if(item.a && parseInt(p.annee)!==item.a) continue;
       if(item.mots.some(m=>nomN.includes(m)) && (facialeOK || !mod.pays)){
         p.serie = mod.nom; p.serieItem = item.label;
-        p.serieVariation = (mod.variationsDefaut && atelierAllemand(p)) ? (atelierAllemand(p).lettre+" ("+atelierAllemand(p).ville+")") : (item.variations?null:null);
+        const atG = mod.variationsDefaut ? atelierAllemand(p) : null;
+        p.serieVariation = atG ? (atG.lettre+" ("+atG.ville+")") : null;
         await assurerSerie(mod.nom);
         await dbSauver(p);
         return mod.nom;
@@ -1763,7 +1783,7 @@ function rendreSeries(){
     }
     // Décompte global
     let itemsOwned=0, totVariations=0, ownedVariations=0;
-    let axeMax=0, axeExemple="";
+    let axeMax=0;
     for(const [,e] of parItem){
       if(e.pieces.length>0) itemsOwned++;
       const axes = axesActifs(e.it, e.pieces);
@@ -1773,7 +1793,7 @@ function rendreSeries(){
           const own = new Set();
           for(const p of e.pieces){ const v=valeurAxe(p,ax.id); if(v && ax.valeurs.some(vv=>normTxt(vv)===normTxt(v))) own.add(normTxt(v)); }
           ownedVariations += own.size;
-          if(ax.valeurs.length>axeMax){ axeMax=ax.valeurs.length; axeExemple=ax.nom.toLowerCase()+"s"; }
+          if(ax.valeurs.length>axeMax) axeMax=ax.valeurs.length;
         }
       } else {
         totVariations += 1;
@@ -1975,8 +1995,9 @@ function rendreRegistre(){
     </li>`;
   }).join("")+`</ul>`;
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* =====================================================================
    v4 — Wishlist (pièces recherchées, liée aux séries)
@@ -2069,8 +2090,9 @@ document.addEventListener("click", e=>{
   const chip = e.target.closest("[data-wish]");
   if(chip) ajouterWishDepuisSerie(chip.dataset.wish, chip.dataset.serie);
 });
-</script>
-<script>
+
+
+
 "use strict";
 /* =====================================================================
    v5 — Carte d'Europe interactive (dénombrement par pays)
@@ -2196,8 +2218,9 @@ function filtrerParAlias(alias, nom){
   rendreCollection();
   toast(nom+" : filtre appliqué");
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* =====================================================================
    v6 — Fiscalité française de la revente de métaux précieux (règles 2026)
@@ -2370,9 +2393,9 @@ function rendreFiscalite(){
   }
   el.innerHTML = html;
 }
-</script>
 
-<script>
+
+
 "use strict";
 /* =====================================================================
    v7 — Base de données de référence (catalogue) : pré-remplissage
@@ -2426,12 +2449,15 @@ function preRemplirCatalogue(){
   if(!$("#f-notes").value && e.notes) $("#f-notes").value = e.notes;
   toast("Pré-rempli depuis le catalogue ✓ (champs vides complétés)");
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "8.0";
+const VERSION_ACTUELLE = "8.1";
 const CHANGELOG = [
+  { v:"8.1", type:"mineure", date:"2026-07", titre:"Fiabilisation & optimisation",
+    points:["Refonte structurelle : code unifié en un seul module (élimine les erreurs de chargement)","Correction des pannes d'affichage et du bouton recherche sur iOS","Affichage des erreurs à l'écran pour un diagnostic immédiat","Nettoyage du code et micro-optimisations de rendu"] },
   { v:"8.0", type:"majeure", date:"2026-07", titre:"Recherche & classification",
     points:["Recherche globale : dans la collection ET la base de données de référence","Ajout d'une pièce directement depuis un résultat du catalogue","Classification par monnaie (Euro, Franc, Ancien franc…) par pays","Nature des pièces (circulante courante, commémorative, BU/BE…)","Filtres monnaie et nature dans la collection"] },
   { v:"7.0", type:"majeure", date:"2026-07", titre:"Variations, tranches & base de données",
@@ -2462,8 +2488,9 @@ function rendreChangelog(){
       <ul class="cl-points">${c.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
     </div>`).join("");
 }
-</script>
-<script>
+
+
+
 "use strict";
 /* =====================================================================
    v8 — Recherche globale (collection + base de données catalogue)
@@ -2559,6 +2586,7 @@ function ajouterDepuisCatalogue(i){
   setTimeout(()=>{ if(typeof preRemplirCatalogue==="function") preRemplirCatalogue(); }, 50);
   toast("Fiche pré-remplie — complétez et enregistrez");
 }
+
 </script>
 </body>
 </html>
