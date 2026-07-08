@@ -880,7 +880,8 @@ function rendreCollection(){
   $("#videCollection").style.display = etat.pieces.length? "none":"block";
   $("#grillePieces").innerHTML = liste.map(p=>{
     const pv = plusValue(p);
-    const photo = (p.miniature||p.photoAvers) ? `style="background-image:url('${p.miniature||p.photoAvers}')"` : "";
+    const imgC = p.miniature||p.photoAvers||p.photoAversUrl;
+    const photo = imgC ? `style="background-image:url('${imgC}')"` : "";
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
@@ -952,7 +953,7 @@ function ouvrirDetail(id){
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${src?`style="background-image:url('${src}')" data-zoom="${lib}"`:""}>${src?"":"—"}</div>
       <div class="lib">${lib}</div></div>`;
   ouvrirModale(p.nom, `
-    <div class="detail-photos">${photoDiv(p.photoAvers,"Avers")}${photoDiv(p.photoRevers,"Revers")}</div>
+    <div class="detail-photos">${photoDiv(p.photoAvers||p.photoAversUrl,"Avers")}${photoDiv(p.photoRevers||p.photoReversUrl,"Revers")}</div>
     ${p.photoTranche?`<div class="tranche-bloc">
       <div class="${p.estLot?"photo-rouleau":"photo-tranche"}" style="background-image:url('${p.photoTranche}')" data-zoom="${p.estLot?"Rouleau / lot":"Tranche"}"></div>
       <div class="lib">${p.estLot?"Rouleau / lot":"Tranche"}</div></div>`:""}
@@ -1022,6 +1023,7 @@ let photosTemp = {photoAvers:null, photoRevers:null, photoTranche:null, miniatur
 function ouvrirFormulaire(id){
   const p = id ? etat.pieces.find(x=>x.id===id) : null;
   photosTemp = {photoAvers:p?.photoAvers||null, photoRevers:p?.photoRevers||null, photoTranche:p?.photoTranche||null, miniature:p?.miniature||null};
+  window._urlsCata = null;
   if(typeof wishEnCours!=="undefined") wishEnCours=null;
   const v = c=>esc(p?.[c]??"");
   const slot = (cle,lib)=>`<div class="photo-slot">
@@ -1150,6 +1152,8 @@ async function sauverFormulaire(id){
     coteEstimee:lire("coteEstimee",1), dateCote:lire("dateCote"), sourceCote:lire("sourceCote"),
     numeroKM:lire("numeroKM"), lienNumista:lienNumistaFR(lire("lienNumista")), notes:lire("notes"),
     photoAvers:photosTemp.photoAvers, photoRevers:photosTemp.photoRevers,
+    photoAversUrl:(!photosTemp.photoAvers && window._urlsCata) ? window._urlsCata.avers : p.photoAversUrl,
+    photoReversUrl:(!photosTemp.photoRevers && window._urlsCata) ? window._urlsCata.revers : p.photoReversUrl,
     photoTranche:photosTemp.photoTranche, miniature:photosTemp.miniature
   });
   await dbSauver(p);
@@ -2447,15 +2451,18 @@ function preRemplirCatalogue(){
     $("#f-tranche").value = "Striée (variantes de tranche "+e.tranches.join("/")+" connues)";
   }
   if(!$("#f-notes").value && e.notes) $("#f-notes").value = e.notes;
-  toast("Pré-rempli depuis le catalogue ✓ (champs vides complétés)");
+  window._urlsCata = (e.imageAvers||e.imageRevers) ? {avers:e.imageAvers||null, revers:e.imageRevers||null} : null;
+  toast("Pré-rempli depuis le catalogue ✓ (champs vides complétés"+(window._urlsCata?" + images de prévisualisation":"")+")");
 }
 
 
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "8.1";
+const VERSION_ACTUELLE = "8.2";
 const CHANGELOG = [
+  { v:"8.2", type:"mineure", date:"2026-07", titre:"Images de prévisualisation",
+    points:["Images Numista de prévisualisation (avers/revers) sur les pièces sans photo","Vignettes et fiches illustrées dans la recherche catalogue","Vos photos personnelles remplacent la prévisualisation dès leur ajout","Éditeur de base : champs images, arbitrage des doublons Numista, prompt Claude intégré"] },
   { v:"8.1", type:"mineure", date:"2026-07", titre:"Fiabilisation & optimisation",
     points:["Refonte structurelle : code unifié en un seul module (élimine les erreurs de chargement)","Correction des pannes d'affichage et du bouton recherche sur iOS","Affichage des erreurs à l'écran pour un diagnostic immédiat","Nettoyage du code et micro-optimisations de rendu"] },
   { v:"8.0", type:"majeure", date:"2026-07", titre:"Recherche & classification",
@@ -2529,7 +2536,7 @@ function lancerRecherche(q){
   if(dansColl.length){
     html += `<div class="rech-section">Dans ma collection (${dansColl.length})</div>`;
     html += dansColl.map(p=>{
-      const img=p.miniature||p.photoAvers;
+      const img=p.miniature||p.photoAvers||p.photoAversUrl;
       return `<div class="rech-item" onclick="fermerModale();ouvrirDetail('${p.id}')">
         <div class="rech-vignette ${RIMS[p.metal]||"rim-autre"}" ${img?`style="background-image:url('${img}')"`:""}>${img?"":"🪙"}</div>
         <div class="rech-corps"><div class="rech-nom">${esc(p.nom)}</div>
@@ -2544,7 +2551,7 @@ function lancerRecherche(q){
       const specs=[e.metal,e.poids?e.poids+" g":"",e.diametre?e.diametre+" mm":"",e.tirage?("tirage "+Number(e.tirage).toLocaleString("fr-FR")):""].filter(Boolean).join(" · ");
       const variantes=[e.ateliers?("ateliers "+e.ateliers.join("/")):"",e.tranches?("tranches "+e.tranches.join("/")):""].filter(Boolean).join(" · ");
       return `<div class="rech-item" onclick="detailCatalogue(${i})" data-cata="${i}">
-        <div class="rech-vignette">📖</div>
+        <div class="rech-vignette" ${e.imageAvers?`style="background-image:url('${e.imageAvers}')"`:""}>${e.imageAvers?"":"📖"}</div>
         <div class="rech-corps"><div class="rech-nom">${esc(e.nom||e.cle)}</div>
           <div class="rech-sous">${esc(specs||e.notes||"")}${variantes?" · "+esc(variantes):""}</div></div>
         <span class="rech-tag cata">Catalogue</span>
@@ -2570,6 +2577,10 @@ function detailCatalogue(i){
   add("Particularité", e.ateliersEtrangers?e.ateliersEtrangers.join(", "):null);
   add("Notes", e.notes);
   ouvrirModale(e.nom||"Fiche catalogue", `
+    ${(e.imageAvers||e.imageRevers)?`<div class="detail-photos">
+      ${e.imageAvers?`<div class="photo-slot"><div class="piece-photo rim-or" style="background-image:url('${e.imageAvers}')"></div><div class="lib">Avers</div></div>`:""}
+      ${e.imageRevers?`<div class="photo-slot"><div class="piece-photo rim-or" style="background-image:url('${e.imageRevers}')"></div><div class="lib">Revers</div></div>`:""}
+    </div>`:""}
     <dl class="fiche">${lignes.join("")}</dl>
     ${e.lienNumista||e.lienNumistaFR?`<p style="margin-top:10px"><a href="${esc(e.lienNumista||e.lienNumistaFR)}" target="_blank" rel="noopener">Ouvrir sur Numista ↗</a></p>`:""}
     <div class="form-actions">
