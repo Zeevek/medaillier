@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "maj": "2026-07-08",
+  "maj": "2026-07-09",
   "description": "Base de données de référence du Médaillier — specs et variantes pré-enregistrées. Étendable dans le temps.",
   "specsCommunes": {
     "2euro": {
@@ -1125,6 +1125,209 @@
       "imageAvers": "https://en.numista.com/catalogue/photos/allemagne/6992fd952426b8.52663388-270.jpg",
       "imageRevers": "https://en.numista.com/catalogue/photos/allemagne/6992fd96276923.95019620-270.jpg",
       "notes": "Extrait du catalogue Numista (liste 2 € Allemagne). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-2193-2-euros-trait-d-tat-autrichien",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "traité",
+          "état",
+          "autrichien"
+        ]
+      },
+      "nom": "2 euros Traité d'État autrichien",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3124",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2193.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abb1788e4722.03708350-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abb17a242e39.20579645-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-2163-2-euros-trait-de-rome",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "traité",
+          "rome"
+        ]
+      },
+      "nom": "2 euros Traité de Rome",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3150",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces2163.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abd5050ee9d6.69275165-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abd5073dbe78.91512037-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-5055-2-euros-union-conomique-et-montaire",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "union",
+          "économique",
+          "monétaire"
+        ]
+      },
+      "nom": "2 euros Union économique et monétaire",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3175",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces5055.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abd7c8bbac64.42726838-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abd7caace8c4.11880308-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-28191-2-euros-introduction-de-l-euro-10-ans",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "introduction",
+          "euro"
+        ]
+      },
+      "nom": "2 euros Introduction de l'euro (10 ans)",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3205",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces28191.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abce291ea883.08201879-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abce2b0c3339.95112030-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-77180-2-euros-drapeau-europen",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "drapeau",
+          "européen"
+        ]
+      },
+      "nom": "2 euros Drapeau européen",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3247",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces77180.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abd0012dd304.92496202-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abd0032b8f79.83173722-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-80926-2-euros-banque-nationale-d-autriche",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "banque",
+          "nationale",
+          "autriche"
+        ]
+      },
+      "nom": "2 euros Banque Nationale d'Autriche",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3248",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces80926.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abd18234a2f3.81856797-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abd1840bd6f6.71437557-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-131199-2-euros-rpublique-d-autriche",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "république",
+          "autriche"
+        ]
+      },
+      "nom": "2 euros République d'Autriche",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3275",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces131199.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/3552-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/3553-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
+    },
+    {
+      "cle": "at-331112-2-euros-programme-erasmus",
+      "match": {
+        "pays": "Autriche",
+        "mots": [
+          "euros",
+          "programme",
+          "erasmus"
+        ]
+      },
+      "nom": "2 euros Programme Erasmus",
+      "metal": "cupronickel",
+      "poids": 8.5,
+      "diametre": 25.75,
+      "axeFrappe": "medaille",
+      "numeroKM": "KM# 3336",
+      "lienNumista": "https://fr.numista.com/catalogue/pieces331112.html",
+      "tranches": [
+        "A",
+        "B"
+      ],
+      "imageAvers": "https://en.numista.com/catalogue/photos/autriche/65abd2d63dedd8.53627245-270.jpg",
+      "imageRevers": "https://en.numista.com/catalogue/photos/autriche/65abd2d87de518.46469298-270.jpg",
+      "notes": "Extrait du catalogue Numista (liste 2 € Autriche). Poids/diamètre standard 2 € ; tirage à compléter."
     }
   ]
 }
