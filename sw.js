@@ -2,8 +2,8 @@
    Stratégie "réseau d'abord, cache en secours" :
    l'app se met à jour dès qu'une nouvelle version est en ligne,
    et fonctionne intégralement hors-ligne sinon. */
-const CACHE = "medaillier-v8-6";
-const FICHIERS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./base-donnees.json", "./LICENSE", "./README.md"];
+const CACHE = "medaillier-v9-1";
+const FICHIERS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./base-donnees.json", "./series-donnees.json", "./LICENSE", "./README.md"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FICHIERS)).then(() => self.skipWaiting()));

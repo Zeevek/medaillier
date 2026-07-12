@@ -1,0 +1,890 @@
+{
+  "description": "Séries de collection du Médaillier — définitions séparées des pièces. Chargé par l'app à côté de base-donnees.json.",
+  "version": 1,
+  "maj": "2026-07-12",
+  "series": [
+    {
+      "nom": "2 € commune 2007 — Traité de Rome",
+      "commun": true,
+      "a": 2007,
+      "mots": [
+        "traite de rome"
+      ],
+      "zone": [
+        "DE",
+        "AT",
+        "BE",
+        "ES",
+        "FI",
+        "FR",
+        "GR",
+        "IE",
+        "IT",
+        "LU",
+        "NL",
+        "PT",
+        "SI"
+      ]
+    },
+    {
+      "nom": "2 € commune 2009 — 10 ans de l'UEM",
+      "commun": true,
+      "a": 2009,
+      "mots": [
+        "union economique",
+        "uem",
+        "economique et monetaire"
+      ],
+      "zone": [
+        "DE",
+        "AT",
+        "BE",
+        "CY",
+        "ES",
+        "FI",
+        "FR",
+        "GR",
+        "IE",
+        "IT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "SK",
+        "SI"
+      ]
+    },
+    {
+      "nom": "2 € commune 2012 — 10 ans de l'euro fiduciaire",
+      "commun": true,
+      "a": 2012,
+      "mots": [
+        "10 ans de l'euro",
+        "euro fiduciaire",
+        "introduction de l'euro",
+        "2002-2012"
+      ],
+      "zone": [
+        "DE",
+        "AT",
+        "BE",
+        "CY",
+        "ES",
+        "EE",
+        "FI",
+        "FR",
+        "GR",
+        "IE",
+        "IT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "SK",
+        "SI"
+      ]
+    },
+    {
+      "nom": "2 € commune 2015 — 30 ans du drapeau européen",
+      "commun": true,
+      "a": 2015,
+      "mots": [
+        "drapeau europeen",
+        "drapeau"
+      ],
+      "zone": [
+        "DE",
+        "AT",
+        "BE",
+        "CY",
+        "ES",
+        "EE",
+        "FI",
+        "FR",
+        "GR",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "SK",
+        "SI"
+      ]
+    },
+    {
+      "nom": "2 € commune 2022 — 35 ans du programme Erasmus",
+      "commun": true,
+      "a": 2022,
+      "mots": [
+        "erasmus"
+      ],
+      "zone": [
+        "DE",
+        "AT",
+        "BE",
+        "CY",
+        "ES",
+        "EE",
+        "FI",
+        "FR",
+        "GR",
+        "IE",
+        "IT",
+        "LV",
+        "LT",
+        "LU",
+        "MT",
+        "NL",
+        "PT",
+        "SK",
+        "SI"
+      ]
+    },
+    {
+      "nom": "2 € Bundesländer (Allemagne)",
+      "pays": "allemagne|germany|deutschland",
+      "attendus": [
+        {
+          "label": "Schleswig-Holstein",
+          "mots": [
+            "schleswig",
+            "holstein"
+          ]
+        },
+        {
+          "label": "Mecklembourg-Poméranie-Occidentale",
+          "mots": [
+            "mecklembourg",
+            "pomeranie",
+            "occidentale"
+          ]
+        },
+        {
+          "label": "Hambourg",
+          "mots": [
+            "hambourg"
+          ]
+        },
+        {
+          "label": "Hambourg (erreur : 1re carte au revers)",
+          "mots": [
+            "hambourg",
+            "erreur",
+            "carte",
+            "revers"
+          ]
+        },
+        {
+          "label": "Sarre",
+          "mots": [
+            "sarre"
+          ]
+        },
+        {
+          "label": "Brême",
+          "mots": [
+            "breme"
+          ]
+        },
+        {
+          "label": "Rhénanie-du-Nord-Westphalie",
+          "mots": [
+            "rhenanie",
+            "nord",
+            "westphalie"
+          ]
+        },
+        {
+          "label": "Bavière",
+          "mots": [
+            "baviere"
+          ]
+        },
+        {
+          "label": "Bade-Württemberg",
+          "mots": [
+            "bade",
+            "wurttemberg"
+          ]
+        },
+        {
+          "label": "Basse-Saxe",
+          "mots": [
+            "basse",
+            "saxe"
+          ]
+        },
+        {
+          "label": "Hesse",
+          "mots": [
+            "hesse"
+          ]
+        },
+        {
+          "label": "Saxe",
+          "mots": [
+            "saxe"
+          ]
+        },
+        {
+          "label": "Rhénanie-Palatinat",
+          "mots": [
+            "rhenanie",
+            "palatinat"
+          ]
+        },
+        {
+          "label": "Berlin",
+          "mots": [
+            "berlin"
+          ]
+        },
+        {
+          "label": "Chute du mur de Berlin",
+          "mots": [
+            "chute",
+            "berlin"
+          ]
+        },
+        {
+          "label": "Brandebourg",
+          "mots": [
+            "brandebourg"
+          ]
+        },
+        {
+          "label": "Saxe-Anhalt",
+          "mots": [
+            "saxe",
+            "anhalt"
+          ]
+        },
+        {
+          "label": "Thuringe",
+          "mots": [
+            "thuringe"
+          ]
+        },
+        {
+          "label": "Boucle de la Sarre",
+          "mots": [
+            "boucle",
+            "sarre"
+          ]
+        },
+        {
+          "label": "Maison du Climat de Brême",
+          "mots": [
+            "maison",
+            "climat",
+            "breme"
+          ]
+        }
+      ],
+      "variationsDefaut": true
+    },
+    {
+      "nom": "2 € Sites UNESCO (Espagne)",
+      "pays": "espagne|spain",
+      "attendus": [
+        {
+          "label": "Centre historique de Cordoue",
+          "mots": [
+            "centre",
+            "historique",
+            "cordoue"
+          ]
+        },
+        {
+          "label": "Alhambra de Grenade",
+          "mots": [
+            "alhambra",
+            "grenade"
+          ]
+        },
+        {
+          "label": "Cathédrale de Burgos",
+          "mots": [
+            "cathedrale",
+            "burgos"
+          ]
+        },
+        {
+          "label": "Escurial",
+          "mots": [
+            "escurial"
+          ]
+        },
+        {
+          "label": "Parc Güell",
+          "mots": [
+            "parc",
+            "guell"
+          ]
+        },
+        {
+          "label": "Grotte d’Altamira",
+          "mots": [
+            "grotte",
+            "daltamira"
+          ]
+        },
+        {
+          "label": "Aqueduc de Ségovie",
+          "mots": [
+            "aqueduc",
+            "segovie"
+          ]
+        },
+        {
+          "label": "Saint-Jacques-de-Compostelle",
+          "mots": [
+            "saint",
+            "jacques",
+            "compostelle"
+          ]
+        },
+        {
+          "label": "Architecture mudéjare d'Aragon",
+          "mots": [
+            "architecture",
+            "mudejare",
+            "aragon"
+          ]
+        },
+        {
+          "label": "Tolède",
+          "mots": [
+            "tolede"
+          ]
+        },
+        {
+          "label": "Séville",
+          "mots": [
+            "seville"
+          ]
+        },
+        {
+          "label": "Salamanque",
+          "mots": [
+            "salamanque"
+          ]
+        },
+        {
+          "label": "Espagne — Monastère de Poblet",
+          "mots": [
+            "espagne",
+            "monastere",
+            "poblet"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Temples mégalithiques (Malte)",
+      "pays": "malte|malta",
+      "attendus": [
+        {
+          "label": "Temple de Ġgantija",
+          "mots": [
+            "temple",
+            "ggantija"
+          ]
+        },
+        {
+          "label": "Temple de Ħaġar Qim",
+          "mots": [
+            "temple",
+            "agar"
+          ]
+        },
+        {
+          "label": "Temple de Mnajdra",
+          "mots": [
+            "temple",
+            "mnajdra"
+          ]
+        },
+        {
+          "label": "Temple de Skorba",
+          "mots": [
+            "temple",
+            "skorba"
+          ]
+        },
+        {
+          "label": "Temples de Tarxien",
+          "mots": [
+            "temples",
+            "tarxien"
+          ]
+        },
+        {
+          "label": "Hypogée de Ħal Saflieni",
+          "mots": [
+            "hypogee",
+            "saflieni"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Histoire constitutionnelle (Malte)",
+      "pays": "malte|malta",
+      "attendus": [
+        {
+          "label": "Élection des premiers représentants",
+          "mots": [
+            "election",
+            "premiers",
+            "representants"
+          ]
+        },
+        {
+          "label": "Représentation Majoritaire",
+          "mots": [
+            "representation",
+            "majoritaire"
+          ]
+        },
+        {
+          "label": "Auto-détermination gouvernementale",
+          "mots": [
+            "auto",
+            "determination",
+            "gouvernementale"
+          ]
+        },
+        {
+          "label": "Proclamation de la République",
+          "mots": [
+            "proclamation",
+            "republique"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Régions historiques (Lettonie)",
+      "pays": "lettonie|latvia",
+      "attendus": [
+        {
+          "label": "Vidzeme",
+          "mots": [
+            "vidzeme"
+          ]
+        },
+        {
+          "label": "Kurzeme",
+          "mots": [
+            "kurzeme"
+          ]
+        },
+        {
+          "label": "Latgale",
+          "mots": [
+            "latgale"
+          ]
+        },
+        {
+          "label": "Zemgale",
+          "mots": [
+            "zemgale"
+          ]
+        },
+        {
+          "label": "Sélonie",
+          "mots": [
+            "selonie"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Régions ethnographiques (Lituanie)",
+      "pays": "lituanie|lithuania",
+      "attendus": [
+        {
+          "label": "Samogitie",
+          "mots": [
+            "samogitie"
+          ]
+        },
+        {
+          "label": "Haute Lituanie",
+          "mots": [
+            "haute",
+            "lituanie"
+          ]
+        },
+        {
+          "label": "Dzūkija",
+          "mots": [
+            "dzukija"
+          ]
+        },
+        {
+          "label": "Région ethnographique de Suvalkija",
+          "mots": [
+            "region",
+            "ethnographique",
+            "suvalkija"
+          ]
+        },
+        {
+          "label": "Lituanie — Petite Lituanie",
+          "mots": [
+            "lituanie",
+            "petite",
+            "lituanie"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Solidarité avec l'Ukraine",
+      "attendus": [
+        {
+          "label": "Estonie — Gloire à l'Ukraine",
+          "mots": [
+            "euros",
+            "gloire",
+            "ukraine"
+          ],
+          "pays": "Estonie"
+        },
+        {
+          "label": "Lettonie — Tournesol ukrainien",
+          "mots": [
+            "euros",
+            "tournesol",
+            "ukrainien"
+          ],
+          "pays": "Lettonie"
+        },
+        {
+          "label": "Lituanie — Ensemble avec l'Ukraine",
+          "mots": [
+            "euros",
+            "ensemble",
+            "avec",
+            "ukraine"
+          ],
+          "pays": "Lituanie"
+        }
+      ]
+    },
+    {
+      "nom": "2 € Jeux Olympiques",
+      "attendus": [
+        {
+          "label": "France — JO 2024 Paris (au cœur des Jeux)",
+          "mots": [
+            "euros",
+            "2024",
+            "paris",
+            "jeux"
+          ],
+          "pays": "France"
+        },
+        {
+          "label": "Grèce — JO 2004 Jeux d'été d'Athènes",
+          "mots": [
+            "euros",
+            "2004",
+            "jeux",
+            "athenes"
+          ],
+          "pays": "Grèce"
+        },
+        {
+          "label": "Italie — JO 2006 Jeux d'hiver de Turin",
+          "mots": [
+            "euros",
+            "2006",
+            "jeux",
+            "hiver"
+          ],
+          "pays": "Italie"
+        },
+        {
+          "label": "Portugal — JO 2016 Jeux d'été de Rio de Janeiro",
+          "mots": [
+            "euros",
+            "2016",
+            "jeux",
+            "janeiro"
+          ],
+          "pays": "Portugal"
+        },
+        {
+          "label": "Portugal — JO 2021 Tokyo",
+          "mots": [
+            "euros",
+            "2021",
+            "tokyo"
+          ],
+          "pays": "Portugal"
+        },
+        {
+          "label": "Portugal — Équipe Olympique (non colorée)",
+          "mots": [
+            "euros",
+            "equipe",
+            "olympique",
+            "coloree"
+          ],
+          "pays": "Portugal"
+        }
+      ]
+    },
+    {
+      "nom": "2 € Présidences du Conseil de l'UE",
+      "attendus": [
+        {
+          "label": "Belgique — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "Belgique"
+        },
+        {
+          "label": "Belgique — Présidence de l'UE (2024)",
+          "mots": [
+            "euros",
+            "presidence",
+            "2024"
+          ],
+          "pays": "Belgique"
+        },
+        {
+          "label": "Chypre — Chypre — Présidence chypriote du Conseil de l'UE",
+          "mots": [
+            "euros",
+            "chypre",
+            "presidence",
+            "chypriote"
+          ],
+          "pays": "Chypre"
+        },
+        {
+          "label": "Espagne — Présidence de l'UE (2023)",
+          "mots": [
+            "euros",
+            "presidence",
+            "2023"
+          ],
+          "pays": "Espagne"
+        },
+        {
+          "label": "France — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "France"
+        },
+        {
+          "label": "Irlande — Présidence de l'Union européenne",
+          "mots": [
+            "euros",
+            "presidence",
+            "union",
+            "europeenne"
+          ],
+          "pays": "Irlande"
+        },
+        {
+          "label": "Lettonie — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "Lettonie"
+        },
+        {
+          "label": "Portugal — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "Portugal"
+        },
+        {
+          "label": "Portugal — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "Portugal"
+        },
+        {
+          "label": "Slovaquie — Présidence de l'UE",
+          "mots": [
+            "euros",
+            "presidence"
+          ],
+          "pays": "Slovaquie"
+        }
+      ]
+    },
+    {
+      "nom": "2 € Versions colorées",
+      "attendus": [
+        {
+          "label": "France — Sidaction",
+          "mots": [
+            "euros",
+            "sidaction",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "France — Drapeau européen",
+          "mots": [
+            "euros",
+            "drapeau",
+            "europeen",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "France — Fête de la Fédération",
+          "mots": [
+            "euros",
+            "fete",
+            "federation",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "France — Ruban rose",
+          "mots": [
+            "euros",
+            "ruban",
+            "rose",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "France — Bleuet de France",
+          "mots": [
+            "euros",
+            "bleuet",
+            "france",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "Pays-Bas — Royaume des Pays-Bas",
+          "mots": [
+            "euros",
+            "royaume",
+            "pays",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "Pays-Bas — Double portrait",
+          "mots": [
+            "euros",
+            "double",
+            "portrait",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "Portugal — Police de sécurité publique",
+          "mots": [
+            "euros",
+            "police",
+            "securite",
+            "publique"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        },
+        {
+          "label": "Portugal — Équipe Olympique",
+          "mots": [
+            "euros",
+            "equipe",
+            "olympique",
+            "coloree"
+          ],
+          "variations": [
+            "Non colorée",
+            "Colorée"
+          ]
+        }
+      ]
+    },
+    {
+      "nom": "2 € Hologrammes (Luxembourg)",
+      "pays": "luxembourg",
+      "attendus": [
+        {
+          "label": "Prince Charles (version hologramme)",
+          "mots": [
+            "euros",
+            "prince",
+            "charles",
+            "version"
+          ]
+        },
+        {
+          "label": "Mariage du Grand-duc Henri (version hologramme)",
+          "mots": [
+            "euros",
+            "mariage",
+            "grand",
+            "henri"
+          ]
+        },
+        {
+          "label": "Grand-Duc Jean (version hologramme)",
+          "mots": [
+            "euros",
+            "grand",
+            "jean",
+            "version"
+          ]
+        }
+      ]
+    }
+  ]
+}

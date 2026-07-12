@@ -604,7 +604,8 @@ const etat = {
   historique: [],                                 // instantanés {d,v,m,n}
   series: [],                                     // séries suivies {id,nom,attendus:[]}
   wishlist: [],                                   // pièces recherchées
-  catalogue: null,                                // base de données de référence (base-donnees.json)
+  catalogue: null,                                // base de données PIÈCES (base-donnees.json)
+  seriesCatalogue: null,                          // base de données SÉRIES (series-donnees.json)
   vue: "dashboard"
 };
 
@@ -1480,6 +1481,7 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
     }
   }
   await chargerCatalogue();
+  await chargerSeries();
   /* Migration : classer les pièces existantes par monnaie et nature */
   for(const p of etat.pieces){
     let modifie=false;
@@ -1592,20 +1594,39 @@ function variationPiece(p){
 /* Items d'un modèle, chacun avec ses variations éventuelles.
    → [{label, variations:[...]}] ; variations vide = item simple (pas de sous-catégorie) */
 function axeAtelier(){ return {id:"atelier", nom:"Atelier", valeurs:ATELIERS_DE_LABELS.slice()}; }
+function axeGenerique(nom, valeurs){ return {id:"variation", nom:nom||"Variante", valeurs:valeurs.slice()}; }
 function itemsDeModele(mod){
   if(!mod) return null;
-  if(mod.commun) return mod.zone.map(c=>({label:PAYS[c].nom, axes: c==="DE"?[axeAtelier()]:[]}));
+  if(mod.commun) return (mod.zone||[]).filter(c=>PAYS[c]).map(c=>({label:PAYS[c].nom, axes: c==="DE"?[axeAtelier()]:[]}));
   if(mod.bilateral) return mod.membres.map(m=>({label:m.item, axes:(m.variations&&m.variations.length)?[axeAtelier()]:[]}));
-  return (mod.attendus||[]).map(it=>({label:it.label, axes:(mod.variationsDefaut||it.variations)?[axeAtelier()]:[]}));
+  return (mod.attendus||[]).map(it=>{
+    const axes=[];
+    if(mod.variationsDefaut) axes.push(axeAtelier());          // ex. Bundesländer : 5 ateliers
+    if(Array.isArray(it.variations) && it.variations.length) axes.push(axeGenerique("Version", it.variations)); // ex. Non colorée / Colorée
+    return {label:it.label, axes};
+  });
 }
 /* Valeur d'une pièce sur un axe de variation donné */
 function valeurAxe(p, axeId){
   if(axeId==="atelier"){ const at=atelierAllemand(p); return at?(at.lettre+" ("+at.ville+")"):null; }
   if(axeId==="tranche"){ return p.varianteTranche || null; }
+  if(axeId==="variation"){
+    if(p.serieVariation) return p.serieVariation;
+    const t=normTxt(p.nom||"");
+    if(/coloree|colorisee/.test(t) && !/non coloree/.test(t)) return "Colorée";
+    if(/non coloree/.test(t)) return "Non colorée";
+    return null;
+  }
   return null;
 }
 /* Retrouver le modèle par le nom de série (pour enrichir une série stockée) */
-function modeleParNom(nom){ return SERIES_MODELES.find(m=>m.nom===nom) || null; }
+function tousLesModeles(){
+  const dist = (etat.seriesCatalogue && Array.isArray(etat.seriesCatalogue.series)) ? etat.seriesCatalogue.series : [];
+  // Les séries distantes complètent les modèles intégrés ; en cas de même nom, la distante gagne (plus à jour)
+  const nomsDist = new Set(dist.map(m=>m.nom));
+  return [...dist, ...SERIES_MODELES.filter(m=>!nomsDist.has(m.nom))];
+}
+function modeleParNom(nom){ return tousLesModeles().find(m=>m.nom===nom) || null; }
 /* Liste plate des libellés d'items (stockée dans series.attendus) */
 function attendusModele(mod){ const it=itemsDeModele(mod); return it?it.map(x=>x.label):[]; }
 
@@ -1688,7 +1709,7 @@ async function detecterSerie(p){
   if(p.serie){ await assurerSerie(p.serie); return null; }
   const nomN = normTxt(p.nom);
   const facialeOK = /2\s*(euro|€)/.test(normTxt(p.valeurFaciale||"")) || /2\s*(euro|€)/.test(nomN);
-  for(const mod of SERIES_MODELES){
+  for(const mod of tousLesModeles()){
     if(mod.commun){
       if(parseInt(p.annee)!==mod.a) continue;
       if(!mod.mots.some(m=>nomN.includes(m))) continue;
@@ -1717,7 +1738,10 @@ async function detecterSerie(p){
       await dbSauver(p);
       return mod.nom;
     }
-    if(mod.pays && !(mod.pays.test(p.pays||""))) continue;
+    if(mod.pays){
+      const rx = (mod.pays instanceof RegExp) ? mod.pays : new RegExp(String(mod.pays), "i");
+      if(!rx.test(p.pays||"")) continue;
+    }
     for(const item of mod.attendus){
       if(item.a && parseInt(p.annee)!==item.a) continue;
       if(item.mots.some(m=>nomN.includes(m)) && (facialeOK || !mod.pays)){
@@ -2406,6 +2430,21 @@ function rendreFiscalite(){
    Fichier base-donnees.json hébergé à côté de l'app (GitHub Pages).
    Chargé quand en ligne, mis en cache pour usage hors-ligne.
 ===================================================================== */
+async function chargerSeries(){
+  try{
+    if(location.protocol.startsWith("http")){
+      const r = await fetch("series-donnees.json", {cache:"no-cache"});
+      if(r.ok){
+        const d = await r.json();
+        etat.seriesCatalogue = d;
+        await dbConfigEcrire("seriesCatalogue", d);
+        return;
+      }
+    }
+  }catch(e){ /* hors-ligne */ }
+  const c = await dbConfigLire("seriesCatalogue");
+  if(c) etat.seriesCatalogue = c;
+}
 async function chargerCatalogue(){
   try{
     if(location.protocol.startsWith("http")){
@@ -2575,6 +2614,20 @@ function detailCatalogue(i){
   add("Ateliers connus", e.ateliers?e.ateliers.join(", "):null);
   add("Tranches connues", e.tranches?e.tranches.join(", "):null);
   add("Particularité", e.ateliersEtrangers?e.ateliersEtrangers.join(", "):null);
+  /* Détails issus des fiches Numista individuelles */
+  add("Avers", e.descriptionAvers);
+  add("Revers", e.descriptionRevers);
+  add("Inscription avers", e.inscriptionAvers);
+  add("Inscription revers", e.inscriptionRevers);
+  add("Inscription tranche", e.inscriptionTranche);
+  add("Graveur", e.graveur);
+  add("Technique", e.technique);
+  if(e.tirageDetail && typeof e.tirageDetail==="object"){
+    const d=Object.entries(e.tirageDetail)
+      .map(([k,v])=>k+" : "+(isNaN(Number(v))?v:Number(v).toLocaleString("fr-FR")))
+      .join(" · ");
+    add("Tirages détaillés", d);
+  }
   add("Notes", e.notes);
   ouvrirModale(e.nom||"Fiche catalogue", `
     ${(e.imageAvers||e.imageRevers)?`<div class="detail-photos">
