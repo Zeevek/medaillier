@@ -490,6 +490,7 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
       <select id="filtreGrade"><option value="">Tous grades</option></select>
       <select id="filtreEmplacement"><option value="">Tous emplacements</option></select>
       <select id="filtreMonnaie"><option value="">Toutes monnaies</option></select>
+      <select id="filtreCategorie"><option value="">Toutes catégories</option></select>
       <select id="filtreNature"><option value="">Toutes natures</option></select>
       <select id="filtreStatut">
         <option value="collection">En collection</option>
@@ -547,6 +548,11 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
 
   <!-- ================= CHANGELOG ================= -->
   <section class="vue" id="vue-changelog">
+    <div class="panneau" style="margin-bottom:14px">
+      <h3>Catalogues de référence</h3>
+      <p class="vide-note" style="margin-bottom:10px">Activez seulement les catalogues qui vous intéressent : chacun est téléchargé puis gardé hors-ligne. Moins de catalogues = application plus rapide.</p>
+      <div id="listeModules"><p class="vide-note">Aucun manifeste de catalogue trouvé (ouvrez l'app en ligne une fois).</p></div>
+    </div>
     <div class="panneau" style="margin-bottom:14px"><h3>Le Médaillier — versions</h3><p class="vide-note" id="clFooter"></p></div>
     <div id="listeChangelog"></div>
     <div class="panneau" style="margin-top:14px">
@@ -605,7 +611,9 @@ const etat = {
   series: [],                                     // séries suivies {id,nom,attendus:[]}
   wishlist: [],                                   // pièces recherchées
   catalogue: null,                                // base de données PIÈCES (base-donnees.json)
-  seriesCatalogue: null,                          // base de données SÉRIES (series-donnees.json)
+  seriesCatalogue: null,
+  manifeste: null,                                // catalogue/index.json (liste des modules)
+  modulesActifs: [],                              // ids des modules de catalogue chargés                          // base de données SÉRIES (series-donnees.json)
   vue: "dashboard"
 };
 
@@ -651,6 +659,14 @@ function dbConfigEcrire(cle,valeur){
   return new Promise((res)=>{
     const rq = db.transaction("config","readwrite").objectStore("config").put({cle,valeur});
     rq.onsuccess=()=>res(); rq.onerror=()=>res();
+  });
+}
+function dbConfigSupprimer(cle){
+  return new Promise((res)=>{
+    try{
+      const rq = db.transaction("config","readwrite").objectStore("config").delete(cle);
+      rq.onsuccess=()=>res(); rq.onerror=()=>res();
+    }catch(e){ res(); }
   });
 }
 
@@ -703,6 +719,39 @@ function inferMonnaie(p){
   if(/peseta/.test(f)) return "Peseta";
   if(/lire|lira/.test(f)) return "Lire";
   return null;
+}
+/* Taxonomie des catégories (calquée sur le catalogue Numista) */
+const CATEGORIES = [
+  "Pièce courante",
+  "Pièce circulante commémorative",
+  "Pièce non circulante",
+  "Pièce pour collectionneurs",
+  "Monnaie de siège",
+  "Monnaie de nécessité officielle",
+  "Jeton de marchand",
+  "Pièce locale",
+  "Essai",
+  "Fausse monnaie d'époque",
+  "Proto-monnaie"
+];
+/* Déduction de la catégorie quand elle n'est pas renseignée */
+function inferCategorie(p){
+  if(p.categorie && CATEGORIES.includes(p.categorie)) return p.categorie;
+  const t = normTxt((p.nom||"")+" "+(p.valeurFaciale||"")+" "+(p.notes||""));
+  if(/proto-?monnaie/.test(t)) return "Proto-monnaie";
+  if(/fausse monnaie|faux d'epoque|contrefacon/.test(t)) return "Fausse monnaie d'époque";
+  if(/\bessai\b|piefort|piedfort/.test(t)) return "Essai";
+  if(/monnaie de siege/.test(t)) return "Monnaie de siège";
+  if(/jeton de marchand/.test(t)) return "Jeton de marchand";
+  if(/monnaie de necessite/.test(t)) return "Monnaie de nécessité officielle";
+  if(/piece locale|monnaie locale/.test(t)) return "Pièce locale";
+  if(/commemorat/.test(t)){
+    // Circulante commémorative = faciale courante (2 €, 1 €, cents…) ; sinon pièce pour collectionneurs
+    return /\b(1|2)\s*(euro|€)|cent/.test(t) ? "Pièce circulante commémorative" : "Pièce pour collectionneurs";
+  }
+  if(/\b(bu|be|belle epreuve|brillant universel|proof)\b/.test(t)) return "Pièce pour collectionneurs";
+  if(/lingot|once|bullion/.test(t)) return "Pièce non circulante";
+  return "Pièce courante";
 }
 function inferNature(p){
   const t = normTxt((p.nom||"")+" "+(p.valeurFaciale||""));
@@ -850,6 +899,7 @@ function rendreCollection(){
   const fp = $("#filtrePays").value, fm = $("#filtreMetal").value, fg = $("#filtreGrade").value, fe = $("#filtreEmplacement").value;
   const fs = $("#filtreStatut").value;
   const fmo = $("#filtreMonnaie").value, fna = $("#filtreNature").value;
+  const fca = ($("#filtreCategorie")||{}).value || "";
   let liste = etat.pieces.filter(p=>{
     if(fs==="collection" && p.vendu) return false;
     if(fs==="doublons" && (!p.doublon || p.vendu)) return false;
@@ -860,6 +910,7 @@ function rendreCollection(){
     if(fe && p.emplacement!==fe) return false;
     if(fmo && (p.monnaie||inferMonnaie(p))!==fmo) return false;
     if(fna && (p.nature||inferNature(p))!==fna) return false;
+    if(fca && inferCategorie(p)!==fca) return false;
     if(q){
       const blob = [p.nom,p.pays,p.annee,p.numeroKM,p.atelier,p.valeurFaciale,p.monnaie,p.nature,p.tranche,p.emplacement,p.notes].join(" ").toLowerCase();
       if(!blob.includes(q)) return false;
@@ -919,10 +970,19 @@ function majFiltres(){
   const selNa=$("#filtreNature"), vNa=selNa.value;
   selNa.innerHTML=`<option value="">Toutes natures</option>`+nat.map(m=>`<option>${esc(m)}</option>`).join("");
   selNa.value = nat.includes(vNa)?vNa:"";
+
+  const selCa=$("#filtreCategorie");
+  if(selCa){
+    const vCa=selCa.value;
+    const cats=[...new Set(etat.pieces.map(p=>inferCategorie(p)))].sort();
+    selCa.innerHTML=`<option value="">Toutes catégories</option>`+cats.map(c=>`<option>${esc(c)}</option>`).join("");
+    selCa.value = cats.includes(vCa)?vCa:"";
+  }
 }
 function rafraichir(){
   const secu=(nom,fn)=>{ try{ fn(); }catch(e){ console.error("Erreur "+nom+" :", e); } };
   secu("majFiltres", majFiltres);
+  secu("modules", rendreModules);
   secu("dashboard", rendreDashboard);
   secu("collection", rendreCollection);
   if(typeof rendreSeries==="function") secu("séries", rendreSeries);
@@ -1045,6 +1105,7 @@ function ouvrirFormulaire(id){
       <div class="champ"><label>Atelier</label><input id="f-atelier" value="${v("atelier")}" placeholder="A (Paris)"></div>
       <div class="champ"><label>Valeur faciale</label><input id="f-valeurFaciale" value="${v("valeurFaciale")}"></div>
       <div class="champ"><label>Monnaie</label><input id="f-monnaie" list="listeMonnaies" value="${v("monnaie")}" placeholder="Euro, Franc…"><datalist id="listeMonnaies"><option value="Euro"><option value="Franc français"><option value="Ancien franc"><option value="Yen"><option value="Dollar"><option value="Livre sterling"></datalist></div>
+      <div class="champ"><label>Catégorie</label><select id="f-categorie">${["",...CATEGORIES].map(c=>`<option value="${c}" ${v("categorie")===c?"selected":""}>${c||"— (déduite automatiquement)"}</option>`).join("")}</select></div>
       <div class="champ"><label>Nature</label><input id="f-nature" list="listeNatures" value="${v("nature")}" placeholder="Circulante, Commémorative…"><datalist id="listeNatures"><option value="Circulante courante"><option value="Commémorative"><option value="Commémorative 2€"><option value="Numismatique (BU/BE)"><option value="Bullion / investissement"><option value="Jeton / médaille"></datalist></div>
       <div class="champ"><label>Métal</label><select id="f-metal">${Object.entries(METAUX).map(([k,l])=>`<option value="${k}" ${p?.metal===k?"selected":""}>${l}</option>`).join("")}</select></div>
       <div class="champ"><label>Titre (‰ ou 0.xxx)</label><input id="f-titre" type="number" step="any" value="${v("titre")}" placeholder="900"></div>
@@ -1152,6 +1213,7 @@ async function sauverFormulaire(id){
     prixAchat:lire("prixAchat",1), dateAchat:lire("dateAchat"),
     coteEstimee:lire("coteEstimee",1), dateCote:lire("dateCote"), sourceCote:lire("sourceCote"),
     numeroKM:lire("numeroKM"), lienNumista:lienNumistaFR(lire("lienNumista")), notes:lire("notes"),
+    categorie: ($("#f-categorie") ? $("#f-categorie").value : "") || undefined,
     photoAvers:photosTemp.photoAvers, photoRevers:photosTemp.photoRevers,
     photoAversUrl:(!photosTemp.photoAvers && window._urlsCata) ? window._urlsCata.avers : p.photoAversUrl,
     photoReversUrl:(!photosTemp.photoRevers && window._urlsCata) ? window._urlsCata.revers : p.photoReversUrl,
@@ -1428,7 +1490,7 @@ surClic("btnImport", ()=>ouvrirImport());
 surClic("btnExport", ()=>ouvrirExport());
 surClic("btnCours", ()=>ouvrirCours());
 surClic("btnRecherche", ()=>ouvrirRecherche());
-["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, ()=>rendreCollection()));
+["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreCategorie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, ()=>rendreCollection()));
 let _debRech;
 surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
 (function(){ const g=$("#grillePieces"); if(!g) return;
@@ -2445,20 +2507,123 @@ async function chargerSeries(){
   const c = await dbConfigLire("seriesCatalogue");
   if(c) etat.seriesCatalogue = c;
 }
+/* ================================================================
+   CATALOGUE MODULAIRE À DEUX NIVEAUX
+   - data/manifest.json .............. liste des modules
+   - modules/<id>/index.json ......... fiches ALLÉGÉES (recherche, listes, séries)
+   - modules/<id>/f/NNN.json ......... fiches COMPLÈTES, chargées à la demande
+   Seuls les modules activés par l'utilisateur sont téléchargés.
+================================================================= */
+const RACINE_DATA = "data/";
+let BASE_IMAGES = "https://en.numista.com/catalogue/photos/";
+
+/* Fiche allégée → forme attendue par le reste de l'app */
+function etendreFiche(a, idModule){
+  const e = {
+    cle: idModule+"-"+a.i,
+    idNumista: a.i,
+    nom: a.n,
+    match: { pays: a.p, ...(a.a ? {annee:a.a} : {}) },
+    ...(a.f ? {valeurFaciale:a.f} : {}),
+    ...(a.c ? {categorie:a.c} : {}),
+    ...(a.k ? {numeroKM:a.k} : {}),
+    ...(a.v ? {imageAvers: BASE_IMAGES + a.v} : {}),
+    lienNumista: "https://fr.numista.com/catalogue/pieces"+a.i+".html",
+    _mod: idModule,
+    _paquet: a.b,
+    _complete: false
+  };
+  return e;
+}
+
 async function chargerCatalogue(){
-  try{
-    if(location.protocol.startsWith("http")){
-      const r = await fetch("base-donnees.json", {cache:"no-cache"});
+  const enLigne = location.protocol.startsWith("http");
+
+  // 1) Manifeste
+  if(enLigne){
+    try{
+      const r = await fetch(RACINE_DATA+"manifest.json", {cache:"no-cache"});
       if(r.ok){
-        const d = await r.json();
-        etat.catalogue = d;
-        await dbConfigEcrire("catalogue", d);
-        return;
+        const man = await r.json();
+        etat.manifeste = man;
+        if(man.baseImages) BASE_IMAGES = man.baseImages;
+        await dbConfigEcrire("manifeste", man);
       }
+    }catch(e){ /* hors-ligne */ }
+  }
+  if(!etat.manifeste){
+    etat.manifeste = await dbConfigLire("manifeste");
+    if(etat.manifeste && etat.manifeste.baseImages) BASE_IMAGES = etat.manifeste.baseImages;
+  }
+  if(!etat.manifeste) return;                       // rien à charger
+
+  // 2) Modules activés (défaut : ceux marqués defaut:true)
+  let actifs = await dbConfigLire("modulesActifs");
+  if(!Array.isArray(actifs)){
+    actifs = (etat.manifeste.modules||[]).filter(m=>m.defaut).map(m=>m.id);
+    await dbConfigEcrire("modulesActifs", actifs);
+  }
+  etat.modulesActifs = actifs;
+
+  // 3) Index allégés des modules actifs
+  const pieces=[];
+  for(const m of (etat.manifeste.modules||[])){
+    if(!etat.modulesActifs.includes(m.id)) continue;
+    let idx = null;
+    if(enLigne){
+      try{
+        const r = await fetch(RACINE_DATA+m.chemin+"/index.json", {cache:"no-cache"});
+        if(r.ok){ idx = await r.json(); await dbConfigEcrire("index:"+m.id, idx); }
+      }catch(e){ /* hors-ligne */ }
     }
-  }catch(e){ /* hors-ligne : on retombe sur le cache */ }
-  const c = await dbConfigLire("catalogue");
-  if(c) etat.catalogue = c;
+    if(!idx) idx = await dbConfigLire("index:"+m.id);
+    if(idx && Array.isArray(idx.pieces)) pieces.push(...idx.pieces.map(a=>etendreFiche(a, m.id)));
+  }
+  etat.catalogue = { modulaire:true, pieces };
+}
+
+/* Charge (et met en cache) le paquet de fiches complètes contenant une pièce,
+   puis complète la fiche allégée avec tous ses champs. */
+async function completerFiche(e){
+  if(!e || e._complete || !e._mod || e._paquet===undefined) return e;
+  const mod = (etat.manifeste?.modules||[]).find(m=>m.id===e._mod);
+  if(!mod) return e;
+  const clePaquet = "paquet:"+e._mod+":"+e._paquet;
+  let paquet = await dbConfigLire(clePaquet);
+  if(!paquet && location.protocol.startsWith("http")){
+    try{
+      const nom = String(e._paquet).padStart(3,"0")+".json";
+      const r = await fetch(RACINE_DATA+mod.chemin+"/f/"+nom, {cache:"no-cache"});
+      if(r.ok){ paquet = await r.json(); await dbConfigEcrire(clePaquet, paquet); }
+    }catch(err){ /* hors-ligne */ }
+  }
+  if(!paquet || !Array.isArray(paquet.pieces)) return e;   // on garde la fiche allégée
+  const pleine = paquet.pieces.find(p=>{
+    const m=/pieces(\d+)/.exec(p.lienNumista||""); return m && m[1]===e.idNumista;
+  });
+  if(pleine){
+    for(const [k,v] of Object.entries(pleine)){
+      if(v!==null && v!=="" && !(k in e && e[k])) e[k]=v;
+    }
+    e._complete = true;
+  }
+  return e;
+}
+
+/* Activer / désactiver un module */
+async function basculerModule(id, actif){
+  const set = new Set(etat.modulesActifs||[]);
+  actif ? set.add(id) : set.delete(id);
+  etat.modulesActifs = [...set];
+  await dbConfigEcrire("modulesActifs", etat.modulesActifs);
+  if(!actif){
+    await dbConfigSupprimer("index:"+id);
+    const mod=(etat.manifeste?.modules||[]).find(m=>m.id===id);
+    if(mod) for(let b=0;b<(mod.nbPaquets||0);b++) await dbConfigSupprimer("paquet:"+id+":"+b);
+  }
+  await chargerCatalogue();
+  toast(actif ? "Catalogue activé ✓" : "Catalogue désactivé");
+  if(typeof rafraichir==="function") rafraichir();
 }
 /* Recherche de la meilleure fiche catalogue pour une pièce (nom/pays/année) */
 function chercherCatalogue(nom, pays, annee){
@@ -2476,11 +2641,12 @@ function chercherCatalogue(nom, pays, annee){
   return bestScore>=3 ? best : null;
 }
 /* Pré-remplir le formulaire à partir du catalogue (ne remplit que les champs vides) */
-function preRemplirCatalogue(){
+async function preRemplirCatalogue(){
   if(!etat.catalogue){ toast("Catalogue non chargé (nécessite une première ouverture en ligne)"); return; }
   const nom=$("#f-nom").value, pays=$("#f-pays").value, annee=$("#f-annee").value;
   const e = chercherCatalogue(nom, pays, annee);
   if(!e){ toast("Aucune fiche catalogue correspondante"); return; }
+  await completerFiche(e);                        // détail à la demande
   const set=(id,val)=>{ const el=$("#"+id); if(el && !el.value && val!=null && val!=="") el.value=val; };
   set("f-poids", e.poids); set("f-diametre", e.diametre); set("f-tirage", e.tirage);
   set("f-numeroKM", e.numeroKM); set("f-lienNumista", e.lienNumista || e.lienNumistaFR);
@@ -2490,6 +2656,8 @@ function preRemplirCatalogue(){
     $("#f-tranche").value = "Striée (variantes de tranche "+e.tranches.join("/")+" connues)";
   }
   if(!$("#f-notes").value && e.notes) $("#f-notes").value = e.notes;
+  const selC=$("#f-categorie");
+  if(selC && !selC.value && e.categorie) selC.value = e.categorie;
   window._urlsCata = (e.imageAvers||e.imageRevers) ? {avers:e.imageAvers||null, revers:e.imageRevers||null} : null;
   toast("Pré-rempli depuis le catalogue ✓ (champs vides complétés"+(window._urlsCata?" + images de prévisualisation":"")+")");
 }
@@ -2498,8 +2666,10 @@ function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "8.2";
+const VERSION_ACTUELLE = "9.0";
 const CHANGELOG = [
+  { v:"9.0", type:"majeure", date:"2026-07", titre:"Catalogues modulaires & catégories",
+    points:["Catalogue découpé en modules activables : n'installez que ce qui vous intéresse","Zone euro circulantes (855 pièces) activé par défaut ; collection or/argent (6 024) en option","Catégories officielles Numista : courante, circulante commémorative, non circulante, collection, nécessité, locale, essai, fausse monnaie, proto-monnaie","Nouveau filtre par catégorie dans la collection","Base des séries séparée de la base des pièces"] },
   { v:"8.2", type:"mineure", date:"2026-07", titre:"Images de prévisualisation",
     points:["Images Numista de prévisualisation (avers/revers) sur les pièces sans photo","Vignettes et fiches illustrées dans la recherche catalogue","Vos photos personnelles remplacent la prévisualisation dès leur ajout","Éditeur de base : champs images, arbitrage des doublons Numista, prompt Claude intégré"] },
   { v:"8.1", type:"mineure", date:"2026-07", titre:"Fiabilisation & optimisation",
@@ -2521,6 +2691,30 @@ const CHANGELOG = [
   { v:"1.0", type:"majeure", date:"2026-07", titre:"Première version",
     points:["Collection avec fiches, photos, grades (échelle française)","Tableau de bord : valeur, plus-value, valeur métal","Import / export JSON, cours des métaux, fiscalité 2026"] }
 ];
+function rendreModules(){
+  const el=$("#listeModules"); if(!el) return;
+  const man=etat.manifeste;
+  if(!man || !Array.isArray(man.modules) || !man.modules.length){
+    el.innerHTML='<p class="vide-note">Aucun manifeste de catalogue trouvé (ouvrez l\'app en ligne une fois).</p>';
+    return;
+  }
+  const actifs=new Set(etat.modulesActifs||[]);
+  el.innerHTML = man.modules.map(m=>{
+    const on=actifs.has(m.id);
+    const nb = m.nbPieces ? Number(m.nbPieces).toLocaleString("fr-FR")+" pièces" : "";
+    const taille = m.taille ? " · "+m.taille : "";
+    return `<div class="ligne-module" style="display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--ligne)">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600">${esc(m.libelle||m.id)}</div>
+        <div class="vide-note" style="font-size:.8rem">${esc(nb+taille)}${m.description?" — "+esc(m.description):""}</div>
+      </div>
+      <button class="${on?"btn-or":"btn-clair"}" data-mod="${esc(m.id)}" data-on="${on?1:0}">${on?"Activé ✓":"Activer"}</button>
+    </div>`;
+  }).join("");
+  el.querySelectorAll("[data-mod]").forEach(b=>b.addEventListener("click", ()=>{
+    basculerModule(b.dataset.mod, b.dataset.on!=="1").then(()=>rendreModules());
+  }));
+}
 function rendreChangelog(){
   const el=$("#listeChangelog"); if(!el) return;
   const f=$("#clFooter"); if(f) f.textContent="Version actuelle : "+VERSION_ACTUELLE+" — "+CHANGELOG.length+" versions publiées.";
@@ -2603,8 +2797,9 @@ function lancerRecherche(q){
   }
   el.innerHTML = html;
 }
-function detailCatalogue(i){
+async function detailCatalogue(i){
   const e = (window._rechCata||[])[i]; if(!e) return;
+  await completerFiche(e);                       // charge le détail à la demande
   const lignes=[];
   const add=(k,v)=>{ if(v!=null&&v!=="") lignes.push(`<div><dt>${k}</dt><dd>${esc(v)}</dd></div>`); };
   add("Nom", e.nom);
@@ -2628,6 +2823,7 @@ function detailCatalogue(i){
       .join(" · ");
     add("Tirages détaillés", d);
   }
+  add("Catégorie", e.categorie);
   add("Notes", e.notes);
   ouvrirModale(e.nom||"Fiche catalogue", `
     ${(e.imageAvers||e.imageRevers)?`<div class="detail-photos">
@@ -2641,7 +2837,8 @@ function detailCatalogue(i){
       <button class="btn-or" onclick="ajouterDepuisCatalogue(${i})">Ajouter à ma collection</button>
     </div>`);
 }
-function ajouterDepuisCatalogue(i){
+async function ajouterDepuisCatalogue(i){
+  await completerFiche((window._rechCata||[])[i]);
   const e = (window._rechCata||[])[i]; if(!e) return;
   ouvrirFormulaire("");
   if(e.nom) $("#f-nom").value=e.nom;
