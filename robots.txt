@@ -1,0 +1,3 @@
+# Le Médaillier — usage personnel
+User-agent: *
+Disallow: /
