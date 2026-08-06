@@ -1,0 +1,6254 @@
+{
+ "description": "Séries de collection du Médaillier — séries officielles Numista + séries maison.",
+ "version": 3,
+ "maj": "2026-08-05",
+ "series": [
+  {
+   "nom": "Europa Star",
+   "source": "numista",
+   "specificite": 10,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Autriche — 5 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "10216",
+     "annee": 2004,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Autriche — 5 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "12333",
+     "annee": 2005,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Autriche — 5 euros Wolfgang Amadeus Mozart",
+     "mots": [
+      "wolfgang",
+      "amadeus",
+      "mozart"
+     ],
+     "idNumista": "10831",
+     "annee": 2006,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Autriche — 5 euros Réforme du droit de vote",
+     "mots": [
+      "reforme",
+      "droit",
+      "vote"
+     ],
+     "idNumista": "10883",
+     "annee": 2007,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Autriche — 5 euros Herbert von Karajan",
+     "mots": [
+      "herbert",
+      "karajan"
+     ],
+     "idNumista": "10834",
+     "annee": 2008,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Autriche — 5 euros Joseph Haydn",
+     "mots": [
+      "joseph",
+      "haydn"
+     ],
+     "idNumista": "10835",
+     "annee": 2009,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 100 euros - Albert II (Élargissement de l'Union européenne)",
+     "mots": [
+      "albert",
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "21853",
+     "annee": 2004,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros - Albert II (Élargissement de l'Union européenne)",
+     "mots": [
+      "albert",
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22021",
+     "annee": 2004,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "29018",
+     "annee": 2005,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Juste Lipse",
+     "mots": [
+      "juste",
+      "lipse"
+     ],
+     "idNumista": "26358",
+     "annee": 2006,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 50 euros Juste Lipse",
+     "mots": [
+      "juste",
+      "lipse"
+     ],
+     "idNumista": "31185",
+     "annee": 2006,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "26294",
+     "annee": 2007,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 50 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "30919",
+     "annee": 2007,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros L'Oiseau bleu",
+     "mots": [
+      "oiseau",
+      "bleu"
+     ],
+     "idNumista": "26297",
+     "annee": 2008,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 50 euros L'Oiseau bleu",
+     "mots": [
+      "oiseau",
+      "bleu"
+     ],
+     "idNumista": "31213",
+     "annee": 2008,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros L'Éloge de la folie par Érasme",
+     "mots": [
+      "eloge",
+      "folie",
+      "erasme"
+     ],
+     "idNumista": "26589",
+     "annee": 2009,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Musée royal de l'Afrique centrale",
+     "mots": [
+      "musee",
+      "royal",
+      "afrique",
+      "centrale"
+     ],
+     "idNumista": "27553",
+     "annee": 2010,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Auguste Picard",
+     "mots": [
+      "auguste",
+      "picard"
+     ],
+     "idNumista": "26587",
+     "annee": 2011,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 50 euros Auguste Picard",
+     "mots": [
+      "auguste",
+      "picard"
+     ],
+     "idNumista": "26757",
+     "annee": 2011,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 10 euros Paul Delvaux",
+     "mots": [
+      "paul",
+      "delvaux"
+     ],
+     "idNumista": "33045",
+     "annee": 2012,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Espagne — 10 euros - Juan Carlos Ier (Élargissement de l'Union européenne)",
+     "mots": [
+      "juan",
+      "carlos",
+      "elargissement",
+      "union"
+     ],
+     "idNumista": "28580",
+     "annee": 2004,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros - Juan Carlos Ier (Élargissement de l'Union européenne)",
+     "mots": [
+      "juan",
+      "carlos",
+      "elargissement",
+      "union"
+     ],
+     "idNumista": "28597",
+     "annee": 2004,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros - Juan Carlos Ier (Paix et liberté)",
+     "mots": [
+      "juan",
+      "carlos",
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "32236",
+     "annee": 2005,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros - Juan Carlos Ier (Paix et liberté)",
+     "mots": [
+      "juan",
+      "carlos",
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "32237",
+     "annee": 2005,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros - Juan Carlos Ier (Charles Quint)",
+     "mots": [
+      "juan",
+      "carlos",
+      "charles",
+      "quint"
+     ],
+     "idNumista": "31193",
+     "annee": 2006,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros - Juan Carlos Ier (Charles Quint)",
+     "mots": [
+      "juan",
+      "carlos",
+      "charles",
+      "quint"
+     ],
+     "idNumista": "31194",
+     "annee": 2006,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros - Juan Carlos Ier (Traité de Rome)",
+     "mots": [
+      "juan",
+      "carlos",
+      "traite",
+      "rome"
+     ],
+     "idNumista": "30923",
+     "annee": 2007,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "30924",
+     "annee": 2007,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros Alphonse X",
+     "mots": [
+      "alphonse"
+     ],
+     "idNumista": "32376",
+     "annee": 2008,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Alphonse X",
+     "mots": [
+      "alphonse"
+     ],
+     "idNumista": "32377",
+     "annee": 2008,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros Philippe II",
+     "mots": [
+      "philippe"
+     ],
+     "idNumista": "32520",
+     "annee": 2009,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Philippe II",
+     "mots": [
+      "philippe"
+     ],
+     "idNumista": "32521",
+     "annee": 2009,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros Antoni Gaudí",
+     "mots": [
+      "antoni",
+      "gaudi"
+     ],
+     "idNumista": "30905",
+     "annee": 2010,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Antoni Gaudí",
+     "mots": [
+      "antoni",
+      "gaudi"
+     ],
+     "idNumista": "30906",
+     "annee": 2010,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros Francisco de Orellana",
+     "mots": [
+      "francisco",
+      "orellana"
+     ],
+     "idNumista": "20013",
+     "annee": 2011,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Francisco de Orellana",
+     "mots": [
+      "francisco",
+      "orellana"
+     ],
+     "idNumista": "26756",
+     "annee": 2011,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 10 euros Juan Gris",
+     "mots": [
+      "juan",
+      "gris"
+     ],
+     "idNumista": "32495",
+     "annee": 2012,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Espagne — 200 euros Juan Gris",
+     "mots": [
+      "juan",
+      "gris"
+     ],
+     "idNumista": "32519",
+     "annee": 2012,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Finlande — 10 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "13330",
+     "annee": 2005,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Johan Vilhelm Snellman",
+     "mots": [
+      "johan",
+      "vilhelm",
+      "snellman"
+     ],
+     "idNumista": "13332",
+     "annee": 2006,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Adolf Erik Nordenskiöld",
+     "mots": [
+      "adolf",
+      "erik",
+      "nordenskiold"
+     ],
+     "idNumista": "13347",
+     "annee": 2007,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Drapeau de la Finlande",
+     "mots": [
+      "drapeau",
+      "finlande"
+     ],
+     "idNumista": "13579",
+     "annee": 2008,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Fredrik Pacius",
+     "mots": [
+      "fredrik",
+      "pacius"
+     ],
+     "idNumista": "13581",
+     "annee": 2009,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Eero Saarinen",
+     "mots": [
+      "eero",
+      "saarinen"
+     ],
+     "idNumista": "13583",
+     "annee": 2010,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Pehr Kalm",
+     "mots": [
+      "pehr",
+      "kalm"
+     ],
+     "idNumista": "20135",
+     "annee": 2011,
+     "pays": "Finlande"
+    },
+    {
+     "label": "Finlande — 10 euros Henrik Wigström",
+     "mots": [
+      "henrik",
+      "wigstrom"
+     ],
+     "idNumista": "31012",
+     "annee": 2012,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 50 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22022",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22087",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 20 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22088",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 1½ euro Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22128",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — ¼ euro Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22129",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 500 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22131",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 100 euros Élargissement de l'Union européenne",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22132",
+     "annee": 2004,
+     "pays": "France"
+    },
+    {
+     "label": "France — 1½ euro Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "19203",
+     "annee": 2005,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "32081",
+     "annee": 2005,
+     "pays": "France"
+    },
+    {
+     "label": "France — 100 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "32083",
+     "annee": 2005,
+     "pays": "France"
+    },
+    {
+     "label": "France — 1½ euro Robert Schuman",
+     "mots": [
+      "robert",
+      "schuman"
+     ],
+     "idNumista": "28284",
+     "annee": 2006,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Robert Schuman",
+     "mots": [
+      "robert",
+      "schuman"
+     ],
+     "idNumista": "28288",
+     "annee": 2006,
+     "pays": "France"
+    },
+    {
+     "label": "France — 100 euros Robert Schuman",
+     "mots": [
+      "robert",
+      "schuman"
+     ],
+     "idNumista": "28289",
+     "annee": 2006,
+     "pays": "France"
+    },
+    {
+     "label": "France — 50 euros Robert Schuman",
+     "mots": [
+      "robert",
+      "schuman"
+     ],
+     "idNumista": "28290",
+     "annee": 2006,
+     "pays": "France"
+    },
+    {
+     "label": "France — ¼ d'euro Sébastien Le Prestre de Vauban",
+     "mots": [
+      "sebastien",
+      "prestre",
+      "vauban"
+     ],
+     "idNumista": "20065",
+     "annee": 2007,
+     "pays": "France"
+    },
+    {
+     "label": "France — 20 euros Sébastien Le Prestre de Vauban",
+     "mots": [
+      "sebastien",
+      "prestre",
+      "vauban"
+     ],
+     "idNumista": "21858",
+     "annee": 2007,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Sébastien Le Prestre de Vauban",
+     "mots": [
+      "sebastien",
+      "prestre",
+      "vauban"
+     ],
+     "idNumista": "21859",
+     "annee": 2007,
+     "pays": "France"
+    },
+    {
+     "label": "France — 1½ euro Sébastien Le Prestre de Vauban",
+     "mots": [
+      "sebastien",
+      "prestre",
+      "vauban"
+     ],
+     "idNumista": "21860",
+     "annee": 2007,
+     "pays": "France"
+    },
+    {
+     "label": "France — 1½ euro Parlement européen",
+     "mots": [
+      "parlement",
+      "europeen"
+     ],
+     "idNumista": "23230",
+     "annee": 2008,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Parlement européen",
+     "mots": [
+      "parlement",
+      "europeen"
+     ],
+     "idNumista": "24295",
+     "annee": 2008,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Concorde",
+     "mots": [
+      "concorde"
+     ],
+     "idNumista": "21343",
+     "annee": 2009,
+     "pays": "France"
+    },
+    {
+     "label": "France — 50 euros Centre Pompidou (argent)",
+     "mots": [
+      "centre",
+      "pompidou",
+      "argent"
+     ],
+     "idNumista": "22780",
+     "annee": 2010,
+     "pays": "France"
+    },
+    {
+     "label": "Irlande — 10 euros Samuel Beckett",
+     "mots": [
+      "samuel",
+      "beckett"
+     ],
+     "idNumista": "13604",
+     "annee": 2006,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 20 euros Samuel Beckett",
+     "mots": [
+      "samuel",
+      "beckett"
+     ],
+     "idNumista": "13611",
+     "annee": 2006,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 10 euros Culture celtique",
+     "mots": [
+      "culture",
+      "celtique"
+     ],
+     "idNumista": "13605",
+     "annee": 2007,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 20 euros Culture celtique",
+     "mots": [
+      "culture",
+      "celtique"
+     ],
+     "idNumista": "13613",
+     "annee": 2007,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 10 euros Skellig Michael",
+     "mots": [
+      "skellig",
+      "michael"
+     ],
+     "idNumista": "13606",
+     "annee": 2008,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 20 euros Skellig Michael",
+     "mots": [
+      "skellig",
+      "michael"
+     ],
+     "idNumista": "13689",
+     "annee": 2008,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 10 euros Billets de banque Ploughman",
+     "mots": [
+      "billets",
+      "banque",
+      "ploughman"
+     ],
+     "idNumista": "13607",
+     "annee": 2009,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 20 euros Billets de banque Ploughman",
+     "mots": [
+      "billets",
+      "banque",
+      "ploughman"
+     ],
+     "idNumista": "13690",
+     "annee": 2009,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 10 euros Le prix du président - Gaisce",
+     "mots": [
+      "prix",
+      "president",
+      "gaisce"
+     ],
+     "idNumista": "30912",
+     "annee": 2010,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 20 euros Le prix du président - Gaisce",
+     "mots": [
+      "prix",
+      "president",
+      "gaisce"
+     ],
+     "idNumista": "30914",
+     "annee": 2010,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Irlande — 10 euros Saint-Brendan le navigateur",
+     "mots": [
+      "saint",
+      "brendan",
+      "navigateur"
+     ],
+     "idNumista": "26741",
+     "annee": 2011,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 10 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "22020",
+     "annee": 2005,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 10 euros Léonard de Vinci",
+     "mots": [
+      "leonard",
+      "vinci"
+     ],
+     "idNumista": "31191",
+     "annee": 2006,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 10 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "30925",
+     "annee": 2007,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 20 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "30926",
+     "annee": 2007,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 10 euros Andrea Palladio",
+     "mots": [
+      "andrea",
+      "palladio"
+     ],
+     "idNumista": "32378",
+     "annee": 2008,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 20 euros Andrea Palladio",
+     "mots": [
+      "andrea",
+      "palladio"
+     ],
+     "idNumista": "32379",
+     "annee": 2008,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 10 euros Guglielmo Marconi",
+     "mots": [
+      "guglielmo",
+      "marconi"
+     ],
+     "idNumista": "32381",
+     "annee": 2009,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 20 euros Guglielmo Marconi",
+     "mots": [
+      "guglielmo",
+      "marconi"
+     ],
+     "idNumista": "32382",
+     "annee": 2009,
+     "pays": "Italie"
+    },
+    {
+     "label": "Italie — 10 euros Amerigo Vespucci",
+     "mots": [
+      "amerigo",
+      "vespucci"
+     ],
+     "idNumista": "26752",
+     "annee": 2011,
+     "pays": "Italie"
+    },
+    {
+     "label": "Malte — 10 euros La Castellania",
+     "mots": [
+      "castellania"
+     ],
+     "idNumista": "25874",
+     "annee": 2009,
+     "pays": "Malte"
+    },
+    {
+     "label": "Malte — 50 euros La Castellania",
+     "mots": [
+      "castellania"
+     ],
+     "idNumista": "30735",
+     "annee": 2009,
+     "pays": "Malte"
+    },
+    {
+     "label": "Malte — 50 euros Les Phéniciens à Malte",
+     "mots": [
+      "pheniciens",
+      "malte"
+     ],
+     "idNumista": "25589",
+     "annee": 2011,
+     "pays": "Malte"
+    },
+    {
+     "label": "Malte — 10 euros Les Phéniciens à Malte",
+     "mots": [
+      "pheniciens",
+      "malte"
+     ],
+     "idNumista": "25590",
+     "annee": 2011,
+     "pays": "Malte"
+    },
+    {
+     "label": "Pays-Bas — 5 euros - Beatrix (Élargissement de l'Union européenne)",
+     "mots": [
+      "beatrix",
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "12308",
+     "annee": 2004,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 10 euros - Beatrix (Élargissement de l'Union européenne)",
+     "mots": [
+      "beatrix",
+      "elargissement",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "26816",
+     "annee": 2004,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 5 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "13267",
+     "annee": 2005,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 10 euros Paix et liberté",
+     "mots": [
+      "paix",
+      "liberte"
+     ],
+     "idNumista": "32087",
+     "annee": 2005,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 5 euros Rembrandt",
+     "mots": [
+      "rembrandt"
+     ],
+     "idNumista": "13270",
+     "annee": 2006,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 10 euros Rembrandt",
+     "mots": [
+      "rembrandt"
+     ],
+     "idNumista": "31186",
+     "annee": 2006,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 5 euros Les Pays-Bas et l'architecture (cuivre plaqué argent)",
+     "mots": [
+      "pays",
+      "architecture",
+      "cuivre",
+      "plaque"
+     ],
+     "idNumista": "13273",
+     "annee": 2008,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 5 euros Les Pays-Bas et l'architecture (argent 925‰)",
+     "mots": [
+      "pays",
+      "architecture",
+      "argent"
+     ],
+     "idNumista": "20529",
+     "annee": 2008,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 10 euros Les Pays-Bas et l'architecture",
+     "mots": [
+      "pays",
+      "architecture"
+     ],
+     "idNumista": "31214",
+     "annee": 2008,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 5 euros Waterland (cuivre plaqué argent)",
+     "mots": [
+      "waterland",
+      "cuivre",
+      "plaque",
+      "argent"
+     ],
+     "idNumista": "16109",
+     "annee": 2010,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 8 euros (Élargissement de l'Union européenne ; 21 g ; argent 500‰)",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne",
+      "argent"
+     ],
+     "idNumista": "13286",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros (Élargissement de l'Union européenne ; 31 g ; argent 925‰)",
+     "mots": [
+      "elargissement",
+      "union",
+      "europeenne",
+      "argent"
+     ],
+     "idNumista": "17640",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Paix et liberté (argent 500‰)",
+     "mots": [
+      "paix",
+      "liberte",
+      "argent"
+     ],
+     "idNumista": "13287",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Paix et liberté (argent 925‰)",
+     "mots": [
+      "paix",
+      "liberte",
+      "argent"
+     ],
+     "idNumista": "17065",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Prince Henri le navigateur (argent 500‰)",
+     "mots": [
+      "prince",
+      "henri",
+      "navigateur",
+      "argent"
+     ],
+     "idNumista": "13288",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Prince Henri le navigateur (argent 925‰)",
+     "mots": [
+      "prince",
+      "henri",
+      "navigateur",
+      "argent"
+     ],
+     "idNumista": "17645",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Passarola (argent 500‰)",
+     "mots": [
+      "passarola",
+      "argent"
+     ],
+     "idNumista": "13289",
+     "annee": 2007,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 8 euros Passarola (argent 925‰)",
+     "mots": [
+      "passarola",
+      "argent"
+     ],
+     "idNumista": "18238",
+     "annee": 2007,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Fado (cupronickel)",
+     "mots": [
+      "fado",
+      "cupronickel"
+     ],
+     "idNumista": "9131",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Fado (argent)",
+     "mots": [
+      "fado",
+      "argent"
+     ],
+     "idNumista": "18240",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Langue portugaise (cupronickel)",
+     "mots": [
+      "langue",
+      "portugaise",
+      "cupronickel"
+     ],
+     "idNumista": "8185",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Langue portugaise (argent)",
+     "mots": [
+      "langue",
+      "portugaise",
+      "argent"
+     ],
+     "idNumista": "18236",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Langue portugaise (or)",
+     "mots": [
+      "langue",
+      "portugaise"
+     ],
+     "idNumista": "18237",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2½ euros Terreiro do Paço (cupronickel)",
+     "mots": [
+      "terreiro",
+      "paco",
+      "cupronickel"
+     ],
+     "idNumista": "13091",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2½ euros Terreiro do Paço (argent)",
+     "mots": [
+      "terreiro",
+      "paco",
+      "argent"
+     ],
+     "idNumista": "17433",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2½ euros Terreiro do Paço (or)",
+     "mots": [
+      "terreiro",
+      "paco"
+     ],
+     "idNumista": "17434",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Capelo et Ivens (cupronickel)",
+     "mots": [
+      "capelo",
+      "ivens",
+      "cupronickel"
+     ],
+     "idNumista": "21902",
+     "annee": 2011,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Capelo et Ivens (argent)",
+     "mots": [
+      "capelo",
+      "ivens",
+      "argent"
+     ],
+     "idNumista": "22407",
+     "annee": 2011,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Capelo et Ivens (or)",
+     "mots": [
+      "capelo",
+      "ivens"
+     ],
+     "idNumista": "22422",
+     "annee": 2011,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Saint-Marin — 5 euros Explorateurs européens",
+     "mots": [
+      "explorateurs",
+      "europeens"
+     ],
+     "idNumista": "27114",
+     "annee": 2011,
+     "pays": "Saint-Marin"
+    },
+    {
+     "label": "Slovaquie — 10 euros Églises en bois de la partie slovaque de la zone des Carpates",
+     "mots": [
+      "eglises",
+      "bois",
+      "partie",
+      "slovaque"
+     ],
+     "idNumista": "19120",
+     "annee": 2010,
+     "pays": "Slovaquie"
+    }
+   ],
+   "note": "123 pièce(s) · 12 pays · 2004-2012"
+  },
+  {
+   "nom": "Régions françaises",
+   "source": "numista",
+   "specificite": 65,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 euros Rhône-Alpes (1er type)",
+     "mots": [
+      "rhone",
+      "alpes",
+      "type"
+     ],
+     "idNumista": "15450",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Alsace (1er type)",
+     "mots": [
+      "alsace",
+      "type"
+     ],
+     "idNumista": "15476",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Aquitaine (1er type)",
+     "mots": [
+      "aquitaine",
+      "type"
+     ],
+     "idNumista": "15477",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Auvergne (1er type)",
+     "mots": [
+      "auvergne",
+      "type"
+     ],
+     "idNumista": "15478",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Basse-Normandie (1er type)",
+     "mots": [
+      "basse",
+      "normandie",
+      "type"
+     ],
+     "idNumista": "15479",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Bourgogne (1er type)",
+     "mots": [
+      "bourgogne",
+      "type"
+     ],
+     "idNumista": "15480",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Bretagne (1er type)",
+     "mots": [
+      "bretagne",
+      "type"
+     ],
+     "idNumista": "15481",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Centre (1er type)",
+     "mots": [
+      "centre",
+      "type"
+     ],
+     "idNumista": "15482",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Champagne-Ardenne (1er type)",
+     "mots": [
+      "champagne",
+      "ardenne",
+      "type"
+     ],
+     "idNumista": "15483",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Corse (1er type)",
+     "mots": [
+      "corse",
+      "type"
+     ],
+     "idNumista": "15484",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Franche-Comté (1er type)",
+     "mots": [
+      "franche",
+      "comte",
+      "type"
+     ],
+     "idNumista": "15485",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Guadeloupe (1er type)",
+     "mots": [
+      "guadeloupe",
+      "type"
+     ],
+     "idNumista": "15486",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Guyane (1er type)",
+     "mots": [
+      "guyane",
+      "type"
+     ],
+     "idNumista": "15487",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Haute-Normandie (1er type)",
+     "mots": [
+      "haute",
+      "normandie",
+      "type"
+     ],
+     "idNumista": "15488",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Île de France (1er type)",
+     "mots": [
+      "france",
+      "type"
+     ],
+     "idNumista": "15489",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Languedoc-Roussillon (1er type)",
+     "mots": [
+      "languedoc",
+      "roussillon",
+      "type"
+     ],
+     "idNumista": "15490",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Limousin (1er type)",
+     "mots": [
+      "limousin",
+      "type"
+     ],
+     "idNumista": "15491",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Lorraine (1er type)",
+     "mots": [
+      "lorraine",
+      "type"
+     ],
+     "idNumista": "15492",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Martinique (1er type)",
+     "mots": [
+      "martinique",
+      "type"
+     ],
+     "idNumista": "15493",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Midi-Pyrénées (1er type)",
+     "mots": [
+      "midi",
+      "pyrenees",
+      "type"
+     ],
+     "idNumista": "15494",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Nord-Pas de Calais (1er type)",
+     "mots": [
+      "nord",
+      "calais",
+      "type"
+     ],
+     "idNumista": "15495",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Pays de la Loire (1er type)",
+     "mots": [
+      "pays",
+      "loire",
+      "type"
+     ],
+     "idNumista": "15496",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Picardie (1er type)",
+     "mots": [
+      "picardie",
+      "type"
+     ],
+     "idNumista": "15497",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Poitou-Charentes (1er type)",
+     "mots": [
+      "poitou",
+      "charentes",
+      "type"
+     ],
+     "idNumista": "15498",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Provence-Alpes-Côte d'Azur (1er type)",
+     "mots": [
+      "provence",
+      "alpes",
+      "cote",
+      "azur"
+     ],
+     "idNumista": "15499",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Réunion (1er type)",
+     "mots": [
+      "reunion",
+      "type"
+     ],
+     "idNumista": "15500",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Mayotte (1er type)",
+     "mots": [
+      "mayotte",
+      "type"
+     ],
+     "idNumista": "19955",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Alsace (2e type)",
+     "mots": [
+      "alsace",
+      "type"
+     ],
+     "idNumista": "25266",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Aquitaine (2e type)",
+     "mots": [
+      "aquitaine",
+      "type"
+     ],
+     "idNumista": "25268",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Auvergne (2e type)",
+     "mots": [
+      "auvergne",
+      "type"
+     ],
+     "idNumista": "25269",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Basse-Normandie (2e type)",
+     "mots": [
+      "basse",
+      "normandie",
+      "type"
+     ],
+     "idNumista": "25270",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Bourgogne (2e type)",
+     "mots": [
+      "bourgogne",
+      "type"
+     ],
+     "idNumista": "25271",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Bretagne (2e type)",
+     "mots": [
+      "bretagne",
+      "type"
+     ],
+     "idNumista": "25272",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Centre (2e type)",
+     "mots": [
+      "centre",
+      "type"
+     ],
+     "idNumista": "25273",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Champagne-Ardenne (2e type)",
+     "mots": [
+      "champagne",
+      "ardenne",
+      "type"
+     ],
+     "idNumista": "25274",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Corse (2e type)",
+     "mots": [
+      "corse",
+      "type"
+     ],
+     "idNumista": "25275",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Franche-Comté (2e type)",
+     "mots": [
+      "franche",
+      "comte",
+      "type"
+     ],
+     "idNumista": "25276",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Guadeloupe (2e type)",
+     "mots": [
+      "guadeloupe",
+      "type"
+     ],
+     "idNumista": "25277",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Guyane (2e type)",
+     "mots": [
+      "guyane",
+      "type"
+     ],
+     "idNumista": "25278",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Haute-Normandie (2e type)",
+     "mots": [
+      "haute",
+      "normandie",
+      "type"
+     ],
+     "idNumista": "25279",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Île de France (2e type)",
+     "mots": [
+      "france",
+      "type"
+     ],
+     "idNumista": "25280",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Languedoc-Roussillon (2e type)",
+     "mots": [
+      "languedoc",
+      "roussillon",
+      "type"
+     ],
+     "idNumista": "25281",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Limousin (2e type)",
+     "mots": [
+      "limousin",
+      "type"
+     ],
+     "idNumista": "25282",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Lorraine (2e type)",
+     "mots": [
+      "lorraine",
+      "type"
+     ],
+     "idNumista": "25286",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Martinique (2e type)",
+     "mots": [
+      "martinique",
+      "type"
+     ],
+     "idNumista": "25287",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Mayotte (2e type)",
+     "mots": [
+      "mayotte",
+      "type"
+     ],
+     "idNumista": "25288",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Midi-Pyrénées (2e type)",
+     "mots": [
+      "midi",
+      "pyrenees",
+      "type"
+     ],
+     "idNumista": "25289",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Nord-Pas de Calais (2e type)",
+     "mots": [
+      "nord",
+      "calais",
+      "type"
+     ],
+     "idNumista": "25290",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Pays de la Loire (2e type)",
+     "mots": [
+      "pays",
+      "loire",
+      "type"
+     ],
+     "idNumista": "25291",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Picardie (2e type)",
+     "mots": [
+      "picardie",
+      "type"
+     ],
+     "idNumista": "25292",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Poitou-Charentes (2e type)",
+     "mots": [
+      "poitou",
+      "charentes",
+      "type"
+     ],
+     "idNumista": "25294",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Provence-Alpes-Côte d'Azur (2e type)",
+     "mots": [
+      "provence",
+      "alpes",
+      "cote",
+      "azur"
+     ],
+     "idNumista": "25295",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Réunion (2e type)",
+     "mots": [
+      "reunion",
+      "type"
+     ],
+     "idNumista": "25296",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Rhône-Alpes (2e type)",
+     "mots": [
+      "rhone",
+      "alpes",
+      "type"
+     ],
+     "idNumista": "25297",
+     "annee": 2011
+    },
+    {
+     "label": "200 euros Régions françaises (1er type)",
+     "mots": [
+      "type"
+     ],
+     "idNumista": "25710",
+     "annee": 2011
+    }
+   ],
+   "note": "55 pièce(s) · 1 pays · 2010-2011",
+   "pays": "France"
+  },
+  {
+   "nom": "Patrimoine mondial de l'UNESCO",
+   "source": "numista",
+   "specificite": 64,
+   "type": "multi-pays",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Quedlinburg",
+     "mots": [
+      "quedlinburg"
+     ],
+     "idNumista": "15436",
+     "annee": 2003,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Bamberg",
+     "mots": [
+      "bamberg"
+     ],
+     "idNumista": "15437",
+     "annee": 2004,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Weimar",
+     "mots": [
+      "weimar"
+     ],
+     "idNumista": "15439",
+     "annee": 2006,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Lübeck",
+     "mots": [
+      "lubeck"
+     ],
+     "idNumista": "15440",
+     "annee": 2007,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Goslar",
+     "mots": [
+      "goslar"
+     ],
+     "idNumista": "15441",
+     "annee": 2008,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Trèves",
+     "mots": [
+      "treves"
+     ],
+     "idNumista": "15443",
+     "annee": 2009,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Résidence de Würzburg",
+     "mots": [
+      "residence",
+      "wurzburg"
+     ],
+     "idNumista": "16104",
+     "annee": 2010,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Château de la Wartbourg",
+     "mots": [
+      "chateau",
+      "wartbourg"
+     ],
+     "idNumista": "26503",
+     "annee": 2011,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "France — 5 euros Le château de Versailles",
+     "mots": [
+      "chateau",
+      "versailles"
+     ],
+     "idNumista": "20794",
+     "annee": 2011,
+     "pays": "France"
+    },
+    {
+     "label": "France — 10 euros Le château de Versailles",
+     "mots": [
+      "chateau",
+      "versailles"
+     ],
+     "idNumista": "21352",
+     "annee": 2011,
+     "pays": "France"
+    },
+    {
+     "label": "Portugal — 5 euros Couvent du Christ à Tomar (argent 500‰)",
+     "mots": [
+      "couvent",
+      "christ",
+      "tomar",
+      "argent"
+     ],
+     "idNumista": "13277",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Centre historique d'Évora (argent 500‰)",
+     "mots": [
+      "centre",
+      "historique",
+      "evora",
+      "argent"
+     ],
+     "idNumista": "13278",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Couvent du Christ à Tomar (argent 925‰)",
+     "mots": [
+      "couvent",
+      "christ",
+      "tomar",
+      "argent"
+     ],
+     "idNumista": "17651",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Centre historique d'Évora (argent 925‰)",
+     "mots": [
+      "centre",
+      "historique",
+      "evora",
+      "argent"
+     ],
+     "idNumista": "18239",
+     "annee": 2004,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Centre historique d'Angra do Heroísmo (argent 500‰)",
+     "mots": [
+      "centre",
+      "historique",
+      "angra",
+      "heroismo"
+     ],
+     "idNumista": "11441",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Monastère de Batalha (argent 500‰)",
+     "mots": [
+      "monastere",
+      "batalha",
+      "argent"
+     ],
+     "idNumista": "13276",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Monastère de Batalha (argent 925‰)",
+     "mots": [
+      "monastere",
+      "batalha",
+      "argent"
+     ],
+     "idNumista": "17046",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Centre historique d'Angra do Heroísmo (argent 925‰)",
+     "mots": [
+      "centre",
+      "historique",
+      "angra",
+      "heroismo"
+     ],
+     "idNumista": "17649",
+     "annee": 2005,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Paysage culturel de Sintra (argent 500‰)",
+     "mots": [
+      "paysage",
+      "culturel",
+      "sintra",
+      "argent"
+     ],
+     "idNumista": "12021",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Monastère d'Alcobaça (argent 500‰)",
+     "mots": [
+      "monastere",
+      "alcobaca",
+      "argent"
+     ],
+     "idNumista": "13274",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Paysage culturel de Sintra (argent 925‰)",
+     "mots": [
+      "paysage",
+      "culturel",
+      "sintra",
+      "argent"
+     ],
+     "idNumista": "18224",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Monastère d'Alcobaça (argent 925‰)",
+     "mots": [
+      "monastere",
+      "alcobaca",
+      "argent"
+     ],
+     "idNumista": "18225",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Forêt laurifère de Madère (argent 500‰)",
+     "mots": [
+      "foret",
+      "laurifere",
+      "madere",
+      "argent"
+     ],
+     "idNumista": "11432",
+     "annee": 2007,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Forêt laurifère de Madère (argent 925‰)",
+     "mots": [
+      "foret",
+      "laurifere",
+      "madere",
+      "argent"
+     ],
+     "idNumista": "16926",
+     "annee": 2007,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Région viticole du Haut-Douro (cupronickel)",
+     "mots": [
+      "region",
+      "viticole",
+      "haut",
+      "douro"
+     ],
+     "idNumista": "8006",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Centre historique de Porto (cupronickel)",
+     "mots": [
+      "centre",
+      "historique",
+      "porto",
+      "cupronickel"
+     ],
+     "idNumista": "8007",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Région viticole du Haut-Douro (argent)",
+     "mots": [
+      "region",
+      "viticole",
+      "haut",
+      "douro"
+     ],
+     "idNumista": "17971",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Centre historique de Porto (argent)",
+     "mots": [
+      "centre",
+      "historique",
+      "porto",
+      "argent"
+     ],
+     "idNumista": "17974",
+     "annee": 2008,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Tour de Bélem (cupronickel)",
+     "mots": [
+      "tour",
+      "belem",
+      "cupronickel"
+     ],
+     "idNumista": "9133",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2½ euros Monastère des Hiéronymites (cupronickel)",
+     "mots": [
+      "monastere",
+      "hieronymites",
+      "cupronickel"
+     ],
+     "idNumista": "9134",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Tour de Bélem (argent)",
+     "mots": [
+      "tour",
+      "belem",
+      "argent"
+     ],
+     "idNumista": "18232",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2½ euros Monastère de Jerónimos (argent)",
+     "mots": [
+      "monastere",
+      "jeronimos",
+      "argent"
+     ],
+     "idNumista": "18235",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Vallée de Côa (cupronickel)",
+     "mots": [
+      "vallee",
+      "cupronickel"
+     ],
+     "idNumista": "17437",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Vallée de Côa (argent)",
+     "mots": [
+      "vallee",
+      "argent"
+     ],
+     "idNumista": "17438",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Paysage viticole de l'île du Pico (cupronickel)",
+     "mots": [
+      "paysage",
+      "viticole",
+      "pico",
+      "cupronickel"
+     ],
+     "idNumista": "26368",
+     "annee": 2011,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 2,50 euros Paysage viticole de l'île du Pico (argent)",
+     "mots": [
+      "paysage",
+      "viticole",
+      "pico",
+      "argent"
+     ],
+     "idNumista": "26444",
+     "annee": 2011,
+     "pays": "Portugal"
+    }
+   ],
+   "note": "36 pièce(s) · 3 pays · 2003-2011"
+  },
+  {
+   "nom": "Drapeau européen",
+   "source": "numista",
+   "specificite": 97,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76632",
+     "annee": 2015,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Autriche — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77180",
+     "annee": 2015,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77181",
+     "annee": 2015,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Chypre — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76633",
+     "annee": 2015,
+     "pays": "Chypre"
+    },
+    {
+     "label": "Espagne — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76634",
+     "annee": 2015,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Estonie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77306",
+     "annee": 2015,
+     "pays": "Estonie"
+    },
+    {
+     "label": "Finlande — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "74920",
+     "annee": 2015,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 2 euros Drapeau européen (non colorée)",
+     "mots": [
+      "coloree"
+     ],
+     "idNumista": "76635",
+     "annee": 2015,
+     "pays": "France"
+    },
+    {
+     "label": "France — 2 euros Drapeau européen (colorée)",
+     "mots": [
+      "coloree"
+     ],
+     "idNumista": "78890",
+     "annee": 2015,
+     "pays": "France"
+    },
+    {
+     "label": "Grèce — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76636",
+     "annee": 2015,
+     "pays": "Grèce"
+    },
+    {
+     "label": "Irlande — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77182",
+     "annee": 2015,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76638",
+     "annee": 2015,
+     "pays": "Italie"
+    },
+    {
+     "label": "Lettonie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76639",
+     "annee": 2015,
+     "pays": "Lettonie"
+    },
+    {
+     "label": "Lituanie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76640",
+     "annee": 2015,
+     "pays": "Lituanie"
+    },
+    {
+     "label": "Luxembourg — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "78817",
+     "annee": 2015,
+     "pays": "Luxembourg"
+    },
+    {
+     "label": "Malte — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77307",
+     "annee": 2015,
+     "pays": "Malte"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76641",
+     "annee": 2015,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Drapeau européen (colorée, bleu et jaune)",
+     "mots": [
+      "coloree",
+      "bleu",
+      "jaune"
+     ],
+     "idNumista": "218048",
+     "annee": 2015,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Drapeau européen (colorée, multicolore)",
+     "mots": [
+      "coloree",
+      "multicolore"
+     ],
+     "idNumista": "218049",
+     "annee": 2015,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Drapeau européen (colorée, drapeau)",
+     "mots": [
+      "coloree"
+     ],
+     "idNumista": "218051",
+     "annee": 2015,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "77133",
+     "annee": 2015,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Slovaquie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76781",
+     "annee": 2015,
+     "pays": "Slovaquie"
+    },
+    {
+     "label": "Slovénie — 2 euros Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "76645",
+     "annee": 2015,
+     "pays": "Slovénie"
+    }
+   ],
+   "note": "23 pièce(s) · 19 pays · 2015-2015",
+   "remplace": [
+    "2 € commune 2015 — 30 ans du drapeau européen"
+   ]
+  },
+  {
+   "nom": "Länder allemands",
+   "source": "numista",
+   "specificite": 79,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Schleswig-Holstein",
+     "mots": [
+      "schleswig",
+      "holstein"
+     ],
+     "idNumista": "2169",
+     "annee": 2006,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Mecklembourg-Poméranie-Occidentale",
+     "mots": [
+      "mecklembourg",
+      "pomeranie",
+      "occidentale"
+     ],
+     "idNumista": "2201",
+     "annee": 2007,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Hambourg",
+     "mots": [
+      "hambourg"
+     ],
+     "idNumista": "2994",
+     "annee": 2008,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Sarre",
+     "mots": [
+      "sarre"
+     ],
+     "idNumista": "5053",
+     "annee": 2009,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Brême",
+     "mots": [
+      "breme"
+     ],
+     "idNumista": "10069",
+     "annee": 2010,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Rhénanie-du-Nord-Westphalie",
+     "mots": [
+      "rhenanie",
+      "nord",
+      "westphalie"
+     ],
+     "idNumista": "18666",
+     "annee": 2011,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Bavière",
+     "mots": [
+      "baviere"
+     ],
+     "idNumista": "29694",
+     "annee": 2012,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Bade-Württemberg",
+     "mots": [
+      "bade",
+      "wurttemberg"
+     ],
+     "idNumista": "42149",
+     "annee": 2013,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Basse-Saxe",
+     "mots": [
+      "basse",
+      "saxe"
+     ],
+     "idNumista": "53570",
+     "annee": 2014,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Hesse",
+     "mots": [
+      "hesse"
+     ],
+     "idNumista": "69263",
+     "annee": 2015,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Hesse (essai)",
+     "mots": [
+      "hesse",
+      "essai"
+     ],
+     "idNumista": "284594",
+     "annee": 2015,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Saxe",
+     "mots": [
+      "saxe"
+     ],
+     "idNumista": "80927",
+     "annee": 2016,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Rhénanie-Palatinat",
+     "mots": [
+      "rhenanie",
+      "palatinat"
+     ],
+     "idNumista": "102445",
+     "annee": 2017,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Berlin",
+     "mots": [
+      "berlin"
+     ],
+     "idNumista": "132935",
+     "annee": 2018,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Brandebourg",
+     "mots": [
+      "brandebourg"
+     ],
+     "idNumista": "193506",
+     "annee": 2020,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Saxe-Anhalt",
+     "mots": [
+      "saxe",
+      "anhalt"
+     ],
+     "idNumista": "267621",
+     "annee": 2021,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Thuringe",
+     "mots": [
+      "thuringe"
+     ],
+     "idNumista": "314709",
+     "annee": 2022,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Philharmonie de l'Elbe",
+     "mots": [
+      "philharmonie",
+      "elbe"
+     ],
+     "idNumista": "352712",
+     "annee": 2023,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Parc national de Jasmund",
+     "mots": [
+      "parc",
+      "national",
+      "jasmund"
+     ],
+     "idNumista": "394629",
+     "annee": 2024,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Boucle de la Sarre",
+     "mots": [
+      "boucle",
+      "sarre"
+     ],
+     "idNumista": "439766",
+     "annee": 2025,
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "2 euros Maison du Climat de Brême",
+     "mots": [
+      "maison",
+      "climat",
+      "breme"
+     ],
+     "idNumista": "474550",
+     "annee": 2026,
+     "axes": [
+      "atelier"
+     ]
+    }
+   ],
+   "note": "21 pièce(s) · 1 pays · 2006-2026",
+   "pays": "Allemagne,\\ République\\ fédérale\\ d'",
+   "remplace": [
+    "2 € Bundesländer I (Allemagne 2006-2022)",
+    "2 € Bundesländer II (Allemagne 2023-…)"
+   ]
+  },
+  {
+   "nom": "Programme Erasmus",
+   "source": "numista",
+   "specificite": 101,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "324867",
+     "annee": 2022,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Autriche — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331112",
+     "annee": 2022,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331208",
+     "annee": 2022,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Chypre — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "319134",
+     "annee": 2022,
+     "pays": "Chypre"
+    },
+    {
+     "label": "Espagne — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331425",
+     "annee": 2022,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Estonie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331415",
+     "annee": 2022,
+     "pays": "Estonie"
+    },
+    {
+     "label": "Finlande — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331204",
+     "annee": 2022,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331022",
+     "annee": 2022,
+     "pays": "France"
+    },
+    {
+     "label": "Grèce — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331432",
+     "annee": 2022,
+     "pays": "Grèce"
+    },
+    {
+     "label": "Irlande — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "319135",
+     "annee": 2022,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331445",
+     "annee": 2022,
+     "pays": "Italie"
+    },
+    {
+     "label": "Lettonie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331196",
+     "annee": 2022,
+     "pays": "Lettonie"
+    },
+    {
+     "label": "Lituanie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "323472",
+     "annee": 2022,
+     "pays": "Lituanie"
+    },
+    {
+     "label": "Luxembourg — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331428",
+     "annee": 2022,
+     "pays": "Luxembourg"
+    },
+    {
+     "label": "Malte — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "319136",
+     "annee": 2022,
+     "pays": "Malte"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331447",
+     "annee": 2022,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "327887",
+     "annee": 2022,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Slovaquie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "331026",
+     "annee": 2022,
+     "pays": "Slovaquie"
+    },
+    {
+     "label": "Slovénie — 2 euros Programme Erasmus",
+     "mots": [
+      "programme",
+      "erasmus"
+     ],
+     "idNumista": "320109",
+     "annee": 2022,
+     "pays": "Slovénie"
+    }
+   ],
+   "note": "19 pièce(s) · 19 pays · 2022-2022",
+   "remplace": [
+    "2 € commune 2022 — 35 ans du programme Erasmus"
+   ]
+  },
+  {
+   "nom": "L'Autriche et ses habitants",
+   "source": "numista",
+   "specificite": 82,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 euros Château d'Ambras",
+     "mots": [
+      "chateau",
+      "ambras"
+     ],
+     "idNumista": "13290",
+     "annee": 2002
+    },
+    {
+     "label": "10 euros Château d'Eggenberg",
+     "mots": [
+      "chateau",
+      "eggenberg"
+     ],
+     "idNumista": "13291",
+     "annee": 2002
+    },
+    {
+     "label": "10 euros Château de Hof",
+     "mots": [
+      "chateau"
+     ],
+     "idNumista": "13292",
+     "annee": 2003
+    },
+    {
+     "label": "10 euros Château de Schönbrunn",
+     "mots": [
+      "chateau",
+      "schonbrunn"
+     ],
+     "idNumista": "13293",
+     "annee": 2003
+    },
+    {
+     "label": "10 euros Château de Hellbrunn",
+     "mots": [
+      "chateau",
+      "hellbrunn"
+     ],
+     "idNumista": "13294",
+     "annee": 2004
+    },
+    {
+     "label": "10 euros Château d'Artstetten",
+     "mots": [
+      "chateau",
+      "artstetten"
+     ],
+     "idNumista": "13295",
+     "annee": 2004
+    },
+    {
+     "label": "10 euros Abbaye de Nonnberg",
+     "mots": [
+      "abbaye",
+      "nonnberg"
+     ],
+     "idNumista": "13298",
+     "annee": 2006
+    },
+    {
+     "label": "10 euros Abbaye de Göttweig",
+     "mots": [
+      "abbaye",
+      "gottweig"
+     ],
+     "idNumista": "13299",
+     "annee": 2006
+    },
+    {
+     "label": "10 euros Abbaye de Melk",
+     "mots": [
+      "abbaye",
+      "melk"
+     ],
+     "idNumista": "13300",
+     "annee": 2007
+    },
+    {
+     "label": "10 euros Saint Paul im Lavanttal",
+     "mots": [
+      "saint",
+      "paul",
+      "lavanttal"
+     ],
+     "idNumista": "13301",
+     "annee": 2007
+    },
+    {
+     "label": "10 euros Abbaye de Klosterneuburg",
+     "mots": [
+      "abbaye",
+      "klosterneuburg"
+     ],
+     "idNumista": "13302",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Abbaye de Seckau",
+     "mots": [
+      "abbaye",
+      "seckau"
+     ],
+     "idNumista": "13303",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Basilik de Vienne",
+     "mots": [
+      "basilik",
+      "vienne"
+     ],
+     "idNumista": "8609",
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Richard Cœur de Lion à Dürnstein",
+     "mots": [
+      "richard",
+      "lion",
+      "durnstein"
+     ],
+     "idNumista": "13304",
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Erzberg en Styrie",
+     "mots": [
+      "erzberg",
+      "styrie"
+     ],
+     "idNumista": "19909",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Charlemagne et l'Untersberg",
+     "mots": [
+      "charlemagne",
+      "untersberg"
+     ],
+     "idNumista": "21377",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Le serpent à Klagenfurt",
+     "mots": [
+      "serpent",
+      "klagenfurt"
+     ],
+     "idNumista": "22187",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Cher Augustin",
+     "mots": [
+      "cher",
+      "augustin"
+     ],
+     "idNumista": "26847",
+     "annee": 2011
+    }
+   ],
+   "note": "18 pièce(s) · 1 pays · 2002-2011",
+   "pays": "Autriche"
+  },
+  {
+   "nom": "10 ans de l'Euro",
+   "source": "numista",
+   "specificite": 102,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28321",
+     "annee": 2012,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Autriche — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28191",
+     "annee": 2012,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28325",
+     "annee": 2012,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Chypre — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28326",
+     "annee": 2012,
+     "pays": "Chypre"
+    },
+    {
+     "label": "Espagne — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28193",
+     "annee": 2012,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Estonie — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28192",
+     "annee": 2012,
+     "pays": "Estonie"
+    },
+    {
+     "label": "Finlande — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28328",
+     "annee": 2012,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28330",
+     "annee": 2012,
+     "pays": "France"
+    },
+    {
+     "label": "Grèce — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28102",
+     "annee": 2012,
+     "pays": "Grèce"
+    },
+    {
+     "label": "Irlande — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28194",
+     "annee": 2012,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28324",
+     "annee": 2012,
+     "pays": "Italie"
+    },
+    {
+     "label": "Luxembourg — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28323",
+     "annee": 2012,
+     "pays": "Luxembourg"
+    },
+    {
+     "label": "Malte — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28322",
+     "annee": 2012,
+     "pays": "Malte"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28327",
+     "annee": 2012,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28329",
+     "annee": 2012,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Saint-Marin — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "30276",
+     "annee": 2012,
+     "pays": "Saint-Marin"
+    },
+    {
+     "label": "Slovaquie — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28064",
+     "annee": 2012,
+     "pays": "Slovaquie"
+    },
+    {
+     "label": "Slovénie — 2 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28110",
+     "annee": 2012,
+     "pays": "Slovénie"
+    }
+   ],
+   "note": "18 pièce(s) · 18 pays · 2012-2012",
+   "remplace": [
+    "2 € commune 2012 — 10 ans de l'euro fiduciaire"
+   ]
+  },
+  {
+   "nom": "Patrimonio Mundial",
+   "source": "numista",
+   "specificite": 83,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Centre historique de Cordoue",
+     "mots": [
+      "centre",
+      "historique",
+      "cordoue"
+     ],
+     "idNumista": "10364",
+     "annee": 2010
+    },
+    {
+     "label": "2 euros Alhambra de Grenade",
+     "mots": [
+      "alhambra",
+      "grenade"
+     ],
+     "idNumista": "19979",
+     "annee": 2011
+    },
+    {
+     "label": "2 euros Cathédrale de Burgos",
+     "mots": [
+      "cathedrale",
+      "burgos"
+     ],
+     "idNumista": "30072",
+     "annee": 2012
+    },
+    {
+     "label": "2 euros Escurial",
+     "mots": [
+      "escurial"
+     ],
+     "idNumista": "42976",
+     "annee": 2013
+    },
+    {
+     "label": "2 euros Parc Güell",
+     "mots": [
+      "parc",
+      "guell"
+     ],
+     "idNumista": "57612",
+     "annee": 2014
+    },
+    {
+     "label": "2 euros Grotte d’Altamira",
+     "mots": [
+      "grotte",
+      "daltamira"
+     ],
+     "idNumista": "69425",
+     "annee": 2015
+    },
+    {
+     "label": "2 euros Aqueduc de Ségovie",
+     "mots": [
+      "aqueduc",
+      "segovie"
+     ],
+     "idNumista": "81058",
+     "annee": 2016
+    },
+    {
+     "label": "2 euros Églises du Royaume des Asturies",
+     "mots": [
+      "eglises",
+      "royaume",
+      "asturies"
+     ],
+     "idNumista": "101994",
+     "annee": 2017
+    },
+    {
+     "label": "2 euros Saint-Jacques-de-Compostelle",
+     "mots": [
+      "saint",
+      "jacques",
+      "compostelle"
+     ],
+     "idNumista": "131881",
+     "annee": 2018
+    },
+    {
+     "label": "2 euros Ávila",
+     "mots": [
+      "avila"
+     ],
+     "idNumista": "155939",
+     "annee": 2019
+    },
+    {
+     "label": "2 euros Architecture mudéjare d'Aragon",
+     "mots": [
+      "architecture",
+      "mudejare",
+      "aragon"
+     ],
+     "idNumista": "193508",
+     "annee": 2020
+    },
+    {
+     "label": "2 euros Tolède",
+     "mots": [
+      "tolede"
+     ],
+     "idNumista": "264789",
+     "annee": 2021
+    },
+    {
+     "label": "2 euros Parc national de Garajonay",
+     "mots": [
+      "parc",
+      "national",
+      "garajonay"
+     ],
+     "idNumista": "323476",
+     "annee": 2022
+    },
+    {
+     "label": "2 euros Cáceres",
+     "mots": [
+      "caceres"
+     ],
+     "idNumista": "357033",
+     "annee": 2023
+    },
+    {
+     "label": "2 euros Séville",
+     "mots": [
+      "seville"
+     ],
+     "idNumista": "401373",
+     "annee": 2024
+    },
+    {
+     "label": "2 euros Salamanque",
+     "mots": [
+      "salamanque"
+     ],
+     "idNumista": "457922",
+     "annee": 2025
+    },
+    {
+     "label": "2 Euros (Monastery of Poblet)",
+     "mots": [
+      "monastery",
+      "poblet"
+     ],
+     "idNumista": "557309",
+     "annee": 2026
+    }
+   ],
+   "note": "17 pièce(s) · 1 pays · 2010-2026",
+   "pays": "Espagne"
+  },
+  {
+   "nom": "10e anniversaire de l'Union Economique et Monétaire",
+   "source": "numista",
+   "specificite": 104,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5054",
+     "annee": 2009,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Autriche — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5055",
+     "annee": 2009,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5056",
+     "annee": 2009,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Chypre — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5060",
+     "annee": 2009,
+     "pays": "Chypre"
+    },
+    {
+     "label": "Espagne — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5061",
+     "annee": 2009,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Finlande — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5062",
+     "annee": 2009,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5063",
+     "annee": 2009,
+     "pays": "France"
+    },
+    {
+     "label": "Grèce — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5068",
+     "annee": 2009,
+     "pays": "Grèce"
+    },
+    {
+     "label": "Irlande — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5069",
+     "annee": 2009,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5070",
+     "annee": 2009,
+     "pays": "Italie"
+    },
+    {
+     "label": "Luxembourg — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5071",
+     "annee": 2009,
+     "pays": "Luxembourg"
+    },
+    {
+     "label": "Malte — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5072",
+     "annee": 2009,
+     "pays": "Malte"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5073",
+     "annee": 2009,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5074",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Slovaquie — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5092",
+     "annee": 2009,
+     "pays": "Slovaquie"
+    },
+    {
+     "label": "Slovénie — 2 euros Union économique et monétaire",
+     "mots": [
+      "union"
+     ],
+     "idNumista": "5079",
+     "annee": 2009,
+     "pays": "Slovénie"
+    }
+   ],
+   "note": "16 pièce(s) · 16 pays · 2009-2009",
+   "remplace": [
+    "2 € commune 2009 — 10 ans de l'UEM"
+   ]
+  },
+  {
+   "nom": "Dernière émission de pesetas",
+   "source": "numista",
+   "specificite": 86,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2000 pesetas Présidence du Conseil de l'Union européenne",
+     "mots": [
+      "2000",
+      "presidence",
+      "conseil",
+      "union"
+     ],
+     "idNumista": "9094",
+     "annee": 1995
+    },
+    {
+     "label": "12 euros Présidence de l'UE (2002)",
+     "mots": [
+      "presidence",
+      "2002"
+     ],
+     "idNumista": "8285",
+     "annee": 2002
+    },
+    {
+     "label": "12 euros Constitution espagnole",
+     "mots": [
+      "constitution",
+      "espagnole"
+     ],
+     "idNumista": "8286",
+     "annee": 2003
+    },
+    {
+     "label": "12 euros Mariage du prince Felipe avec Letizia",
+     "mots": [
+      "mariage",
+      "prince",
+      "felipe",
+      "avec"
+     ],
+     "idNumista": "8287",
+     "annee": 2004
+    },
+    {
+     "label": "12 euros Isabelle I de Castille",
+     "mots": [
+      "isabelle",
+      "castille"
+     ],
+     "idNumista": "8288",
+     "annee": 2004
+    },
+    {
+     "label": "12 euros Don Quichotte",
+     "mots": [
+      "quichotte"
+     ],
+     "idNumista": "8289",
+     "annee": 2005
+    },
+    {
+     "label": "12 euros Christophe Colomb",
+     "mots": [
+      "christophe",
+      "colomb"
+     ],
+     "idNumista": "8234",
+     "annee": 2006
+    },
+    {
+     "label": "12 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "8290",
+     "annee": 2007
+    },
+    {
+     "label": "12 euros Planète Terre",
+     "mots": [
+      "planete",
+      "terre"
+     ],
+     "idNumista": "8235",
+     "annee": 2008
+    },
+    {
+     "label": "12 euros Union économique et monétaire",
+     "mots": [
+      "union",
+      "economique",
+      "monetaire"
+     ],
+     "idNumista": "7712",
+     "annee": 2009
+    },
+    {
+     "label": "12 euros Présidence de l'UE (2010)",
+     "mots": [
+      "presidence",
+      "2010"
+     ],
+     "idNumista": "10814",
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Champions du monde FIFA 2010",
+     "mots": [
+      "champions",
+      "monde",
+      "fifa",
+      "2010"
+     ],
+     "idNumista": "17413",
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Journée de la femme",
+     "mots": [
+      "journee",
+      "femme"
+     ],
+     "idNumista": "20008",
+     "annee": 2011
+    },
+    {
+     "label": "30 euros Introduction de l'euro (10 ans)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "30844",
+     "annee": 2012
+    }
+   ],
+   "note": "14 pièce(s) · 1 pays · 1995-2012",
+   "pays": "Espagne"
+  },
+  {
+   "nom": "Traité de Rome",
+   "source": "numista",
+   "specificite": 107,
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2162",
+     "annee": 2007,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Autriche — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2163",
+     "annee": 2007,
+     "pays": "Autriche"
+    },
+    {
+     "label": "Belgique — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2167",
+     "annee": 2007,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Espagne — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2209",
+     "annee": 2007,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Finlande — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2205",
+     "annee": 2007,
+     "pays": "Finlande"
+    },
+    {
+     "label": "France — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2161",
+     "annee": 2007,
+     "pays": "France"
+    },
+    {
+     "label": "Grèce — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2213",
+     "annee": 2007,
+     "pays": "Grèce"
+    },
+    {
+     "label": "Irlande — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2211",
+     "annee": 2007,
+     "pays": "Irlande"
+    },
+    {
+     "label": "Italie — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2210",
+     "annee": 2007,
+     "pays": "Italie"
+    },
+    {
+     "label": "Luxembourg — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2212",
+     "annee": 2007,
+     "pays": "Luxembourg"
+    },
+    {
+     "label": "Pays-Bas — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2207",
+     "annee": 2007,
+     "pays": "Pays-Bas"
+    },
+    {
+     "label": "Portugal — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2206",
+     "annee": 2007,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Slovénie — 2 euros Traité de Rome",
+     "mots": [
+      "traite",
+      "rome"
+     ],
+     "idNumista": "2208",
+     "annee": 2007,
+     "pays": "Slovénie"
+    }
+   ],
+   "note": "13 pièce(s) · 13 pays · 2007-2007",
+   "remplace": [
+    "2 € commune 2007 — 50 ans du Traité de Rome"
+   ]
+  },
+  {
+   "nom": "Europa",
+   "source": "numista",
+   "specificite": 88,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro Introduction de l'euro",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "22032",
+     "annee": 2002
+    },
+    {
+     "label": "¼ euro Introduction de l'euro",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "28766",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro Introduction de l'euro (1 an)",
+     "mots": [
+      "introduction"
+     ],
+     "idNumista": "20759",
+     "annee": 2003
+    },
+    {
+     "label": "1½ euro Drapeau européen",
+     "mots": [
+      "drapeau",
+      "europeen"
+     ],
+     "idNumista": "19142",
+     "annee": 2005
+    },
+    {
+     "label": "10 euros Présidence française de l'Union européenne",
+     "mots": [
+      "presidence",
+      "francaise",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "22052",
+     "annee": 2008
+    },
+    {
+     "label": "1½ euro Présidence française de l'Union européenne",
+     "mots": [
+      "presidence",
+      "francaise",
+      "union",
+      "europeenne"
+     ],
+     "idNumista": "30592",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Mur de Berlin",
+     "mots": [
+      "berlin"
+     ],
+     "idNumista": "22300",
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Abbaye de Cluny",
+     "mots": [
+      "abbaye",
+      "cluny"
+     ],
+     "idNumista": "21345",
+     "annee": 2010
+    },
+    {
+     "label": "5 euros Abbaye de Cluny",
+     "mots": [
+      "abbaye",
+      "cluny"
+     ],
+     "idNumista": "22275",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Fête de la musique",
+     "mots": [
+      "fete",
+      "musique"
+     ],
+     "idNumista": "23150",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Fête de la musique",
+     "mots": [
+      "fete",
+      "musique"
+     ],
+     "idNumista": "23151",
+     "annee": 2011
+    },
+    {
+     "label": "200 euros Fête de la Musique",
+     "mots": [
+      "fete",
+      "musique"
+     ],
+     "idNumista": "25588",
+     "annee": 2011
+    }
+   ],
+   "note": "12 pièce(s) · 1 pays · 2002-2011",
+   "pays": "France"
+  },
+  {
+   "nom": "Coupe du monde FIFA 2006 en Allemagne",
+   "source": "numista",
+   "specificite": 90,
+   "type": "multi-pays",
+   "attendus": [
+    {
+     "label": "Allemagne, République fédérale d' — 10 euros Coupe du monde 2006 (edition 2003)",
+     "mots": [
+      "edition",
+      "2003"
+     ],
+     "idNumista": "10714",
+     "annee": 2003,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 10 euros Coupe du monde 2006 (édition 2004)",
+     "mots": [
+      "edition",
+      "2004"
+     ],
+     "idNumista": "12755",
+     "annee": 2004,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 10 euros Coupe du monde 2006 (édition 2005)",
+     "mots": [
+      "edition",
+      "2005"
+     ],
+     "idNumista": "12803",
+     "annee": 2005,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 100 euros Coupe du monde FIFA 2006",
+     "mots": [
+      "coupe",
+      "monde",
+      "fifa",
+      "2006"
+     ],
+     "idNumista": "15438",
+     "annee": 2005,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "Allemagne, République fédérale d' — 10 euros Coupe du monde 2006 (édition 2006)",
+     "mots": [
+      "edition"
+     ],
+     "idNumista": "13133",
+     "annee": 2006,
+     "pays": "Allemagne, République fédérale d'",
+     "axes": [
+      "atelier"
+     ]
+    },
+    {
+     "label": "France — 1½ euro Coupe du monde FIFA 2006",
+     "mots": [
+      "coupe",
+      "monde",
+      "fifa",
+      "2006"
+     ],
+     "idNumista": "19144",
+     "annee": 2005,
+     "pays": "France"
+    },
+    {
+     "label": "Portugal — 10 euros Coupe du monde FIFA 2006 (argent 500‰)",
+     "mots": [
+      "argent"
+     ],
+     "idNumista": "12586",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 10 euros Coupe du monde FIFA 2006 (argent 925‰)",
+     "mots": [
+      "argent"
+     ],
+     "idNumista": "17066",
+     "annee": 2006,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Saint-Marin — 5 euros Coupe du monde de football 2006",
+     "mots": [
+      "football"
+     ],
+     "idNumista": "13780",
+     "annee": 2004,
+     "pays": "Saint-Marin"
+    },
+    {
+     "label": "Saint-Marin — 10 euros coupe du monde de football",
+     "mots": [
+      "football"
+     ],
+     "idNumista": "16374",
+     "annee": 2004,
+     "pays": "Saint-Marin"
+    }
+   ],
+   "note": "10 pièce(s) · 4 pays · 2003-2006"
+  },
+  {
+   "nom": "Provinces historiques de Finlande",
+   "source": "numista",
+   "specificite": 111,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "5 euros Finlande du Sud-Ouest",
+     "mots": [
+      "ouest"
+     ],
+     "idNumista": "16606",
+     "annee": 2010
+    },
+    {
+     "label": "5 euros Satakunta",
+     "mots": [
+      "satakunta"
+     ],
+     "idNumista": "16927",
+     "annee": 2010
+    },
+    {
+     "label": "5 euros Häme",
+     "mots": [
+      "hame"
+     ],
+     "idNumista": "19393",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Savonie",
+     "mots": [
+      "savonie"
+     ],
+     "idNumista": "20999",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Uusimaa",
+     "mots": [
+      "uusimaa"
+     ],
+     "idNumista": "22894",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Carélie",
+     "mots": [
+      "carelie"
+     ],
+     "idNumista": "26275",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Ostrobotnie",
+     "mots": [
+      "ostrobotnie"
+     ],
+     "idNumista": "26276",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Laponie",
+     "mots": [
+      "laponie"
+     ],
+     "idNumista": "27203",
+     "annee": 2011
+    },
+    {
+     "label": "5 euros Åland",
+     "mots": [
+      "aland"
+     ],
+     "idNumista": "27581",
+     "annee": 2011
+    }
+   ],
+   "note": "9 pièce(s) · 1 pays · 2010-2011",
+   "pays": "Finlande"
+  },
+  {
+   "nom": "Série Ibéro-Américaine",
+   "source": "numista",
+   "specificite": 92,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 euros Nautica (argent 500‰)",
+     "mots": [
+      "nautica",
+      "argent"
+     ],
+     "idNumista": "13311",
+     "annee": 2003
+    },
+    {
+     "label": "10 euros Nautica (argent 925‰)",
+     "mots": [
+      "nautica",
+      "argent"
+     ],
+     "idNumista": "17273",
+     "annee": 2003
+    },
+    {
+     "label": "10 euros Cathédrale de Porto (argent 500‰)",
+     "mots": [
+      "cathedrale",
+      "porto",
+      "argent"
+     ],
+     "idNumista": "13313",
+     "annee": 2005
+    },
+    {
+     "label": "10 euros Cathédrale de Porto (argent 925‰)",
+     "mots": [
+      "cathedrale",
+      "porto",
+      "argent"
+     ],
+     "idNumista": "17047",
+     "annee": 2005
+    },
+    {
+     "label": "10 euros Marathon (argent 500‰)",
+     "mots": [
+      "marathon",
+      "argent"
+     ],
+     "idNumista": "13316",
+     "annee": 2007
+    },
+    {
+     "label": "10 euros Marathon (argent 925‰)",
+     "mots": [
+      "marathon",
+      "argent"
+     ],
+     "idNumista": "16831",
+     "annee": 2007
+    },
+    {
+     "label": "10 euros Escudo (argent 500‰)",
+     "mots": [
+      "escudo",
+      "argent"
+     ],
+     "idNumista": "17276",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Escudo (argent 925‰)",
+     "mots": [
+      "escudo",
+      "argent"
+     ],
+     "idNumista": "17639",
+     "annee": 2010
+    }
+   ],
+   "note": "8 pièce(s) · 1 pays · 2003-2010",
+   "pays": "Portugal"
+  },
+  {
+   "nom": "Contes d'enfants",
+   "source": "numista",
+   "specificite": 92,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro Blanche-Neige",
+     "mots": [
+      "blanche",
+      "neige"
+     ],
+     "idNumista": "19137",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro Pinocchio",
+     "mots": [
+      "pinocchio"
+     ],
+     "idNumista": "19139",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro Cendrillon",
+     "mots": [
+      "cendrillon"
+     ],
+     "idNumista": "19197",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro Alice au pays des merveilles",
+     "mots": [
+      "alice",
+      "pays",
+      "merveilles"
+     ],
+     "idNumista": "19150",
+     "annee": 2003
+    },
+    {
+     "label": "1½ euro Hansel et Gretel",
+     "mots": [
+      "hansel",
+      "gretel"
+     ],
+     "idNumista": "19151",
+     "annee": 2003
+    },
+    {
+     "label": "1½ euro La Belle au bois dormant",
+     "mots": [
+      "belle",
+      "bois",
+      "dormant"
+     ],
+     "idNumista": "19155",
+     "annee": 2003
+    },
+    {
+     "label": "1½ euro Aladdin",
+     "mots": [
+      "aladdin"
+     ],
+     "idNumista": "19219",
+     "annee": 2004
+    },
+    {
+     "label": "1½ euro Peter Pan",
+     "mots": [
+      "peter"
+     ],
+     "idNumista": "19220",
+     "annee": 2004
+    }
+   ],
+   "note": "8 pièce(s) · 1 pays · 2002-2004",
+   "pays": "France"
+  },
+  {
+   "nom": "Trésors numismatiques",
+   "source": "numista",
+   "specificite": 93,
+   "type": "multi-pays",
+   "attendus": [
+    {
+     "label": "Espagne — 10 euros Emporiton",
+     "mots": [
+      "emporiton"
+     ],
+     "idNumista": "19431",
+     "annee": 2008,
+     "pays": "Espagne"
+    },
+    {
+     "label": "Portugal — 1,50 euro Morabitino (cupronickel)",
+     "mots": [
+      "morabitino",
+      "cupronickel"
+     ],
+     "idNumista": "10116",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 1,50 euro Morabitino (or)",
+     "mots": [
+      "morabitino"
+     ],
+     "idNumista": "18226",
+     "annee": 2009,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Justo (cupronickel)",
+     "mots": [
+      "justo",
+      "cupronickel"
+     ],
+     "idNumista": "12019",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 5 euros Justo (or)",
+     "mots": [
+      "justo"
+     ],
+     "idNumista": "17641",
+     "annee": 2010,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 7,50 euros Portugais (cupronickel)",
+     "mots": [
+      "portugais",
+      "cupronickel"
+     ],
+     "idNumista": "26922",
+     "annee": 2011,
+     "pays": "Portugal"
+    },
+    {
+     "label": "Portugal — 7,50 euros Portugais (or)",
+     "mots": [
+      "portugais"
+     ],
+     "idNumista": "30710",
+     "annee": 2011,
+     "pays": "Portugal"
+    }
+   ],
+   "note": "7 pièce(s) · 2 pays · 2008-2011"
+  },
+  {
+   "nom": "Grands peintres",
+   "source": "numista",
+   "specificite": 93,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "¼ d'euro Édouard Manet",
+     "mots": [
+      "edouard",
+      "manet"
+     ],
+     "idNumista": "13401",
+     "annee": 2008
+    },
+    {
+     "label": "5 euros Claude Monet",
+     "mots": [
+      "claude",
+      "monet"
+     ],
+     "idNumista": "10130",
+     "annee": 2009
+    },
+    {
+     "label": "5 euros Auguste Renoir",
+     "mots": [
+      "auguste",
+      "renoir"
+     ],
+     "idNumista": "19276",
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Georges Braque",
+     "mots": [
+      "georges",
+      "braque"
+     ],
+     "idNumista": "18902",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Pablo Picasso",
+     "mots": [
+      "pablo",
+      "picasso"
+     ],
+     "idNumista": "21349",
+     "annee": 2010
+    },
+    {
+     "label": "10 euros Vassily Kandinsky",
+     "mots": [
+      "vassily",
+      "kandinsky"
+     ],
+     "idNumista": "21856",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Andy Warhol",
+     "mots": [
+      "andy",
+      "warhol"
+     ],
+     "idNumista": "29670",
+     "annee": 2011
+    }
+   ],
+   "note": "7 pièce(s) · 1 pays · 2008-2011",
+   "pays": "France"
+  },
+  {
+   "nom": "De Clovis à la République, 1500 ans d'histoire de France",
+   "source": "numista",
+   "specificite": 113,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 euros Clovis Ier",
+     "mots": [
+      "clovis"
+     ],
+     "idNumista": "23145",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Charlemagne",
+     "mots": [
+      "charlemagne"
+     ],
+     "idNumista": "23790",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Charles II le Chauve",
+     "mots": [
+      "charles",
+      "chauve"
+     ],
+     "idNumista": "24589",
+     "annee": 2011
+    },
+    {
+     "label": "50 euros Charles II le Chauve",
+     "mots": [
+      "charles",
+      "chauve"
+     ],
+     "idNumista": "31944",
+     "annee": 2011
+    },
+    {
+     "label": "10 euros Hugues Capet",
+     "mots": [
+      "hugues",
+      "capet"
+     ],
+     "idNumista": "31945",
+     "annee": 2012
+    },
+    {
+     "label": "10 euros Philippe Auguste",
+     "mots": [
+      "philippe",
+      "auguste"
+     ],
+     "idNumista": "32345",
+     "annee": 2012
+    },
+    {
+     "label": "50 euros Philippe Auguste",
+     "mots": [
+      "philippe",
+      "auguste"
+     ],
+     "idNumista": "32346",
+     "annee": 2012
+    }
+   ],
+   "note": "7 pièce(s) · 1 pays · 2011-2012",
+   "pays": "France"
+  },
+  {
+   "nom": "Introduction de l'euro",
+   "source": "numista",
+   "specificite": 113,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1000 Shillings / 2 Euro cent Netherlands",
+     "mots": [
+      "1000",
+      "shillings",
+      "netherlands"
+     ],
+     "idNumista": "65466",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings / 2 Euro Netherlands",
+     "mots": [
+      "1000",
+      "shillings",
+      "netherlands"
+     ],
+     "idNumista": "65477",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings / 2 Euro Belgium",
+     "mots": [
+      "1000",
+      "shillings",
+      "belgium"
+     ],
+     "idNumista": "65479",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings (2 Euro Germany)",
+     "mots": [
+      "1000",
+      "shillings",
+      "germany"
+     ],
+     "idNumista": "170694",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings (2 Euro cent Austria)",
+     "mots": [
+      "1000",
+      "shillings",
+      "austria"
+     ],
+     "idNumista": "193330",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings (2 Euro Austria)",
+     "mots": [
+      "1000",
+      "shillings",
+      "austria"
+     ],
+     "idNumista": "194520",
+     "annee": 1999
+    },
+    {
+     "label": "1000 Shillings (2 Euro cent Belgium)",
+     "mots": [
+      "1000",
+      "shillings",
+      "belgium"
+     ],
+     "idNumista": "195053",
+     "annee": 1999
+    }
+   ],
+   "note": "7 pièce(s) · 1 pays · 1999-1999",
+   "pays": "Ouganda"
+  },
+  {
+   "nom": "Sites préhistoriques maltais",
+   "source": "numista",
+   "specificite": 93,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Temple de Ġgantija",
+     "mots": [
+      "temple",
+      "ggantija"
+     ],
+     "idNumista": "84920",
+     "annee": 2016
+    },
+    {
+     "label": "2 euros Temple de Ħaġar Qim",
+     "mots": [
+      "temple",
+      "agar"
+     ],
+     "idNumista": "113393",
+     "annee": 2017
+    },
+    {
+     "label": "2 euros Temple de Mnajdra",
+     "mots": [
+      "temple",
+      "mnajdra"
+     ],
+     "idNumista": "132944",
+     "annee": 2018
+    },
+    {
+     "label": "2 euros Temple de Ta’ Ħaġrat",
+     "mots": [
+      "temple",
+      "agrat"
+     ],
+     "idNumista": "167679",
+     "annee": 2019
+    },
+    {
+     "label": "2 euros Temple de Skorba",
+     "mots": [
+      "temple",
+      "skorba"
+     ],
+     "idNumista": "215435",
+     "annee": 2020
+    },
+    {
+     "label": "2 euros Temples de Tarxien",
+     "mots": [
+      "temples",
+      "tarxien"
+     ],
+     "idNumista": "309264",
+     "annee": 2021
+    },
+    {
+     "label": "2 euros Hypogée de Ħal Saflieni",
+     "mots": [
+      "hypogee",
+      "saflieni"
+     ],
+     "idNumista": "346677",
+     "annee": 2022
+    }
+   ],
+   "note": "7 pièce(s) · 1 pays · 2016-2022",
+   "pays": "Malte"
+  },
+  {
+   "nom": "Présidence du Conseil de l'Union européenne",
+   "source": "numista",
+   "specificite": 95,
+   "type": "multi-pays",
+   "attendus": [
+    {
+     "label": "Belgique — 2 euros Présidence de l'UE",
+     "mots": [
+      "presidence"
+     ],
+     "idNumista": "11550",
+     "annee": 2010,
+     "pays": "Belgique"
+    },
+    {
+     "label": "Belgique — 2 euros Présidence de l'UE (2024)",
+     "mots": [
+      "2024"
+     ],
+     "idNumista": "395552",
+     "annee": 2024,
+     "pays": "Belgique"
+    },
+    {
+     "label": "France — 2 euros Présidence de l'UE",
+     "mots": [
+      "presidence"
+     ],
+     "idNumista": "3561",
+     "annee": 2008,
+     "pays": "France"
+    },
+    {
+     "label": "Lettonie — 2 euros Présidence de l'UE",
+     "mots": [
+      "presidence"
+     ],
+     "idNumista": "69614",
+     "annee": 2015,
+     "pays": "Lettonie"
+    },
+    {
+     "label": "Portugal — 2 euros Présidence de l'UE",
+     "mots": [
+      "presidence"
+     ],
+     "idNumista": "2204",
+     "annee": 2007,
+     "pays": "Portugal"
+    }
+   ],
+   "note": "5 pièce(s) · 4 pays · 2007-2024"
+  },
+  {
+   "nom": "Trésors des musées d'Europe",
+   "source": "numista",
+   "specificite": 114,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 francs / 1½ euro \"Le Fifre\" d'Édouard Manet",
+     "mots": [
+      "fifre",
+      "edouard",
+      "manet"
+     ],
+     "idNumista": "8669",
+     "annee": 1996
+    },
+    {
+     "label": "10 francs / 1½ euro \"David\" par Michel Ange",
+     "mots": [
+      "david",
+      "michel",
+      "ange"
+     ],
+     "idNumista": "8670",
+     "annee": 1996
+    },
+    {
+     "label": "10 francs / 1½ euro \"Cavalier Chinois\" du Ve siècle",
+     "mots": [
+      "cavalier",
+      "chinois",
+      "siecle"
+     ],
+     "idNumista": "8671",
+     "annee": 1996
+    },
+    {
+     "label": "10 francs / 1½ euro \"La Source\" par Ingres",
+     "mots": [
+      "source",
+      "ingres"
+     ],
+     "idNumista": "22702",
+     "annee": 1996
+    },
+    {
+     "label": "10 francs / 1½ euro L'Autoportrait au feutre de Van Gogh",
+     "mots": [
+      "autoportrait",
+      "feutre",
+      "gogh"
+     ],
+     "idNumista": "31001",
+     "annee": 1996
+    },
+    {
+     "label": "10 francs / 1½ euro \"Autoportrait à la fourrure\" d'Albrecht Dürer",
+     "mots": [
+      "autoportrait",
+      "fourrure",
+      "albrecht",
+      "durer"
+     ],
+     "idNumista": "3059",
+     "annee": 1997
+    }
+   ],
+   "note": "6 pièce(s) · 1 pays · 1996-1997",
+   "pays": "France"
+  },
+  {
+   "nom": "La marine et la marine marchande autrichiennes",
+   "source": "numista",
+   "specificite": 94,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "20 euros Novara",
+     "mots": [
+      "novara"
+     ],
+     "idNumista": "14784",
+     "annee": 2004
+    },
+    {
+     "label": "20 euros Ferdinand Max",
+     "mots": [
+      "ferdinand"
+     ],
+     "idNumista": "14785",
+     "annee": 2004
+    },
+    {
+     "label": "20 euros Expédition polaire Tegetthoff",
+     "mots": [
+      "expedition",
+      "polaire",
+      "tegetthoff"
+     ],
+     "idNumista": "14786",
+     "annee": 2005
+    },
+    {
+     "label": "20 euros Sankt Georg",
+     "mots": [
+      "sankt",
+      "georg"
+     ],
+     "idNumista": "14787",
+     "annee": 2005
+    },
+    {
+     "label": "20 euros Marine marchande autrichienne",
+     "mots": [
+      "autrichienne"
+     ],
+     "idNumista": "14788",
+     "annee": 2006
+    },
+    {
+     "label": "20 euros Viribus Unitis",
+     "mots": [
+      "viribus",
+      "unitis"
+     ],
+     "idNumista": "14789",
+     "annee": 2006
+    }
+   ],
+   "note": "6 pièce(s) · 1 pays · 2004-2006",
+   "pays": "Autriche"
+  },
+  {
+   "nom": "Trésors de Saint-Marin",
+   "source": "numista",
+   "specificite": 98,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "20 euros Trésors de Saint-Marin",
+     "mots": [
+      "saint",
+      "marin"
+     ],
+     "idNumista": "16640",
+     "annee": 2008
+    },
+    {
+     "label": "50 euros Trésors de Saint-Marin",
+     "mots": [
+      "saint",
+      "marin"
+     ],
+     "idNumista": "16641",
+     "annee": 2008
+    }
+   ],
+   "note": "2 pièce(s) · 1 pays · 2008-2010",
+   "pays": "Saint\\-Marin"
+  },
+  {
+   "nom": "Portugal universel",
+   "source": "numista",
+   "specificite": 94,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "¼ d'euro Alphonse Henriques",
+     "mots": [
+      "alphonse",
+      "henriques"
+     ],
+     "idNumista": "16898",
+     "annee": 2006
+    },
+    {
+     "label": "¼ d'euro Saint-Antoine de Padoue",
+     "mots": [
+      "saint",
+      "antoine",
+      "padoue"
+     ],
+     "idNumista": "16894",
+     "annee": 2007
+    },
+    {
+     "label": "¼ d'euro D. Dinis",
+     "mots": [
+      "dinis"
+     ],
+     "idNumista": "16903",
+     "annee": 2008
+    },
+    {
+     "label": "¼ d'euro Vasco de Gama",
+     "mots": [
+      "vasco",
+      "gama"
+     ],
+     "idNumista": "16879",
+     "annee": 2009
+    },
+    {
+     "label": "0,25 euro Luís de Camões",
+     "mots": [
+      "luis",
+      "camoes"
+     ],
+     "idNumista": "16904",
+     "annee": 2010
+    },
+    {
+     "label": "¼ d'euro António Vieira",
+     "mots": [
+      "antonio",
+      "vieira"
+     ],
+     "idNumista": "25044",
+     "annee": 2011
+    }
+   ],
+   "note": "6 pièce(s) · 1 pays · 2006-2011",
+   "pays": "Portugal"
+  },
+  {
+   "nom": "Jeux Olympiques Paris 2024",
+   "source": "numista",
+   "specificite": 94,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros JO 2024 Paris (Marianne)",
+     "mots": [
+      "marianne"
+     ],
+     "idNumista": "304119",
+     "annee": 2021
+    },
+    {
+     "label": "2 euros JO 2024 Paris (Génie de la liberté)",
+     "mots": [
+      "genie",
+      "liberte"
+     ],
+     "idNumista": "341320",
+     "annee": 2022
+    },
+    {
+     "label": "2 euros JO 2024 Paris (Semeuse)",
+     "mots": [
+      "semeuse"
+     ],
+     "idNumista": "352565",
+     "annee": 2023
+    },
+    {
+     "label": "2 euros JO 2024 Paris (Hercule)",
+     "mots": [
+      "hercule"
+     ],
+     "idNumista": "394012",
+     "annee": 2024
+    },
+    {
+     "label": "2 euros JO 2024 Paris (au cœur des Jeux)",
+     "mots": [
+      "2024",
+      "paris",
+      "jeux"
+     ],
+     "idNumista": "403198",
+     "annee": 2024
+    },
+    {
+     "label": "2 euros JO 2024 Paris (au cœur des Jeux, colorée)",
+     "mots": [
+      "coloree"
+     ],
+     "idNumista": "419643",
+     "annee": 2024
+    }
+   ],
+   "note": "6 pièce(s) · 1 pays · 2021-2024",
+   "pays": "France"
+  },
+  {
+   "nom": "Philharmonie de Vienne",
+   "source": "numista",
+   "specificite": 95,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "25 euros Orchestre philharmonique",
+     "mots": [
+      "orchestre",
+      "philharmonique"
+     ],
+     "idNumista": "9167",
+     "annee": 2002
+    },
+    {
+     "label": "10 euros Orchestre philharmonique",
+     "mots": [
+      "orchestre",
+      "philharmonique"
+     ],
+     "idNumista": "20259",
+     "annee": 2002
+    },
+    {
+     "label": "100 euros Orchestre philharmonique (or)",
+     "mots": [
+      "orchestre",
+      "philharmonique"
+     ],
+     "idNumista": "23519",
+     "annee": 2002
+    },
+    {
+     "label": "100 000 euros Orchestre philharmonique",
+     "mots": [
+      "orchestre",
+      "philharmonique"
+     ],
+     "idNumista": "23518",
+     "annee": 2004
+    },
+    {
+     "label": "1,50 euro Orchestre philharmonique",
+     "mots": [
+      "orchestre",
+      "philharmonique"
+     ],
+     "idNumista": "9165",
+     "annee": 2008
+    }
+   ],
+   "note": "5 pièce(s) · 1 pays · 2002-2008",
+   "pays": "Autriche"
+  },
+  {
+   "nom": "Régions de Lettonie",
+   "source": "numista",
+   "specificite": 95,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Vidzeme",
+     "mots": [
+      "vidzeme"
+     ],
+     "idNumista": "95462",
+     "annee": 2016
+    },
+    {
+     "label": "2 euros Kurzeme",
+     "mots": [
+      "kurzeme"
+     ],
+     "idNumista": "125266",
+     "annee": 2017
+    },
+    {
+     "label": "2 euros Latgale",
+     "mots": [
+      "latgale"
+     ],
+     "idNumista": "125267",
+     "annee": 2017
+    },
+    {
+     "label": "2 euros Zemgale",
+     "mots": [
+      "zemgale"
+     ],
+     "idNumista": "143883",
+     "annee": 2018
+    },
+    {
+     "label": "2 euros Sélonie",
+     "mots": [
+      "selonie"
+     ],
+     "idNumista": "462615",
+     "annee": 2025
+    }
+   ],
+   "note": "5 pièce(s) · 1 pays · 2016-2025",
+   "pays": "Lettonie"
+  },
+  {
+   "nom": "Le rôle de la Malta Community Chest Fund dans la société",
+   "source": "numista",
+   "specificite": 95,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Solidarité par l'amour",
+     "mots": [
+      "solidarite",
+      "amour"
+     ],
+     "idNumista": "95463",
+     "annee": 2016
+    },
+    {
+     "label": "2 euros La Paix",
+     "mots": [
+      "paix"
+     ],
+     "idNumista": "127889",
+     "annee": 2017
+    },
+    {
+     "label": "2 euros L'héritage culturel",
+     "mots": [
+      "heritage",
+      "culturel"
+     ],
+     "idNumista": "151381",
+     "annee": 2018
+    },
+    {
+     "label": "2 euros Nature et environnement",
+     "mots": [
+      "nature",
+      "environnement"
+     ],
+     "idNumista": "182718",
+     "annee": 2019
+    },
+    {
+     "label": "2 euros Jeux",
+     "mots": [
+      "jeux"
+     ],
+     "idNumista": "241752",
+     "annee": 2020
+    }
+   ],
+   "note": "5 pièce(s) · 1 pays · 2016-2020",
+   "pays": "Malte"
+  },
+  {
+   "nom": "Régions de Lituanie",
+   "source": "numista",
+   "specificite": 95,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Samogitie",
+     "mots": [
+      "samogitie"
+     ],
+     "idNumista": "161190",
+     "annee": 2019
+    },
+    {
+     "label": "2 euros Haute Lituanie",
+     "mots": [
+      "haute"
+     ],
+     "idNumista": "215429",
+     "annee": 2020
+    },
+    {
+     "label": "2 euros Dzūkija",
+     "mots": [
+      "dzukija"
+     ],
+     "idNumista": "264790",
+     "annee": 2021
+    },
+    {
+     "label": "2 euros Région ethnographique de Suvalkija",
+     "mots": [
+      "region",
+      "ethnographique",
+      "suvalkija"
+     ],
+     "idNumista": "326489",
+     "annee": 2022
+    },
+    {
+     "label": "2 Euros (Lithuania Minor)",
+     "mots": [
+      "lithuania",
+      "minor"
+     ],
+     "idNumista": "534953",
+     "annee": 2025
+    }
+   ],
+   "note": "5 pièce(s) · 1 pays · 2019-2025",
+   "pays": "Lituanie"
+  },
+  {
+   "nom": "Auberges of the Knights of St John",
+   "source": "numista",
+   "specificite": 96,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "10 euros Auberge de Castille",
+     "mots": [
+      "auberge",
+      "castille"
+     ],
+     "idNumista": "19069",
+     "annee": 2008
+    },
+    {
+     "label": "50 euros Auberge de Castille",
+     "mots": [
+      "auberge",
+      "castille"
+     ],
+     "idNumista": "22937",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Auberge d'Italie",
+     "mots": [
+      "auberge",
+      "italie"
+     ],
+     "idNumista": "30909",
+     "annee": 2010
+    },
+    {
+     "label": "50 euros Auberge d'Italie",
+     "mots": [
+      "auberge",
+      "italie"
+     ],
+     "idNumista": "30910",
+     "annee": 2010
+    }
+   ],
+   "note": "4 pièce(s) · 1 pays · 2008-2010",
+   "pays": "Malte"
+  },
+  {
+   "nom": "Jules Verne",
+   "source": "numista",
+   "specificite": 116,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro 20 000 lieues sous les mers",
+     "mots": [
+      "lieues",
+      "sous",
+      "mers"
+     ],
+     "idNumista": "19145",
+     "annee": 2005
+    },
+    {
+     "label": "1½ euro Le tour du monde en 80 jours",
+     "mots": [
+      "tour",
+      "monde",
+      "jours"
+     ],
+     "idNumista": "19213",
+     "annee": 2005
+    },
+    {
+     "label": "1½ euro De la Terre à la Lune",
+     "mots": [
+      "terre",
+      "lune"
+     ],
+     "idNumista": "19222",
+     "annee": 2005
+    },
+    {
+     "label": "¼ d'euro Jules Verne",
+     "mots": [
+      "jules",
+      "verne"
+     ],
+     "idNumista": "19269",
+     "annee": 2005
+    }
+   ],
+   "note": "4 pièce(s) · 1 pays · 2005-2005",
+   "pays": "France"
+  },
+  {
+   "nom": "Monuments de France",
+   "source": "numista",
+   "specificite": 96,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro Mont Saint-Michel",
+     "mots": [
+      "mont",
+      "saint",
+      "michel"
+     ],
+     "idNumista": "19177",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro La butte Montmartre",
+     "mots": [
+      "butte",
+      "montmartre"
+     ],
+     "idNumista": "19178",
+     "annee": 2002
+    },
+    {
+     "label": "1½ euro Château de Chambord",
+     "mots": [
+      "chateau",
+      "chambord"
+     ],
+     "idNumista": "19174",
+     "annee": 2003
+    },
+    {
+     "label": "1½ euro Arc de Triomphe",
+     "mots": [
+      "triomphe"
+     ],
+     "idNumista": "21354",
+     "annee": 2006
+    }
+   ],
+   "note": "4 pièce(s) · 1 pays · 2002-2006",
+   "pays": "France"
+  },
+  {
+   "nom": "Rome sur le Danube",
+   "source": "numista",
+   "specificite": 116,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "20 euros Vindobona",
+     "mots": [
+      "vindobona"
+     ],
+     "idNumista": "24592",
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Virunum",
+     "mots": [
+      "virunum"
+     ],
+     "idNumista": "24593",
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Carnuntum",
+     "mots": [
+      "carnuntum"
+     ],
+     "idNumista": "21380",
+     "annee": 2011
+    },
+    {
+     "label": "20 euros Aguntum",
+     "mots": [
+      "aguntum"
+     ],
+     "idNumista": "26280",
+     "annee": 2011
+    }
+   ],
+   "note": "4 pièce(s) · 1 pays · 2010-2011",
+   "pays": "Autriche"
+  },
+  {
+   "nom": "Indépendance des Pays-baltes",
+   "source": "numista",
+   "specificite": 116,
+   "type": "multi-pays",
+   "attendus": [
+    {
+     "label": "Estonie — 2 euros Indépendance des pays baltes",
+     "mots": [
+      "pays",
+      "baltes"
+     ],
+     "idNumista": "133760",
+     "annee": 2018,
+     "pays": "Estonie"
+    },
+    {
+     "label": "Estonie — 2 euros Indépendance de l'Estonie",
+     "mots": [
+      "estonie"
+     ],
+     "idNumista": "134284",
+     "annee": 2018,
+     "pays": "Estonie"
+    },
+    {
+     "label": "Lettonie — 2 euros Indépendance des pays baltes",
+     "mots": [
+      "pays",
+      "baltes"
+     ],
+     "idNumista": "132943",
+     "annee": 2018,
+     "pays": "Lettonie"
+    },
+    {
+     "label": "Lituanie — 2 euros Indépendance des pays baltes",
+     "mots": [
+      "pays",
+      "baltes"
+     ],
+     "idNumista": "132495",
+     "annee": 2018,
+     "pays": "Lituanie"
+    }
+   ],
+   "note": "4 pièce(s) · 3 pays · 2018-2018"
+  },
+  {
+   "nom": "Jeux Olympiques d'hiver XX en 2006",
+   "source": "numista",
+   "specificite": 117,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "20 euros JO 2006 Palais Madame",
+     "mots": [
+      "palais",
+      "madame"
+     ],
+     "idNumista": "13753",
+     "annee": 2005
+    },
+    {
+     "label": "5 euros JO 2006 Patinage artistique",
+     "mots": [
+      "patinage",
+      "artistique"
+     ],
+     "idNumista": "23585",
+     "annee": 2005
+    },
+    {
+     "label": "2 euros JO 2006 Jeux d'hiver de Turin",
+     "mots": [
+      "hiver",
+      "turin"
+     ],
+     "idNumista": "2199",
+     "annee": 2006
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2005-2006",
+   "pays": "Italie"
+  },
+  {
+   "nom": "Premier avion à moteur",
+   "source": "numista",
+   "specificite": 117,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "3 euros Premier vol au dessus de la Slovénie",
+     "mots": [
+      "dessus",
+      "slovenie"
+     ],
+     "idNumista": "7347",
+     "annee": 2009
+    },
+    {
+     "label": "30 euros premier vol au dessus de la Slovénie",
+     "mots": [
+      "dessus",
+      "slovenie"
+     ],
+     "idNumista": "16241",
+     "annee": 2009
+    },
+    {
+     "label": "100 euros Premier vol au dessus de la Slovénie",
+     "mots": [
+      "dessus",
+      "slovenie"
+     ],
+     "idNumista": "16242",
+     "annee": 2009
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2009-2009",
+   "pays": "Slovénie"
+  },
+  {
+   "nom": "Éthique",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "20 euros paix et sécurité",
+     "mots": [
+      "paix",
+      "securite"
+     ],
+     "idNumista": "13585",
+     "annee": 2009
+    },
+    {
+     "label": "20 euros Créativité des enfants",
+     "mots": [
+      "creativite",
+      "enfants"
+     ],
+     "idNumista": "16154",
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Mer Baltique (argent 925‰)",
+     "mots": [
+      "baltique",
+      "argent"
+     ],
+     "idNumista": "27980",
+     "annee": 2011
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2009-2011",
+   "pays": "Finlande"
+  },
+  {
+   "nom": "Semeuse",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro Ve République",
+     "mots": [
+      "republique"
+     ],
+     "idNumista": "23457",
+     "annee": 2008
+    },
+    {
+     "label": "5 euros Ve République",
+     "mots": [
+      "republique"
+     ],
+     "idNumista": "25405",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Starter Kit",
+     "mots": [
+      "starter"
+     ],
+     "idNumista": "20116",
+     "annee": 2011
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2008-2011",
+   "pays": "France"
+  },
+  {
+   "nom": "Faune et flore du Luxembourg",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "5 euros Faucon crécerelle",
+     "mots": [
+      "faucon",
+      "crecerelle"
+     ],
+     "idNumista": "20130",
+     "annee": 2009
+    },
+    {
+     "label": "5 euros Arnica Montana",
+     "mots": [
+      "arnica",
+      "montana"
+     ],
+     "idNumista": "20132",
+     "annee": 2010
+    },
+    {
+     "label": "5 euros Loutre d'Europe",
+     "mots": [
+      "loutre",
+      "europe"
+     ],
+     "idNumista": "28287",
+     "annee": 2011
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2009-2011",
+   "pays": "Luxembourg"
+  },
+  {
+   "nom": "Châteaux du Luxembourg",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "5 euros Château de Vianden",
+     "mots": [
+      "chateau",
+      "vianden"
+     ],
+     "idNumista": "20133",
+     "annee": 2009
+    },
+    {
+     "label": "5 euros Château d'Esch-Sur-Sûre",
+     "mots": [
+      "chateau",
+      "esch",
+      "sure"
+     ],
+     "idNumista": "20134",
+     "annee": 2010
+    },
+    {
+     "label": "5 euros Château de Mersch",
+     "mots": [
+      "chateau",
+      "mersch"
+     ],
+     "idNumista": "29214",
+     "annee": 2011
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2009-2011",
+   "pays": "Luxembourg"
+  },
+  {
+   "nom": "UNESCO (quartier général)",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "1½ euro Grand Canyon",
+     "mots": [
+      "grand",
+      "canyon"
+     ],
+     "idNumista": "23229",
+     "annee": 2008
+    },
+    {
+     "label": "10 euros Le Kremlin de Moscou",
+     "mots": [
+      "kremlin",
+      "moscou"
+     ],
+     "idNumista": "22291",
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Taj Mahal",
+     "mots": [
+      "mahal"
+     ],
+     "idNumista": "20793",
+     "annee": 2010
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2008-2010",
+   "pays": "France"
+  },
+  {
+   "nom": "Symboles nationaux estoniens",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Le loup",
+     "mots": [
+      "loup"
+     ],
+     "idNumista": "275664",
+     "annee": 2021
+    },
+    {
+     "label": "2 euros Hirondelle rustique",
+     "mots": [
+      "hirondelle",
+      "rustique"
+     ],
+     "idNumista": "364450",
+     "annee": 2023
+    },
+    {
+     "label": "2 euros Bleuet",
+     "mots": [
+      "bleuet"
+     ],
+     "idNumista": "415214",
+     "annee": 2024
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2021-2024",
+   "pays": "Estonie"
+  },
+  {
+   "nom": "Maltese Native Species",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros L'abeille maltaise",
+     "mots": [
+      "abeille",
+      "maltaise"
+     ],
+     "idNumista": "429280",
+     "annee": 2024
+    },
+    {
+     "label": "2 euros Bœuf maltais",
+     "mots": [
+      "maltais"
+     ],
+     "idNumista": "470460",
+     "annee": 2025
+    },
+    {
+     "label": "2 Euros (Il-Kelb Tal-Fenek)",
+     "mots": [
+      "kelb",
+      "fenek"
+     ],
+     "idNumista": "555127",
+     "annee": 2026
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2024-2026",
+   "pays": "Malte"
+  },
+  {
+   "nom": "Maltese Walled Cities",
+   "source": "numista",
+   "specificite": 97,
+   "type": "nationale",
+   "attendus": [
+    {
+     "label": "2 euros Citadelle de Gozo",
+     "mots": [
+      "citadelle",
+      "gozo"
+     ],
+     "idNumista": "429284",
+     "annee": 2024
+    },
+    {
+     "label": "2 euros Mdina",
+     "mots": [
+      "mdina"
+     ],
+     "idNumista": "470466",
+     "annee": 2025
+    },
+    {
+     "label": "2 Euros (Valletta)",
+     "mots": [
+      "valletta"
+     ],
+     "idNumista": "555125",
+     "annee": 2026
+    }
+   ],
+   "note": "3 pièce(s) · 1 pays · 2024-2026",
+   "pays": "Malte"
+  },
+  {
+   "nom": "Peintres espagnols",
+   "type": "nationale",
+   "pays": "Espagne",
+   "attendus": [
+    {
+     "label": "10 euros Salvador Dalí (\"Buste rétrospectif de femme\")",
+     "mots": [
+      "salvador",
+      "dali",
+      "buste",
+      "retrospectif"
+     ],
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Salvador Dalí (\"Début automatique d'un portrait de Gala\")",
+     "mots": [
+      "salvador",
+      "dali",
+      "debut",
+      "automatique"
+     ],
+     "annee": 2009
+    },
+    {
+     "label": "10 euros Salvador Dalí (\"Portrait de Pablo Picasso\")",
+     "mots": [
+      "salvador",
+      "dali",
+      "portrait",
+      "pablo"
+     ],
+     "annee": 2009
+    },
+    {
+     "label": "400 euros Salvador Dalí",
+     "mots": [
+      "salvador",
+      "dali"
+     ],
+     "annee": 2009
+    },
+    {
+     "label": "50 euros Salvador Dalí",
+     "mots": [
+      "salvador",
+      "dali"
+     ],
+     "annee": 2009
+    }
+   ],
+   "note": "5 pièce(s) — Espagne.",
+   "periode": "2009-2009",
+   "specificite": 1200.0,
+   "nbCatalogue": 5,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Année internationale Gaudi 2002",
+   "type": "nationale",
+   "pays": "Espagne",
+   "attendus": [
+    {
+     "label": "10 euros Antoni Gaudí (La maison Milà)",
+     "mots": [
+      "antoni",
+      "gaudi",
+      "maison",
+      "mila"
+     ],
+     "annee": 2002
+    },
+    {
+     "label": "10 euros Antoni Gaudí (Le Caprice de Gaudí)",
+     "mots": [
+      "antoni",
+      "gaudi",
+      "caprice",
+      "gaudi"
+     ],
+     "annee": 2002
+    },
+    {
+     "label": "10 euros Antoni Gaudí (Parc Güell)",
+     "mots": [
+      "antoni",
+      "gaudi",
+      "parc",
+      "guell"
+     ],
+     "annee": 2002
+    },
+    {
+     "label": "400 euros Antoni Gaudí (La maison Battló)",
+     "mots": [
+      "antoni",
+      "gaudi",
+      "maison",
+      "battlo"
+     ],
+     "annee": 2002
+    },
+    {
+     "label": "50 euros Antoni Gaudí (La Sagrada Familia)",
+     "mots": [
+      "antoni",
+      "gaudi",
+      "sagrada",
+      "familia"
+     ],
+     "annee": 2002
+    }
+   ],
+   "note": "5 pièce(s) — Espagne.",
+   "periode": "2002-2002",
+   "specificite": 325.0,
+   "nbCatalogue": 5,
+   "source": "medaillier"
+  },
+  {
+   "nom": "400 ans de marine nationale",
+   "type": "nationale",
+   "pays": "France",
+   "attendus": [
+    {
+     "label": "10 euros Marine nationale",
+     "mots": [
+      "marine",
+      "nationale"
+     ],
+     "annee": 2026
+    },
+    {
+     "label": "2 euros Marine nationale",
+     "mots": [
+      "marine",
+      "nationale"
+     ],
+     "annee": 2026
+    },
+    {
+     "label": "2 euros Marine nationale (colorée)",
+     "mots": [
+      "marine",
+      "nationale",
+      "coloree"
+     ],
+     "annee": 2026
+    }
+   ],
+   "note": "3 pièce(s) — France.",
+   "periode": "2026-2026",
+   "specificite": 666.67,
+   "nbCatalogue": 3,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Europe des arts",
+   "type": "nationale",
+   "pays": "Italie",
+   "attendus": [
+    {
+     "label": "20 euros Europe des arts (Allemagne)",
+     "mots": [
+      "europe",
+      "arts",
+      "allemagne"
+     ],
+     "annee": 2006
+    },
+    {
+     "label": "50 euros Europe des arts (Grèce)",
+     "mots": [
+      "europe",
+      "arts",
+      "grece"
+     ],
+     "annee": 2006
+    }
+   ],
+   "note": "2 pièce(s) — Italie.",
+   "periode": "2006-2006",
+   "specificite": 522.73,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Les arbres des forêts allemandes",
+   "type": "nationale",
+   "pays": "Allemagne",
+   "attendus": [
+    {
+     "label": "20 euros Le chêne",
+     "mots": [
+      "chene"
+     ],
+     "annee": 2010
+    },
+    {
+     "label": "20 euros Le hêtre",
+     "mots": [
+      "hetre"
+     ],
+     "annee": 2011
+    }
+   ],
+   "note": "2 pièce(s) — Allemagne, République fédérale d'.",
+   "variationsDefaut": true,
+   "periode": "2010-2011",
+   "specificite": 500.1,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Les réserves naturelles biélorusses",
+   "type": "nationale",
+   "pays": "Biélorussie",
+   "attendus": [
+    {
+     "label": "1 rouble (Vison d'Europe)",
+     "mots": [
+      "rouble",
+      "vison",
+      "europe"
+     ],
+     "annee": 2006
+    },
+    {
+     "label": "20 roubles Loutre Européenne",
+     "mots": [
+      "roubles",
+      "loutre",
+      "europeenne"
+     ],
+     "annee": 2006
+    }
+   ],
+   "note": "2 pièce(s) — Biélorussie.",
+   "periode": "2006-2006",
+   "specificite": 500.1,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Presidency of the Council of the European Union",
+   "type": "commune",
+   "attendus": [
+    {
+     "label": "Chypre",
+     "mots": [
+      "union"
+     ],
+     "pays": "Chypre"
+    },
+    {
+     "label": "Slovaquie",
+     "mots": [
+      "union"
+     ],
+     "pays": "Slovaquie"
+    }
+   ],
+   "note": "Émission commune — 2 pays émetteurs.",
+   "periode": "2016-2026",
+   "specificite": 508.33,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Hrvatski gradovi",
+   "type": "nationale",
+   "pays": "Croatie",
+   "attendus": [
+    {
+     "label": "2 euros Varaždin",
+     "mots": [
+      "varazdin"
+     ],
+     "annee": 2024
+    },
+    {
+     "label": "2 Euros (City of Pula)",
+     "mots": [
+      "city",
+      "pula"
+     ],
+     "annee": 2025
+    }
+   ],
+   "note": "2 pièce(s) — Croatie.",
+   "periode": "2024-2025",
+   "specificite": 521.74,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  },
+  {
+   "nom": "Unité, justice et liberté",
+   "type": "nationale",
+   "pays": "Allemagne",
+   "attendus": [
+    {
+     "label": "2 euros Unité allemande",
+     "mots": [
+      "unite",
+      "allemande"
+     ],
+     "annee": 2025
+    },
+    {
+     "label": "2 euros Konrad Adenauer",
+     "mots": [
+      "konrad",
+      "adenauer"
+     ],
+     "annee": 2026
+    }
+   ],
+   "note": "2 pièce(s) — Allemagne, République fédérale d'.",
+   "variationsDefaut": true,
+   "periode": "2025-2026",
+   "specificite": 500.1,
+   "nbCatalogue": 2,
+   "source": "medaillier"
+  }
+ ]
+}
