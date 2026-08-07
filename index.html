@@ -208,6 +208,23 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .gv-puces span small{display:block;font-weight:400;font-size:.66rem}
 .gv-puces span.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
 .variantes{display:flex;justify-content:center;align-items:center;gap:6px;margin:6px 0 2px;flex-wrap:wrap}
+.variantes.croise{gap:5px}
+.var-col{display:inline-flex;flex-direction:column;align-items:center;gap:2px;opacity:.55}
+.var-col.eu,.var-col.flou{opacity:1}
+.var-col > i{
+  font-style:normal;font-size:.64rem;font-weight:700;line-height:1;color:var(--encre2);
+}
+.var-col.eu > i{color:var(--or-fonce)}
+.var-col.flou > i{color:var(--cuivre)}
+.var-tr{display:inline-flex;gap:1px}
+.var-tr b{
+  font-size:.54rem;font-weight:700;line-height:1;width:12px;height:12px;
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid var(--ligne);background:#fff;color:var(--ligne);
+}
+.var-tr b:first-child{border-radius:4px 0 0 4px}
+.var-tr b:last-child{border-radius:0 4px 4px 0}
+.var-tr b.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
 .var-groupe{display:inline-flex;gap:3px}
 .var-groupe i{
   font-style:normal;font-size:.62rem;font-weight:700;line-height:1;
@@ -276,6 +293,9 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 }
 .toast.visible{opacity:1}
 
+@media (max-width:430px){
+  .form-grille{grid-template-columns:1fr}   /* iPhone étroit : une colonne, plus lisible */
+}
 @media (max-width:560px){
   .medaillon{width:140px;height:140px}
   .medaillon .val{font-size:1.2rem}
@@ -433,7 +453,14 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   .modale-tete{border-radius:0;position:sticky;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
   .modale-corps{padding:14px 12px calc(16px + env(safe-area-inset-bottom))}
   .form-grille{grid-template-columns:1fr 1fr}
-  .champ input,.champ select,.champ textarea{font-size:16px;padding:10px}
+  /* Sans min-width:0, un contenu long élargit la colonne au-delà de la fenêtre :
+     c'est ce qui faisait déborder les champs hors du cadre sur téléphone. */
+  .form-grille > *{min-width:0}
+  .champ{min-width:0}
+  .champ input,.champ select,.champ textarea{
+    font-size:16px;padding:10px;width:100%;max-width:100%;box-sizing:border-box;
+  }
+  .champ label{overflow-wrap:anywhere}
   .form-actions{position:sticky;bottom:0;background:var(--papier);padding:10px 0 calc(8px + env(safe-area-inset-bottom));margin-top:14px;box-shadow:0 -6px 12px -8px rgba(30,40,33,.25)}
   .form-actions button{flex:1;padding:13px 6px;font-size:.88rem}
   .photos-form{gap:12px}
@@ -1074,19 +1101,38 @@ function tableauVariantes(p){
   </div>`;
 }
 
-/* Bandeau compact affiché sur la carte : A D F G J  ·  A B */
+/* Bandeau compact affiché sur la carte.
+   Cas simple  : une seule rangée de pastilles (A D F G J, ou A B).
+   Cas croisé  : chaque atelier porte SES propres tranches, car dire
+                 « tranche A possédée » sans préciser pour quel atelier
+                 n'apprend rien — une 2 € allemande a 10 variantes. */
 function bandeauVariantes(p){
   const v = variantesDuType(p);
   if(!v) return "";
-  const bloc = (titre, liste, possedees) => liste ? `<span class="var-groupe" title="${titre}">
+
+  if(v.ateliers && v.tranches){
+    const colonnes = v.ateliers.map(a=>{
+      const eus = v.tranches.filter(t=>v.couples.has(a+"/"+t));
+      const inconnu = v.ateliersPossedes.has(a) && !eus.length;   // atelier là, tranche non renseignée
+      const titre = eus.length
+        ? `Atelier ${a} (${ATELIERS_DE[a]}) — tranche${eus.length>1?"s":""} ${eus.join(" et ")}`
+        : (inconnu ? `Atelier ${a} (${ATELIERS_DE[a]}) — tranche non renseignée`
+                   : `Atelier ${a} (${ATELIERS_DE[a]}) — manquant`);
+      const cases = v.tranches.map(t=>
+        `<b class="${v.couples.has(a+"/"+t)?"on":""}">${t}</b>`).join("");
+      return `<span class="var-col ${eus.length?"eu":(inconnu?"flou":"")}" title="${esc(titre)}">
+        <i>${a}</i><span class="var-tr">${cases}</span></span>`;
+    }).join("");
+    return `<div class="variantes croise" title="${v.couples.size} variante(s) sur ${v.ateliers.length*v.tranches.length}">${colonnes}</div>`;
+  }
+
+  const liste = v.ateliers || v.tranches;
+  const possedees = v.ateliers ? v.ateliersPossedes : v.tranchesPossedees;
+  const quoi = v.ateliers ? "Ateliers" : "Tranches";
+  const titre = quoi+" : "+([...possedees].sort().join(", ")||"aucun renseigné")+" sur "+liste.join(", ");
+  return `<div class="variantes"><span class="var-groupe" title="${esc(titre)}">
     ${liste.map(x=>`<i class="${possedees.has(x)?"on":""}">${x}</i>`).join("")}
-  </span>` : "";
-  const at = bloc("Ateliers : "+[...v.ateliersPossedes].sort().join(", ")+" sur "+(v.ateliers||[]).join(", "),
-                  v.ateliers, v.ateliersPossedes);
-  const tr = bloc("Tranches : "+([...v.tranchesPossedees].sort().join(", ")||"aucune renseignée")+" sur A, B",
-                  v.tranches, v.tranchesPossedees);
-  if(!at && !tr) return "";
-  return `<div class="variantes">${at}${tr?`<span class="var-sep">·</span>`+tr:""}</div>`;
+  </span></div>`;
 }
 
 /* ================================================================
@@ -2990,7 +3036,10 @@ async function completerFiche(e){
       if(paquet) await dbConfigEcrire(clePaquet, paquet);
     }catch(err){ /* hors-ligne ou clé absente */ }
   }
-  if(!paquet || !Array.isArray(paquet.pieces)) return e;   // on garde la fiche allégée
+  if(!paquet || !Array.isArray(paquet.pieces)){
+    e._detailIndisponible = true;   // fiche allégée conservée, on le signalera
+    return e;
+  }
   const pleine = paquet.pieces.find(p=>{
     const m=/pieces(\d+)/.exec(p.lienNumista||""); return m && m[1]===e.idNumista;
   });
@@ -3287,8 +3336,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "11.3";
+const VERSION_ACTUELLE = "11.4";
 const CHANGELOG = [
+  { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
+    points:["Téléphone : les champs du formulaire ne débordent plus du cadre ; une seule colonne sur écran étroit","Cartes allemandes : chaque atelier affiche ses deux tranches — on voit d un coup d oeil qu il manque D en tranche B","Poids, diamètre, épaisseur et composition ajoutés à toutes les pièces en euro depuis 1999 (spécifications officielles de la BCE)","Message explicite si les caractéristiques détaillées ne peuvent pas être chargées"] },
   { v:"11.3", type:"correction", date:"2026-08", titre:"Déploiement : catalogue stable",
     points:["Correction de la cause des échecs de publication sur GitHub : le catalogue était intégralement réécrit à chaque construction, gonflant l'historique du dépôt jusqu'à faire expirer le déploiement","Le catalogue produit désormais des fichiers identiques tant que les données ne changent pas","149 fichiers regroupés en 58 : publication plus rapide","La phrase secrète n'est plus redemandée après une simple reconstruction"] },
   { v:"11.2", type:"mineure", date:"2026-08", titre:"Suivi des ateliers et des tranches",
@@ -3297,6 +3348,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
+    points:["Téléphone : les champs du formulaire ne débordent plus du cadre ; une seule colonne sur écran étroit","Cartes allemandes : chaque atelier affiche ses deux tranches — on voit d un coup d oeil qu il manque D en tranche B","Poids, diamètre, épaisseur et composition ajoutés à toutes les pièces en euro depuis 1999 (spécifications officielles de la BCE)","Message explicite si les caractéristiques détaillées ne peuvent pas être chargées"] },
   { v:"11.3", type:"correction", date:"2026-08", titre:"Déploiement : catalogue stable",
     points:["Correction de la cause des échecs de publication sur GitHub : le catalogue était intégralement réécrit à chaque construction, gonflant l'historique du dépôt jusqu'à faire expirer le déploiement","Le catalogue produit désormais des fichiers identiques tant que les données ne changent pas","149 fichiers regroupés en 58 : publication plus rapide","La phrase secrète n'est plus redemandée après une simple reconstruction"] },
   { v:"11.2", type:"mineure", date:"2026-08", titre:"Suivi des ateliers et des tranches",
@@ -3702,6 +3755,8 @@ async function detailCatalogue(i){
       ${e.imageRevers?`<div class="photo-slot"><div class="piece-photo rim-or" style="background-image:url('${e.imageRevers}')"></div><div class="lib">Revers</div></div>`:""}
     </div>`:""}
     <dl class="fiche">${lignes.join("")}</dl>
+    ${e._detailIndisponible?`<p class="vide-note" style="margin-top:8px">⚠ Les caractéristiques détaillées n'ont pas pu être chargées : vérifiez votre connexion, puis rouvrez cette fiche.</p>`:""}
+    ${e.specsStandard?`<p class="vide-note" style="margin-top:8px">Poids, diamètre et composition proviennent des spécifications officielles de la Banque centrale européenne (identiques pour tous les pays).</p>`:""}
     ${e.lienNumista||e.lienNumistaFR?`<p style="margin-top:10px"><a href="${esc(e.lienNumista||e.lienNumistaFR)}" target="_blank" rel="noopener">Ouvrir sur Numista ↗</a></p>`:""}
     <div class="form-actions">
       <button class="btn-clair" onclick="ouvrirRecherche()">← Retour</button>
