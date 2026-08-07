@@ -25,9 +25,9 @@
    "nbPaquets": 7,
    "parPaquet": 1200,
    "nbPays": 25,
-   "nbDetaillees": 1752,
+   "nbDetaillees": 1868,
    "tailleIndex": "1.12 Mo",
-   "tailleTotale": "6.91 Mo",
+   "tailleTotale": "6.96 Mo",
    "defaut": true
   },
   {
@@ -39,7 +39,7 @@
    "nbPaquets": 8,
    "parPaquet": 1200,
    "nbPays": 762,
-   "nbDetaillees": 44,
+   "nbDetaillees": 51,
    "tailleIndex": "1.12 Mo",
    "tailleTotale": "4.77 Mo",
    "defaut": false
