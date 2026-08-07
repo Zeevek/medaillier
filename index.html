@@ -233,6 +233,7 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 }
 .var-groupe i.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
 .var-sep{color:var(--ligne);font-weight:700}
+.rim-bimetal::before{background:conic-gradient(from 210deg,#C9CBC7,#E3E5E1,#C9A85C,#E8D9A8,#C9CBC7)}
 .jauge-completude{display:inline-flex;gap:2px;align-items:center;margin-right:4px}
 .jauge-completude i{width:6px;height:6px;border-radius:50%;background:var(--ligne);display:block;transition:background .2s}
 .jauge-completude.n1 i.on{background:var(--encre2)}
@@ -705,11 +706,12 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
 const GRADES = ["B","TB","TB+","TTB","TTB+","SUP","SUP+","SPL","FDC"];
 const METAUX = {
   or:"Or", argent:"Argent", cuivre:"Cuivre", bronze:"Bronze",
-  nickel:"Nickel", cupronickel:"Cupronickel", autre:"Autre"
+  nickel:"Nickel", cupronickel:"Cupronickel",
+  bimetallique:"Bimétallique", autre:"Autre"
 };
 const METAUX_PRECIEUX = ["or","argent"];
 const RIMS = {or:"rim-or",argent:"rim-argent",cuivre:"rim-cuivre",bronze:"rim-bronze",
-  nickel:"rim-nickel",cupronickel:"rim-nickel",autre:"rim-autre"};
+  nickel:"rim-nickel",cupronickel:"rim-nickel",bimetallique:"rim-bimetal",autre:"rim-autre"};
 
 const etat = {
   pieces: [],
@@ -1436,7 +1438,7 @@ function ouvrirFormulaire(id){
       <div class="champ"><label>Monnaie</label><input id="f-monnaie" list="listeMonnaies" value="${v("monnaie")}" placeholder="Euro, Franc…"><datalist id="listeMonnaies"><option value="Euro"><option value="Franc français"><option value="Ancien franc"><option value="Yen"><option value="Dollar"><option value="Livre sterling"></datalist></div>
       <div class="champ"><label>Catégorie</label><select id="f-categorie">${["",...CATEGORIES].map(c=>`<option value="${c}" ${v("categorie")===c?"selected":""}>${c||"— (déduite automatiquement)"}</option>`).join("")}</select></div>
       <div class="champ"><label>Nature</label><input id="f-nature" list="listeNatures" value="${v("nature")}" placeholder="Circulante, Commémorative…"><datalist id="listeNatures"><option value="Circulante courante"><option value="Commémorative"><option value="Commémorative 2€"><option value="Numismatique (BU/BE)"><option value="Bullion / investissement"><option value="Jeton / médaille"></datalist></div>
-      <div class="champ"><label>Métal</label><select id="f-metal">${Object.entries(METAUX).map(([k,l])=>`<option value="${k}" ${p?.metal===k?"selected":""}>${l}</option>`).join("")}</select></div>
+      <div class="champ"><label>Métal</label><select id="f-metal"><option value="" ${!p?.metal?"selected":""}>— à préciser —</option>${Object.entries(METAUX).map(([k,l])=>`<option value="${k}" ${p?.metal===k?"selected":""}>${l}</option>`).join("")}</select></div>
       <div class="champ"><label>Titre (‰ ou 0.xxx)</label><input id="f-titre" type="number" step="any" value="${v("titre")}" placeholder="900"></div>
       <div class="champ"><label>Poids (g)</label><input id="f-poids" type="number" step="any" value="${v("poids")}"></div>
       <div class="champ"><label>Diamètre (mm)</label><input id="f-diametre" type="number" step="any" value="${v("diametre")}"></div>
@@ -3336,8 +3338,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "11.4";
+const VERSION_ACTUELLE = "11.5";
 const CHANGELOG = [
+  { v:"11.5", type:"correction", date:"2026-08", titre:"Métal : plus d'or par défaut",
+    points:["Correction : « Or » était sélectionné d'office sur chaque nouvelle pièce, faute d'option vide dans la liste des métaux","Nouveau métal « Bimétallique », avec son propre cerclage — c'est la composition réelle des 1 € et 2 €","Les spécifications officielles attribuent désormais « Bimétallique » aux 1 € et 2 €, et non plus cupronickel"] },
   { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
     points:["Téléphone : les champs du formulaire ne débordent plus du cadre ; une seule colonne sur écran étroit","Cartes allemandes : chaque atelier affiche ses deux tranches — on voit d un coup d oeil qu il manque D en tranche B","Poids, diamètre, épaisseur et composition ajoutés à toutes les pièces en euro depuis 1999 (spécifications officielles de la BCE)","Message explicite si les caractéristiques détaillées ne peuvent pas être chargées"] },
   { v:"11.3", type:"correction", date:"2026-08", titre:"Déploiement : catalogue stable",
@@ -3348,6 +3352,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"11.5", type:"correction", date:"2026-08", titre:"Métal : plus d'or par défaut",
+    points:["Correction : « Or » était sélectionné d'office sur chaque nouvelle pièce, faute d'option vide dans la liste des métaux","Nouveau métal « Bimétallique », avec son propre cerclage — c'est la composition réelle des 1 € et 2 €","Les spécifications officielles attribuent désormais « Bimétallique » aux 1 € et 2 €, et non plus cupronickel"] },
   { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
     points:["Téléphone : les champs du formulaire ne débordent plus du cadre ; une seule colonne sur écran étroit","Cartes allemandes : chaque atelier affiche ses deux tranches — on voit d un coup d oeil qu il manque D en tranche B","Poids, diamètre, épaisseur et composition ajoutés à toutes les pièces en euro depuis 1999 (spécifications officielles de la BCE)","Message explicite si les caractéristiques détaillées ne peuvent pas être chargées"] },
   { v:"11.3", type:"correction", date:"2026-08", titre:"Déploiement : catalogue stable",
@@ -3779,6 +3785,7 @@ function metalDepuisComposition(txt){
   if(!t) return null;
   if(/\bor\b|\bor \d|dore/.test(t)) return "or";
   if(/argent/.test(t)) return "argent";
+  if(/bimetallique|bi-metallique|trimetallique/.test(t)) return "bimetallique";
   if(/cupronickel|maillechort/.test(t)) return "cupronickel";
   if(/laiton|nickel/.test(t)) return "nickel";
   if(/bronze|tombac/.test(t)) return "bronze";
