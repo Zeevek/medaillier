@@ -144,7 +144,11 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .rim-autre::before{background:conic-gradient(#A8AEA9,var(--autre),#5D6460,var(--autre),#A8AEA9)}
 .piece-nom{font-weight:600;font-size:.95rem;line-height:1.25;margin-bottom:3px}
 .piece-sous{color:var(--encre2);font-size:.8rem;margin-bottom:8px}
-.piece-bas{display:flex;justify-content:center;gap:8px;align-items:center;flex-wrap:wrap}
+/* État à gauche, valeur à droite : deux natures d'information séparées */
+.piece-bas{display:flex;justify-content:space-between;align-items:center;gap:8px;
+  padding-top:8px;margin-top:2px;border-top:1px solid var(--ligne)}
+.pb-etat{display:inline-flex;align-items:center;gap:6px;min-width:0}
+.pb-valeur{display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap}
 .chip-grade{
   font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:20px;
   background:#EFE8D3;color:var(--or-fonce);border:1px solid #E0D3AC;
@@ -225,6 +229,10 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .var-tr b:first-child{border-radius:4px 0 0 4px}
 .var-tr b:last-child{border-radius:0 4px 4px 0}
 .var-tr b.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
+/* « mien » = la variante de CET exemplaire : distingue deux cartes jumelles */
+.var-tr b.mien{box-shadow:0 0 0 2px var(--velours);position:relative;z-index:1;border-radius:4px}
+.var-groupe i.mien{box-shadow:0 0 0 2px var(--velours)}
+.tr-mien{color:var(--or-fonce);font-weight:700}
 .var-groupe{display:inline-flex;gap:3px}
 .var-groupe i{
   font-style:normal;font-size:.62rem;font-weight:700;line-height:1;
@@ -602,12 +610,25 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
         <option value="toutes">Toutes</option>
       </select>
       <select id="tri">
-        <option value="cote-desc">Cote ↓</option>
-        <option value="cote-asc">Cote ↑</option>
-        <option value="annee-asc">Année ↑</option>
-        <option value="annee-desc">Année ↓</option>
-        <option value="nom">Nom A→Z</option>
-        <option value="pv-desc">Plus-value ↓</option>
+        <optgroup label="Classement">
+          <option value="pays-annee">Pays, puis année ↑</option>
+          <option value="pays-nom">Pays, puis nom A→Z</option>
+          <option value="pays-faciale">Pays, puis valeur faciale</option>
+          <option value="serie">Série, puis année ↑</option>
+          <option value="annee-pays">Année ↑, puis pays</option>
+        </optgroup>
+        <optgroup label="Simple">
+          <option value="annee-asc">Année ↑</option>
+          <option value="annee-desc">Année ↓</option>
+          <option value="nom">Nom A→Z</option>
+          <option value="ajout-desc">Ajout récent</option>
+        </optgroup>
+        <optgroup label="Valeur">
+          <option value="cote-desc" selected>Cote ↓</option>
+          <option value="cote-asc">Cote ↑</option>
+          <option value="pv-desc">Plus-value ↓</option>
+          <option value="completude">Complétude ↑ (à finir d'abord)</option>
+        </optgroup>
       </select>
       <span class="compteur" id="compteur"></span>
     </div>
@@ -1103,6 +1124,17 @@ function tableauVariantes(p){
   </div>`;
 }
 
+/* Deux exemplaires rigoureusement identiques (même type, même atelier, même
+   tranche) sont indiscernables : on les numérote « n° 1 / 2 ». */
+function rangExemplaire(p){
+  const cle = cleType(p);
+  const sig = x => cleType(x)+"|"+((atelierAllemand(x)||{}).lettre||"")+"|"+(lettreTranche(x)||"");
+  const jumeaux = etat.pieces.filter(x=>!x.vendu && cleType(x)===cle && sig(x)===sig(p));
+  if(jumeaux.length<2) return "";
+  const rang = jumeaux.findIndex(x=>x.id===p.id)+1;
+  return ` <span class="badge-qte" title="Exemplaires identiques">n° ${rang}/${jumeaux.length}</span>`;
+}
+
 /* Bandeau compact affiché sur la carte.
    Cas simple  : une seule rangée de pastilles (A D F G J, ou A B).
    Cas croisé  : chaque atelier porte SES propres tranches, car dire
@@ -1111,6 +1143,9 @@ function tableauVariantes(p){
 function bandeauVariantes(p){
   const v = variantesDuType(p);
   if(!v) return "";
+  // Variante de CET exemplaire : c'est elle qui distingue deux cartes jumelles
+  const monAtelier = (atelierAllemand(p)||{}).lettre || null;
+  const maTranche  = lettreTranche(p);
 
   if(v.ateliers && v.tranches){
     const colonnes = v.ateliers.map(a=>{
@@ -1132,8 +1167,9 @@ function bandeauVariantes(p){
   const possedees = v.ateliers ? v.ateliersPossedes : v.tranchesPossedees;
   const quoi = v.ateliers ? "Ateliers" : "Tranches";
   const titre = quoi+" : "+([...possedees].sort().join(", ")||"aucun renseigné")+" sur "+liste.join(", ");
+  const mienne = v.ateliers ? monAtelier : maTranche;
   return `<div class="variantes"><span class="var-groupe" title="${esc(titre)}">
-    ${liste.map(x=>`<i class="${possedees.has(x)?"on":""}">${x}</i>`).join("")}
+    ${liste.map(x=>`<i class="${possedees.has(x)?"on":""}${x===mienne?" mien":""}" ${x===mienne?`title="Cet exemplaire"`:""}>${x}</i>`).join("")}
   </span></div>`;
 }
 
@@ -1243,14 +1279,37 @@ function rendreCollection(){
     return true;
   });
   const tri = $("#tri").value;
+  // Comparateurs élémentaires, combinables pour les classements à deux niveaux
+  const txt = (x)=>String(x??"").localeCompare;
+  const parPays   = (a,b)=>String(a.pays||"zzz").localeCompare(String(b.pays||"zzz"),"fr");
+  const parAnnee  = (a,b)=>(a.annee||9999)-(b.annee||9999);
+  const parNom    = (a,b)=>String(a.nom||"").localeCompare(String(b.nom||""),"fr");
+  const parSerie  = (a,b)=>String(a.serie||"zzz").localeCompare(String(b.serie||"zzz"),"fr");
+  // Valeur faciale : ordonnée par montant réel, pas alphabétiquement
+  const montant = (p)=>{
+    const m=String(p.valeurFaciale||"").replace(",",".").match(/([\d.]+)\s*(euro|cent)/i);
+    if(!m) return 1e9;
+    const v=parseFloat(m[1]);
+    return /cent/i.test(m[2]) ? v/100 : v;
+  };
+  const parFaciale=(a,b)=>montant(a)-montant(b);
+  const enchaine = (...fns)=>(a,b)=>{ for(const f of fns){ const r=f(a,b); if(r) return r; } return 0; };
+
   const cmp = {
-    "cote-desc":(a,b)=>(coteRetenue(b)||0)-(coteRetenue(a)||0),
-    "cote-asc":(a,b)=>(coteRetenue(a)||0)-(coteRetenue(b)||0),
-    "annee-asc":(a,b)=>(a.annee||0)-(b.annee||0),
-    "annee-desc":(a,b)=>(b.annee||0)-(a.annee||0),
-    "nom":(a,b)=>String(a.nom).localeCompare(String(b.nom),"fr"),
-    "pv-desc":(a,b)=>(plusValue(b)??-1e12)-(plusValue(a)??-1e12)
-  }[tri];
+    "pays-annee":   enchaine(parPays, parAnnee, parNom),
+    "pays-nom":     enchaine(parPays, parNom),
+    "pays-faciale": enchaine(parPays, parFaciale, parAnnee),
+    "serie":        enchaine(parSerie, parAnnee, parNom),
+    "annee-pays":   enchaine(parAnnee, parPays, parNom),
+    "annee-asc":    parAnnee,
+    "annee-desc":   (a,b)=>(b.annee||0)-(a.annee||0),
+    "nom":          parNom,
+    "ajout-desc":   (a,b)=>String(b.ajoute||"").localeCompare(String(a.ajoute||"")),
+    "cote-desc":    (a,b)=>(coteRetenue(b)||0)-(coteRetenue(a)||0),
+    "cote-asc":     (a,b)=>(coteRetenue(a)||0)-(coteRetenue(b)||0),
+    "pv-desc":      (a,b)=>(plusValue(b)??-1e12)-(plusValue(a)??-1e12),
+    "completude":   enchaine((a,b)=>niveauCompletude(a)-niveauCompletude(b), parPays, parAnnee)
+  }[tri] || ((a,b)=>(coteRetenue(b)||0)-(coteRetenue(a)||0));
   liste.sort(cmp);
 
   $("#compteur").textContent = liste.length + " / " + etat.pieces.length;
@@ -1262,13 +1321,14 @@ function rendreCollection(){
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
-      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
+      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${lettreTranche(p)?` · <b class="tr-mien">tranche ${lettreTranche(p)}</b>`:""}${rangExemplaire(p)}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
       ${bandeauVariantes(p)}
       <div class="piece-bas">
-        ${pastilleCompletude(p)}
-        ${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}
-        <span class="piece-cote num">${fmtEuro(coteRetenue(p))}</span>
-        ${pv!=null?`<span class="piece-pv num ${pv>=0?"pv-pos":"pv-neg"}">${pv>=0?"+":""}${fmtEuro(pv)}</span>`:""}
+        <span class="pb-etat">${pastilleCompletude(p)}${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}</span>
+        <span class="pb-valeur">
+          <span class="piece-cote num">${fmtEuro(coteRetenue(p))}</span>
+          ${pv!=null?`<span class="piece-pv num ${pv>=0?"pv-pos":"pv-neg"}">${pv>=0?"+":""}${fmtEuro(pv)}</span>`:""}
+        </span>
       </div>
     </div>`;
   }).join("");
@@ -1922,43 +1982,43 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
 /* ---------------- Modèles de séries connus ---------------- */
 
 const PAYS = {
-  IS:{nom:"Islande",alias:["islande","iceland"],t:[0,0]},
-  NO:{nom:"Norvège",alias:["norvege","norway"],t:[3,0]},
-  SE:{nom:"Suède",alias:["suede","sweden"],t:[4,0]},
-  FI:{nom:"Finlande",alias:["finlande","finland"],t:[5,0]},
-  EE:{nom:"Estonie",alias:["estonie","estonia"],t:[6,0]},
-  IE:{nom:"Irlande",alias:["irlande","ireland","eire"],t:[0,1]},
-  GB:{nom:"Royaume-Uni",alias:["royaume-uni","royaume uni","grande-bretagne","grande bretagne","angleterre","united kingdom","great britain"],t:[1,1]},
-  DK:{nom:"Danemark",alias:["danemark","denmark"],t:[3,1]},
-  LV:{nom:"Lettonie",alias:["lettonie","latvia"],t:[5,1]},
-  RU:{nom:"Russie",alias:["russie","russia","urss"],t:[6,1]},
-  BE:{nom:"Belgique",alias:["belgique","belgium","belgie"],t:[1,2]},
-  NL:{nom:"Pays-Bas",alias:["pays-bas","pays bas","netherlands","hollande","nederland"],t:[2,2]},
-  DE:{nom:"Allemagne",alias:["allemagne","germany","deutschland"],t:[3,2]},
-  PL:{nom:"Pologne",alias:["pologne","poland"],t:[4,2]},
-  LT:{nom:"Lituanie",alias:["lituanie","lithuania"],t:[5,2]},
-  UA:{nom:"Ukraine",alias:["ukraine"],t:[6,2]},
-  FR:{nom:"France",alias:["france"],t:[1,3]},
-  LU:{nom:"Luxembourg",alias:["luxembourg"],t:[2,3]},
-  CH:{nom:"Suisse",alias:["suisse","switzerland","helvetia"],t:[3,3]},
-  CZ:{nom:"Tchéquie",alias:["tchequie","republique tcheque","tchecoslovaquie","czech"],t:[4,3]},
-  SK:{nom:"Slovaquie",alias:["slovaquie","slovakia"],t:[5,3]},
-  RO:{nom:"Roumanie",alias:["roumanie","romania"],t:[6,3]},
-  PT:{nom:"Portugal",alias:["portugal"],t:[0,4]},
-  ES:{nom:"Espagne",alias:["espagne","spain","espana"],t:[1,4]},
-  MC:{nom:"Monaco",alias:["monaco"],t:[2,4]},
-  IT:{nom:"Italie",alias:["italie","italy","italia"],t:[3,4]},
-  AT:{nom:"Autriche",alias:["autriche","austria","osterreich"],t:[4,4]},
-  HU:{nom:"Hongrie",alias:["hongrie","hungary"],t:[5,4]},
-  BG:{nom:"Bulgarie",alias:["bulgarie","bulgaria"],t:[6,4]},
-  AD:{nom:"Andorre",alias:["andorre","andorra"],t:[0,5]},
-  SM:{nom:"Saint-Marin",alias:["saint-marin","saint marin","san marino"],t:[2,5]},
-  VA:{nom:"Vatican",alias:["vatican","cite du vatican"],t:[3,5]},
-  SI:{nom:"Slovénie",alias:["slovenie","slovenia"],t:[4,5]},
-  HR:{nom:"Croatie",alias:["croatie","croatia"],t:[5,5]},
-  GR:{nom:"Grèce",alias:["grece","greece","hellas"],t:[6,5]},
-  MT:{nom:"Malte",alias:["malte","malta"],t:[3,6]},
-  CY:{nom:"Chypre",alias:["chypre","cyprus"],t:[6,6]}
+  IS:{nom:"Islande",alias:["islande","iceland"],t:[0,0],g:[64.9,-19.0]},
+  NO:{nom:"Norvège",alias:["norvege","norway"],t:[3,0],g:[61.0,9.0]},
+  SE:{nom:"Suède",alias:["suede","sweden"],t:[4,0],g:[62.0,15.0]},
+  FI:{nom:"Finlande",alias:["finlande","finland"],t:[5,0],g:[64.0,26.0]},
+  EE:{nom:"Estonie",alias:["estonie","estonia"],t:[6,0],g:[58.7,25.5]},
+  IE:{nom:"Irlande",alias:["irlande","ireland","eire"],t:[0,1],g:[53.2,-8.0]},
+  GB:{nom:"Royaume-Uni",alias:["royaume-uni","royaume uni","grande-bretagne","grande bretagne","angleterre","united kingdom","great britain"],t:[1,1],g:[54.0,-2.0]},
+  DK:{nom:"Danemark",alias:["danemark","denmark"],t:[3,1],g:[56.0,9.5]},
+  LV:{nom:"Lettonie",alias:["lettonie","latvia"],t:[5,1],g:[56.9,24.9]},
+  RU:{nom:"Russie",alias:["russie","russia","urss"],t:[6,1],g:[55.8,37.6]},
+  BE:{nom:"Belgique",alias:["belgique","belgium","belgie"],t:[1,2],g:[50.6,4.6]},
+  NL:{nom:"Pays-Bas",alias:["pays-bas","pays bas","netherlands","hollande","nederland"],t:[2,2],g:[52.2,5.5]},
+  DE:{nom:"Allemagne",alias:["allemagne","germany","deutschland"],t:[3,2],g:[51.0,10.4]},
+  PL:{nom:"Pologne",alias:["pologne","poland"],t:[4,2],g:[52.0,19.4]},
+  LT:{nom:"Lituanie",alias:["lituanie","lithuania"],t:[5,2],g:[55.3,23.9]},
+  UA:{nom:"Ukraine",alias:["ukraine"],t:[6,2],g:[48.4,31.2]},
+  FR:{nom:"France",alias:["france"],t:[1,3],g:[46.6,2.5]},
+  LU:{nom:"Luxembourg",alias:["luxembourg"],t:[2,3],g:[49.8,6.1]},
+  CH:{nom:"Suisse",alias:["suisse","switzerland","helvetia"],t:[3,3],g:[46.8,8.2]},
+  CZ:{nom:"Tchéquie",alias:["tchequie","republique tcheque","tchecoslovaquie","czech"],t:[4,3],g:[49.8,15.5]},
+  SK:{nom:"Slovaquie",alias:["slovaquie","slovakia"],t:[5,3],g:[48.7,19.7]},
+  RO:{nom:"Roumanie",alias:["roumanie","romania"],t:[6,3],g:[45.9,25.0]},
+  PT:{nom:"Portugal",alias:["portugal"],t:[0,4],g:[39.5,-8.0]},
+  ES:{nom:"Espagne",alias:["espagne","spain","espana"],t:[1,4],g:[40.0,-3.7]},
+  MC:{nom:"Monaco",alias:["monaco"],t:[2,4],g:[43.7,7.4]},
+  IT:{nom:"Italie",alias:["italie","italy","italia"],t:[3,4],g:[42.8,12.6]},
+  AT:{nom:"Autriche",alias:["autriche","austria","osterreich"],t:[4,4],g:[47.6,14.1]},
+  HU:{nom:"Hongrie",alias:["hongrie","hungary"],t:[5,4],g:[47.2,19.5]},
+  BG:{nom:"Bulgarie",alias:["bulgarie","bulgaria"],t:[6,4],g:[42.7,25.5]},
+  AD:{nom:"Andorre",alias:["andorre","andorra"],t:[0,5],g:[42.5,1.5]},
+  SM:{nom:"Saint-Marin",alias:["saint-marin","saint marin","san marino"],t:[2,5],g:[43.9,12.5]},
+  VA:{nom:"Vatican",alias:["vatican","cite du vatican"],t:[3,5],g:[41.9,12.45]},
+  SI:{nom:"Slovénie",alias:["slovenie","slovenia"],t:[4,5],g:[46.1,14.8]},
+  HR:{nom:"Croatie",alias:["croatie","croatia"],t:[5,5],g:[45.1,15.2]},
+  GR:{nom:"Grèce",alias:["grece","greece","hellas"],t:[6,5],g:[39.0,22.0]},
+  MT:{nom:"Malte",alias:["malte","malta"],t:[3,6],g:[35.9,14.4]},
+  CY:{nom:"Chypre",alias:["chypre","cyprus"],t:[6,6],g:[35.1,33.2]}
 };
 function trouverCodePays(pays){
   const n = normTxt(pays||""); if(!n) return null;
@@ -1996,6 +2056,7 @@ function itemsDeModele(mod){
     const axes=[];
     if(mod.variationsDefaut) axes.push(axeAtelier());          // ex. Bundesländer : 5 ateliers
     if(Array.isArray(it.axes) && it.axes.includes("atelier")) axes.push(axeAtelier()); // axe déclaré par item
+    if(Array.isArray(it.axes) && it.axes.includes("tranche")) axes.push(axeTranche());
     if(Array.isArray(it.variations) && it.variations.length) axes.push(axeGenerique("Version", it.variations)); // ex. Non colorée / Colorée
     return {label:it.label, axes};
   });
@@ -2209,10 +2270,16 @@ function itemsDeSerie(s){
   return (s.attendus||[]).map(l=>({label:l, axes:[]}));
 }
 /* Axes actifs d'un item : ceux du modèle + tranche A/B si une pièce en a une (ou si le catalogue le déclare) */
+function axeTranche(){ return {id:"tranche", nom:"Tranche", valeurs:["A","B"]}; }
 function axesActifs(it, piecesItem){
   const axes = (it.axes||[]).map(a=>({...a, valeurs:a.valeurs.slice()}));
-  const aTranche = piecesItem.some(p=>p.varianteTranche);
-  if(aTranche && !axes.some(a=>a.id==="tranche")) axes.push({id:"tranche", nom:"Tranche", valeurs:["A","B"]});
+  // L'axe « tranche » s'applique à toutes les 2 €, qu'on en possède déjà une ou
+  // non : sinon il restait invisible tant qu'aucune variante n'était renseignée,
+  // alors qu'il fait partie de ce qu'il reste à trouver.
+  const estDeuxEuros = /\b2\s*(euros?|€)/i.test(it.label||"")
+    || piecesItem.some(p=>/^2\s*(euros?|€)/i.test(p.valeurFaciale||""));
+  const dejaRenseignee = piecesItem.some(p=>p.varianteTranche);
+  if((estDeuxEuros || dejaRenseignee) && !axes.some(a=>a.id==="tranche")) axes.push(axeTranche());
   return axes;
 }
 function matchItem(items, serieItem, nom){
@@ -2623,19 +2690,43 @@ function rendreCarte(){
     if(m){ regions[m.region]=regions[m.region]||{}; regions[m.region][m.code]=(regions[m.region][m.code]||0)+q; }
     else if(p.pays) autres[p.pays]=(autres[p.pays]||0)+q;
   }
-  const S=34,G=4,PAS=S+G;
-  let maxX=0,maxY=0;
-  for(const p of Object.values(PAYS)){ maxX=Math.max(maxX,p.t[0]); maxY=Math.max(maxY,p.t[1]); }
-  const tuiles = Object.entries(PAYS).map(([code,p])=>{
-    const n=compte[code]||0, c=couleurTuile(n);
-    const x=p.t[0]*PAS, y=p.t[1]*PAS;
+  /* ---------------------------------------------------------------
+     Carte à positions RÉELLES : chaque pays est placé d'après ses
+     coordonnées géographiques, et non sur une grille arbitraire.
+     Projection équirectangulaire corrigée (les longitudes se
+     resserrent vers le nord), disque proportionnel au nombre de pièces.
+  ---------------------------------------------------------------- */
+  const LAT0 = 52 * Math.PI/180;             // latitude de référence
+  const projX = lon => lon * Math.cos(LAT0) * 15;
+  const projY = lat => -lat * 15;
+  const pts = Object.entries(PAYS).filter(([,p])=>p.g);
+  const xs = pts.map(([,p])=>projX(p.g[1])), ys = pts.map(([,p])=>projY(p.g[0]));
+  const marge = 34;
+  const minX=Math.min(...xs)-marge, maxX2=Math.max(...xs)+marge;
+  const minY=Math.min(...ys)-marge, maxY2=Math.max(...ys)+marge;
+
+  const maxN = Math.max(1, ...Object.values(compte));
+  const rayon = n => n ? 9 + 13*Math.sqrt(n/maxN) : 5;
+
+  // Les plus gros disques dessinés en premier : les petits restent cliquables
+  const ordonnes = pts.slice().sort((a,b)=>(compte[b[0]]||0)-(compte[a[0]]||0));
+  const cercles = ordonnes.map(([code,p])=>{
+    const n = compte[code]||0, c = couleurTuile(n), r = rayon(n);
+    const x = projX(p.g[1]), y = projY(p.g[0]);
+    const etiquette = n
+      ? `<text x="${x}" y="${y+4}" text-anchor="middle" font-size="${n>99?9:12}" font-weight="700" fill="${c.t}" font-family="inherit" pointer-events="none">${n}</text>
+         <text x="${x}" y="${y-r-3}" text-anchor="middle" font-size="7.5" fill="var(--encre2)" font-family="inherit" pointer-events="none">${code}</text>`
+      : `<text x="${x}" y="${y-r-3}" text-anchor="middle" font-size="6.5" fill="var(--ligne)" font-family="inherit" pointer-events="none">${code}</text>`;
     return `<g data-code="${code}" class="tuile"><title>${esc(p.nom)} : ${n} pièce(s)</title>
-      <rect x="${x}" y="${y}" width="${S}" height="${S}" rx="7" fill="${c.f}" stroke="${c.s}" stroke-width="1"/>
-      <text x="${x+S/2}" y="${y+12}" text-anchor="middle" font-size="7.5" fill="${c.t}" opacity=".75" font-family="inherit">${code}</text>
-      <text x="${x+S/2}" y="${y+26}" text-anchor="middle" font-size="${n>99?10:13}" font-weight="700" fill="${c.t}" font-family="inherit">${n||""}</text>
-    </g>`;
+      <circle cx="${x}" cy="${y}" r="${r}" fill="${c.f}" stroke="${c.s}" stroke-width="${n?1.2:1}" ${n?"":'stroke-dasharray="2 2"'}/>
+      ${etiquette}</g>`;
   }).join("");
-  el.innerHTML = `<svg class="carte-svg" viewBox="-2 -2 ${(maxX+1)*PAS-G+4} ${(maxY+1)*PAS-G+4}" role="img" aria-label="Carte des pièces par pays">${tuiles}</svg>`;
+
+  el.innerHTML = `<svg class="carte-svg" viewBox="${minX} ${minY} ${maxX2-minX} ${maxY2-minY}" role="img"
+      aria-label="Carte d'Europe : nombre de pièces par pays">
+    <g class="carte-fond">${cercles}</g>
+  </svg>
+  <p class="vide-note" style="margin-top:6px">Chaque pays est à sa position géographique réelle ; la taille du disque suit le nombre de pièces.</p>`;
   const autresEl=$("#cartAutres");
   let htmlMonde="";
   for(const [region,liste] of Object.entries(MONDE)){
@@ -3338,8 +3429,12 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "11.5";
+const VERSION_ACTUELLE = "12.0";
 const CHANGELOG = [
+  { v:"12.0", type:"majeure", date:"2026-08", titre:"Carte géographique et classements",
+    points:["Nouvelle carte : chaque pays est placé à ses coordonnées réelles, le disque grandit avec le nombre de pièces","Les pays sans pièce restent visibles en pointillés — on voit ce qui manque","Neuf classements, dont « Pays puis année », « Série puis année », « Pays puis valeur faciale »","Bas de carte réorganisé : l'état à gauche, la valeur à droite, séparés par un filet"] },
+  { v:"11.6", type:"mineure", date:"2026-08", titre:"Distinguer deux exemplaires d'une même pièce",
+    points:["La tranche de l'exemplaire apparaît dans le sous-titre de sa carte : « France · 2022 · tranche B »","Sa variante est cerclée dans le bandeau : deux cartes jumelles ne se ressemblent plus","Exemplaires rigoureusement identiques numérotés « n° 1/2 »","Onglet Séries : l'axe Tranche s'affiche pour toutes les 2 €, même sans exemplaire possédé"] },
   { v:"11.5", type:"correction", date:"2026-08", titre:"Métal : plus d'or par défaut",
     points:["Correction : « Or » était sélectionné d'office sur chaque nouvelle pièce, faute d'option vide dans la liste des métaux","Nouveau métal « Bimétallique », avec son propre cerclage — c'est la composition réelle des 1 € et 2 €","Les spécifications officielles attribuent désormais « Bimétallique » aux 1 € et 2 €, et non plus cupronickel"] },
   { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
@@ -3352,6 +3447,10 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"12.0", type:"majeure", date:"2026-08", titre:"Carte géographique et classements",
+    points:["Nouvelle carte : chaque pays est placé à ses coordonnées réelles, le disque grandit avec le nombre de pièces","Les pays sans pièce restent visibles en pointillés — on voit ce qui manque","Neuf classements, dont « Pays puis année », « Série puis année », « Pays puis valeur faciale »","Bas de carte réorganisé : l'état à gauche, la valeur à droite, séparés par un filet"] },
+  { v:"11.6", type:"mineure", date:"2026-08", titre:"Distinguer deux exemplaires d'une même pièce",
+    points:["La tranche de l'exemplaire apparaît dans le sous-titre de sa carte : « France · 2022 · tranche B »","Sa variante est cerclée dans le bandeau : deux cartes jumelles ne se ressemblent plus","Exemplaires rigoureusement identiques numérotés « n° 1/2 »","Onglet Séries : l'axe Tranche s'affiche pour toutes les 2 €, même sans exemplaire possédé"] },
   { v:"11.5", type:"correction", date:"2026-08", titre:"Métal : plus d'or par défaut",
     points:["Correction : « Or » était sélectionné d'office sur chaque nouvelle pièce, faute d'option vide dans la liste des métaux","Nouveau métal « Bimétallique », avec son propre cerclage — c'est la composition réelle des 1 € et 2 €","Les spécifications officielles attribuent désormais « Bimétallique » aux 1 € et 2 €, et non plus cupronickel"] },
   { v:"11.4", type:"correction", date:"2026-08", titre:"Mobile, variantes et pré-remplissage",
