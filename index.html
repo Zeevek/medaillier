@@ -252,7 +252,6 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   border-radius:50%;border:1px solid var(--ligne);color:var(--encre2);background:#fff;
 }
 .var-groupe i.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
-.var-sep{color:var(--ligne);font-weight:700}
 .rim-bimetal::before{background:conic-gradient(from 210deg,#C9CBC7,#E3E5E1,#C9A85C,#E8D9A8,#C9CBC7)}
 .jauge-completude{display:inline-flex;gap:2px;align-items:center;margin-right:4px}
 .jauge-completude i{width:6px;height:6px;border-radius:50%;background:var(--ligne);display:block;transition:background .2s}
@@ -334,12 +333,30 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
   background:#EDE9DC center/contain no-repeat;cursor:pointer;position:relative;
   display:flex;align-items:center;justify-content:center;color:var(--encre2);font-size:.85rem;
   box-shadow:inset 0 0 0 3px var(--velours), var(--ombre)}
-.serie-liste{display:flex;flex-direction:column;gap:2px}
-.serie-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:6px 4px;border-bottom:1px dashed var(--ligne);font-size:.86rem}
-.serie-item:last-child{border-bottom:none}
-.serie-item-lab{overflow:hidden;text-overflow:ellipsis}
-.serie-item-cpt{font-weight:700;white-space:nowrap;font-size:.82rem}
-.serie-vars{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end}
+.serie-liste{display:flex;flex-direction:column;gap:1px;margin-top:4px}
+.serie-item{
+  display:grid;grid-template-columns:14px 1fr auto;gap:10px;align-items:center;
+  padding:9px 10px;border-radius:9px;font-size:.87rem;background:#fff;
+  border:1px solid transparent;transition:background .12s
+}
+.serie-item:nth-child(odd){background:#FBFAF5}      /* alternance : l'œil suit la ligne */
+.serie-item:hover{border-color:var(--ligne)}
+.serie-item::before{
+  content:"";width:8px;height:8px;border-radius:50%;background:var(--ligne);
+  grid-column:1;justify-self:center
+}
+.serie-item.eu::before{background:var(--or)}
+.serie-item.partiel::before{background:var(--or);box-shadow:inset 0 0 0 2px #fff}
+.serie-item-lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.serie-item.manque .serie-item-lab{color:var(--encre2)}
+.serie-item-cpt{font-weight:700;white-space:nowrap;font-size:.8rem;color:var(--encre2)}
+.serie-item-cpt.plein{color:var(--vert)}
+.serie-vars{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.serie-item-multi{grid-template-columns:14px 1fr auto}
+.serie-axes{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.axe-bloc{display:inline-flex;align-items:center;gap:7px}
+.axe-nom{font-size:.66rem;text-transform:uppercase;letter-spacing:.08em;color:var(--encre2);font-weight:700}
+/* En-tête de série : titre, progression, barre */
 .rech-champ{width:100%;font-size:16px;padding:12px 14px;border:1px solid var(--ligne);border-radius:10px;background:#fff;margin-bottom:12px}
 .rech-section{font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--encre2);font-weight:700;margin:14px 0 6px}
 .rech-item{display:flex;gap:10px;align-items:center;padding:9px 10px;border:1px solid var(--ligne);border-radius:10px;margin-bottom:6px;cursor:pointer;background:#fff}
@@ -409,11 +426,18 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 
 /* ---------- Carte Europe ---------- */
 .carte-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
-.carte-svg{width:100%;height:auto;display:block;border-radius:12px;overflow:hidden}
+/* La carte est plus haute que large (l'Europe l'est) : on la centre et on
+   plafonne sa hauteur pour qu'elle n'écrase pas le tableau de bord. */
+.carte-svg{display:block;margin:0 auto;width:auto;max-width:100%;height:auto;
+  max-height:min(62vh,560px);border-radius:12px;overflow:hidden;
+  border:1px solid var(--ligne);background:#EDF1F2}
+@media (max-width:640px){ .carte-svg{max-height:none;width:100%} }
 .geo-mer{fill:#EDF1F2}                       /* teinte marine discrète */
 .geo-vide{fill:#F7F4EC;stroke:#D8D2C2;stroke-width:.7;stroke-linejoin:round}
 .geo-hors{fill:#F1EEE6;stroke:#E0DACB;stroke-width:.5;pointer-events:none}
 .geo-actifs path{filter:drop-shadow(0 1px 1px rgba(60,50,20,.18))}
+.med-cadre{fill:#EDF1F2;stroke:var(--ligne);stroke-width:.8;stroke-dasharray:3 2}
+.medaillon{cursor:pointer}
 .carte-svg .tuile{cursor:pointer}
 .carte-svg .tuile path,.carte-svg .tuile circle{transition:filter .15s}
 .carte-svg .tuile:hover path,.carte-svg .tuile:hover circle{filter:brightness(1.06)}
@@ -2217,8 +2241,11 @@ async function detecterSerie(p){
     if(mod.commun){
       if(parseInt(p.annee)!==mod.a) continue;
       if(!mod.mots.some(m=>nomN.includes(m))) continue;
-      const code = trouverCodePays(p.pays) || mod.zone.find(c=>PAYS[c].alias.some(al=>nomN.includes(al)));
-      if(code && mod.zone.includes(code)){
+      // Une série peut citer un code de pays inconnu (fichier de séries modifié
+      // à la main) : sans garde, la détection plantait sur toute la collection.
+      const code = trouverCodePays(p.pays)
+        || mod.zone.find(c=>PAYS[c] && PAYS[c].alias.some(al=>nomN.includes(al)));
+      if(code && PAYS[code] && mod.zone.includes(code)){
         p.serie = mod.nom; p.serieItem = PAYS[code].nom;
         p.serieVariation = (code==="DE") ? (atelierAllemand(p) ? (atelierAllemand(p).lettre+" ("+atelierAllemand(p).ville+")") : null) : null;
         await assurerSerie(mod.nom);
@@ -2390,8 +2417,9 @@ function rendreSeries(){
             return `<span class="var-col ${eus.length?"eu":(flou?"flou":"")}" title="${esc(vAt)}${eus.length?" — tranche"+(eus.length>1?"s":"")+" "+eus.join(" et "):(flou?" — tranche non renseignée":" — manquant")}">
               <i>${esc(court)}</i><span class="var-tr">${cases}</span></span>`;
           }).join("");
-          return `<div class="serie-item serie-item-multi">
-            <span class="serie-item-lab">${ownIt?"":"✗ "}${esc(it.label)}</span>
+          const etat = nOwn===total ? "eu" : (nOwn>0 ? "partiel" : "manque");
+          return `<div class="serie-item serie-item-multi ${etat}">
+            <span class="serie-item-lab">${esc(it.label)}</span>
             <span class="serie-axes">
               <span class="axe-bloc"><span class="axe-nom">Atelier × tranche</span>
                 <span class="serie-item-cpt num ${nOwn===total?"pv-pos":(nOwn>0?"":"vide-note")}">${nOwn}/${total}</span>
@@ -2418,8 +2446,8 @@ function rendreSeries(){
         </div>`;
       }
       const enWish = !ownIt && etat.wishlist.some(w=>normTxt(w.nom).includes(normTxt(it.label).slice(0,20)));
-      return `<div class="serie-item">
-        <span class="serie-item-lab">${ownIt?"✓ ":(enWish?"☆ ":"✗ ")}${esc(it.label)}</span>
+      return `<div class="serie-item ${ownIt?"eu":"manque"}">
+        <span class="serie-item-lab">${enWish&&!ownIt?"☆ ":""}${esc(it.label)}</span>
         <span class="serie-item-cpt">${ownIt?`<span class="pv-pos">possédée</span>`:`<span class="chip-mini" data-wish="${esc(it.label)}" data-serie="${esc(s.nom)}" role="button" tabindex="0" style="cursor:pointer">${enWish?"dans wishlist":"+ wishlist"}</span>`}</span>
       </div>`;
     }).join("");
@@ -2759,36 +2787,70 @@ function rendreCarte(){
      européens : elle corrige la déformation qui étirait le nord.
   ---------------------------------------------------------------- */
   const RAD = Math.PI/180;
-  const LAMBERT = (()=>{                       // paramètres calés sur l'Europe
-    const p1=40*RAD, p2=62*RAD, l0=12*RAD, f0=50*RAD;
-    const n = Math.log(Math.cos(p1)/Math.cos(p2)) /
-              Math.log(Math.tan(Math.PI/4+p2/2)/Math.tan(Math.PI/4+p1/2));
-    const F = Math.cos(p1)*Math.pow(Math.tan(Math.PI/4+p1/2),n)/n;
-    const r0 = F/Math.pow(Math.tan(Math.PI/4+f0/2),n);
-    return {n,F,r0,l0};
-  })();
-  const ECH = 900;
+  /* Projection azimutale équivalente de Lambert centrée sur l'Europe
+     (52° N, 10° E) : c'est ETRS89-LAEA, la projection officielle de
+     l'Union européenne, celle des cartes d'Eurostat. Contrairement à
+     la conique, elle ne fait pas pivoter les pays sur les bords. */
+  const LAT0 = 52*RAD, LON0 = 10*RAD, ECH = 640;
   function proj(lon,lat){
-    const {n,F,r0,l0}=LAMBERT;
-    const r = F/Math.pow(Math.tan(Math.PI/4+lat*RAD/2), n);
-    const t = n*(lon*RAD - l0);
-    return [ECH*r*Math.sin(t), ECH*(r0 - r*Math.cos(t))];
+    const f = lat*RAD, l = lon*RAD - LON0;
+    const cosc = Math.sin(LAT0)*Math.sin(f) + Math.cos(LAT0)*Math.cos(f)*Math.cos(l);
+    const k = Math.sqrt(2/Math.max(1e-9, 1+cosc));
+    return [ ECH * k * Math.cos(f) * Math.sin(l),
+            -ECH * k * (Math.cos(LAT0)*Math.sin(f) - Math.sin(LAT0)*Math.cos(f)*Math.cos(l)) ];
   }
 
   const chemin = anneaux => anneaux.map(ring =>
     "M"+ring.map(([lo,la])=>proj(lo,la).map(v=>v.toFixed(1)).join(",")).join("L")+"Z").join("");
 
-  const tracés = GEO_EUROPE.map(f=>({...f, d:chemin(f.p)}));
+  // (les tracés sont construits plus bas, une fois la fenêtre connue)
 
-  // Cadre FIXE sur l'Europe : le calculer sur les pays dessinés laisserait la
-  // Russie l'étirer vers l'est et déformer l'ensemble.
-  const COINS = [[-24,36],[34,36],[-24,71],[34,71],[5,34],[5,72]].map(([lo,la])=>proj(lo,la));
-  const bx0=Math.min(...COINS.map(p=>p[0])), bx1=Math.max(...COINS.map(p=>p[0]));
-  const by0=Math.min(...COINS.map(p=>p[1])), by1=Math.max(...COINS.map(p=>p[1]));
-  const vbx=bx0, vby=by0, vbw=bx1-bx0, vbh=by1-by0;
+  /* Fenêtre continentale. Sans elle, les Açores (−31°), les Canaries (−18°)
+     et le Svalbard étiraient le cadre : l'Europe se retrouvait minuscule au
+     milieu d'un océan vide. Ces territoires lointains ne sont pas dessinés. */
+  const FENETRE = {lo0:-11, lo1:31.5, la0:34, la1:71.5};
+  const dansFenetre = ([lo,la]) => lo>=FENETRE.lo0 && lo<=FENETRE.lo1 && la>=FENETRE.la0 && la<=FENETRE.la1;
+  const anneauVisible = ring => ring.some(dansFenetre);
+
+  // Chypre est trop à l'est (33°) : l'inclure creuserait un vide de mer.
+  // On la sort de la carte principale et on la place en médaillon.
+  const EN_MEDAILLON = ["CY"];
+
+  const CADRAGE = ["FR","DE","ES","IT","BE","NL","PT","AT","GR","IE","FI","SE","DK","PL",
+                   "CZ","SK","SI","HR","HU","RO","BG","EE","LV","LT","LU","CH","GB","NO"];
+  let bx0=1e9,by0=1e9,bx1=-1e9,by1=-1e9;
+  for(const f of (rendreCarte._cadre ? [] : GEO_EUROPE)){
+    if(!CADRAGE.includes(f.c)) continue;
+    for(const ring of f.p){
+      if(!anneauVisible(ring)) continue;
+      for(const pt of ring){
+        if(!dansFenetre(pt)) continue;
+        const [x,y]=proj(pt[0],pt[1]);
+        if(x<bx0)bx0=x; if(x>bx1)bx1=x; if(y<by0)by0=y; if(y>by1)by1=y;
+      }
+    }
+  }
+  const m = 8;
+  const c0 = rendreCarte._cadre || {vbx:bx0-m, vby:by0-m, vbw:(bx1-bx0)+2*m, vbh:(by1-by0)+2*m};
+  rendreCarte._cadre = c0;
+  const {vbx,vby,vbw,vbh} = c0;
 
   // Fond neutre d'abord, pays de la collection par-dessus : les frontières
   // des pays possédés restent nettes quel que soit l'ordre du jeu de données.
+  /* Les tracés ne dépendent que de la géographie, jamais de la collection :
+     on les calcule une seule fois et on les réutilise à chaque rafraîchissement.
+     (33 ms par rendu avant, ~3 ms après.) */
+  if(!rendreCarte._tracés){
+    rendreCarte._tracés = GEO_EUROPE
+      .filter(f=>!EN_MEDAILLON.includes(f.c))
+      .map(f=>{
+        const anneaux = f.p.filter(anneauVisible);
+        return anneaux.length ? {...f, d:chemin(anneaux)} : null;
+      })
+      .filter(Boolean);
+  }
+  const tracés = rendreCarte._tracés;
+
   let fond="", actifs="", nombres="";
   for(const f of tracés){
     const n = compte[f.c]||0;
@@ -2824,6 +2886,38 @@ function rendreCarte(){
         font-weight="700" fill="${c.t}" font-family="inherit" pointer-events="none">${n}</text></g>`;
   }
 
+  /* Médaillon : Chypre à son échelle, dans un cadre en bas à droite —
+     usage courant des atlas pour les territoires excentrés. */
+  let medaillon="";
+  for(const code of EN_MEDAILLON){
+    const f = GEO_EUROPE.find(x=>x.c===code); if(!f) continue;
+    const n = compte[code]||0, c = couleurTuile(n);
+    // Cadre local du pays, puis mise à l'échelle dans une vignette
+    let ax0=1e9,ay0=1e9,ax1=-1e9,ay1=-1e9;
+    for(const ring of f.p) for(const [lo,la] of ring){
+      const [x,y]=proj(lo,la);
+      if(x<ax0)ax0=x; if(x>ax1)ax1=x; if(y<ay0)ay0=y; if(y>ay1)ay1=y;
+    }
+    const cote = Math.min(vbw,vbh)*0.13;
+    const k = cote/Math.max(ax1-ax0, ay1-ay0)*0.66;
+    const px = vbx+vbw-cote-6, py = vby+vbh-cote-6;    // coin bas-droit
+    const cx = px+cote/2 - ((ax0+ax1)/2)*k, cy = py+cote/2 - ((ay0+ay1)/2)*k;
+    const d = f.p.map(ring=>"M"+ring.map(([lo,la])=>{
+      const [x,y]=proj(lo,la); return (x*k+cx).toFixed(1)+","+(y*k+cy).toFixed(1);
+    }).join("L")+"Z").join("");
+    medaillon = `<g data-code="${code}" class="tuile medaillon">
+      <title>${esc((PAYS[code]||{}).nom||f.n)} : ${n} pièce(s)</title>
+      <rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${cote.toFixed(1)}" height="${cote.toFixed(1)}"
+        rx="5" class="med-cadre"/>
+      <path d="${d}" ${n?`fill="${c.f}" stroke="${c.s}" stroke-width="1"`:`class="geo-vide"`}/>
+      <text x="${(px+4).toFixed(1)}" y="${(py+10).toFixed(1)}" font-size="7" fill="var(--encre2)"
+        font-family="inherit" pointer-events="none">${code}</text>
+      ${n?`<text x="${(px+cote-5).toFixed(1)}" y="${(py+cote-4).toFixed(1)}" text-anchor="end" font-size="10"
+        font-weight="700" fill="${c.t}" paint-order="stroke" stroke="${c.f}" stroke-width="2.5"
+        font-family="inherit" pointer-events="none">${n}</text>`:""}
+    </g>`;
+  }
+
   el.innerHTML = `<svg class="carte-svg" viewBox="${vbx.toFixed(1)} ${vby.toFixed(1)} ${vbw.toFixed(1)} ${vbh.toFixed(1)}"
       role="img" aria-label="Carte d'Europe : nombre de pièces par pays">
     <rect x="${vbx.toFixed(1)}" y="${vby.toFixed(1)}" width="${vbw.toFixed(1)}" height="${vbh.toFixed(1)}" class="geo-mer"/>
@@ -2831,6 +2925,7 @@ function rendreCarte(){
     <g class="geo-actifs">${actifs}</g>
     <g class="geo-micro">${micro}</g>
     <g class="geo-nb">${nombres}</g>
+    ${medaillon}
   </svg>`;
 
 const autresEl=$("#cartAutres");
@@ -2862,7 +2957,11 @@ const autresEl=$("#cartAutres");
     });
   }
 }
-function filtrerParPaysCode(code){ filtrerParAlias(PAYS[code].alias, PAYS[code].nom); }
+function filtrerParPaysCode(code){
+  const p = PAYS[code];
+  if(!p) return;                       // pays de décor : rien à filtrer
+  filtrerParAlias(p.alias, p.nom);
+}
 function filtrerParAlias(alias, nom){
   const vals=[...new Set(etat.pieces.filter(p=>!p.vendu && alias.some(al=>{const x=normTxt(p.pays||"");return x===al||x.includes(al);})).map(p=>p.pays))];
   if(!vals.length){ toast("Aucune pièce de "+nom+" pour l'instant"); return; }
@@ -3535,8 +3634,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "12.3";
+const VERSION_ACTUELLE = "12.4";
 const CHANGELOG = [
+  { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
+    points:["Carte : fini l'océan vide — les Açores, Canaries et Svalbard ne débordent plus le cadre","Chypre passe en médaillon, comme dans les atlas, au lieu d'être perdue dans un coin","Carte centrée et plafonnée en hauteur pour mieux s'intégrer au tableau de bord","Séries : lignes aérées, alternées, avec une pastille d'état (possédé, partiel, manquant)","Carte 30 fois plus rapide (33 ms → 1 ms) : sa géométrie n'est plus recalculée à chaque affichage","Deux plantages possibles corrigés sur un code de pays inconnu"] },
   { v:"12.3", type:"majeure", date:"2026-08", titre:"Carte : contours Natural Earth",
     points:["Contours officiels Natural Earth 1:50m (domaine public) : 86 fois plus de détail qu'avant — la France passe de 13 à 130 points","Projection conique de Lambert, celle des atlas européens : plus de déformation vers le nord","Malte, Andorre et Saint-Marin ont enfin leur vrai contour","Fond marin, ombrage léger, nombres cerclés pour rester lisibles","Toujours aucune dépendance : tout fonctionne hors-ligne"] },
   { v:"12.2", type:"majeure", date:"2026-08", titre:"Carte d'Europe aux vraies frontières",
@@ -3559,6 +3660,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
+    points:["Carte : fini l'océan vide — les Açores, Canaries et Svalbard ne débordent plus le cadre","Chypre passe en médaillon, comme dans les atlas, au lieu d'être perdue dans un coin","Carte centrée et plafonnée en hauteur pour mieux s'intégrer au tableau de bord","Séries : lignes aérées, alternées, avec une pastille d'état (possédé, partiel, manquant)","Carte 30 fois plus rapide (33 ms → 1 ms) : sa géométrie n'est plus recalculée à chaque affichage","Deux plantages possibles corrigés sur un code de pays inconnu"] },
   { v:"12.3", type:"majeure", date:"2026-08", titre:"Carte : contours Natural Earth",
     points:["Contours officiels Natural Earth 1:50m (domaine public) : 86 fois plus de détail qu'avant — la France passe de 13 à 130 points","Projection conique de Lambert, celle des atlas européens : plus de déformation vers le nord","Malte, Andorre et Saint-Marin ont enfin leur vrai contour","Fond marin, ombrage léger, nombres cerclés pour rester lisibles","Toujours aucune dépendance : tout fonctionne hors-ligne"] },
   { v:"12.2", type:"majeure", date:"2026-08", titre:"Carte d'Europe aux vraies frontières",
