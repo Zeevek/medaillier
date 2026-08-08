@@ -147,8 +147,8 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 /* État à gauche, valeur à droite : deux natures d'information séparées */
 .piece-bas{display:flex;justify-content:space-between;align-items:center;gap:8px;
   padding-top:8px;margin-top:2px;border-top:1px solid var(--ligne)}
-.pb-etat{display:inline-flex;align-items:center;gap:6px;min-width:0}
-.pb-valeur{display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap}
+.pb-etat{display:inline-flex;align-items:center;gap:6px;min-width:0;flex-wrap:wrap}
+.pb-valeur{display:inline-flex;align-items:baseline;gap:8px;white-space:nowrap;margin-left:auto;padding-left:8px}
 .chip-grade{
   font-size:.72rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:20px;
   background:#EFE8D3;color:var(--or-fonce);border:1px solid #E0D3AC;
@@ -505,6 +505,15 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   .modale{min-height:100dvh;border-radius:0;max-width:none}
   .modale-tete{border-radius:0;position:sticky;top:0;z-index:5;padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
   .modale-corps{padding:14px 12px calc(16px + env(safe-area-inset-bottom))}
+  /* Les filtres se tassaient jusqu'à devenir illisibles (« Fr⌄ To⌄ To⌄ ») :
+     on leur impose une largeur plancher, quitte à passer à la ligne. */
+  .outils select{flex:1 1 calc(50% - 5px);min-width:calc(50% - 5px);max-width:100%}
+  .outils input[type=search]{flex:1 1 100%;min-width:0}
+  .compteur{margin-left:0;width:100%;text-align:right}
+  /* Le grade collait au prix quand la carte était étroite */
+  .piece-bas{flex-wrap:wrap;row-gap:4px;column-gap:10px}
+  .pb-etat,.pb-valeur{flex:0 1 auto}
+  .piece-cote{font-size:.88rem}
   .form-grille{grid-template-columns:1fr 1fr}
   /* Sans min-width:0, un contenu long élargit la colonne au-delà de la fenêtre :
      c'est ce qui faisait déborder les champs hors du cadre sur téléphone. */
@@ -2386,6 +2395,18 @@ function rendreSeries(){
     const aVariations = totVariations>totItems;
     const pct = totVariations ? Math.round(ownedVariations/totVariations*100) : 0;
 
+    /* Dans une série commune, tous les libellés répètent le même nom de pièce
+       (« Belgique — 2 euros Introduction de l'euro (10 ans) »). On isole cette
+       partie commune pour n'afficher que ce qui distingue chaque élément. */
+    const libelles = items.map(x=>x.label||"");
+    let suffixeCommun = "";
+    if(libelles.length>2 && libelles.every(l=>l.includes(" — "))){
+      const queues = libelles.map(l=>l.slice(l.indexOf(" — ")+3));
+      if(queues.every(q=>q===queues[0])) suffixeCommun = queues[0];
+    }
+    const abrege = lab => (suffixeCommun && lab.endsWith(" — "+suffixeCommun))
+      ? lab.slice(0, lab.length-suffixeCommun.length-3) : lab;
+
     const lignes = items.map(it=>{
       const e = parItem.get(it.label);
       const ownIt = e.pieces.length>0;
@@ -2419,7 +2440,7 @@ function rendreSeries(){
           }).join("");
           const etat = nOwn===total ? "eu" : (nOwn>0 ? "partiel" : "manque");
           return `<div class="serie-item serie-item-multi ${etat}">
-            <span class="serie-item-lab">${esc(it.label)}</span>
+            <span class="serie-item-lab" title="${esc(it.label)}">${esc(abrege(it.label))}</span>
             <span class="serie-axes">
               <span class="axe-bloc"><span class="axe-nom">Atelier × tranche</span>
                 <span class="serie-item-cpt num ${nOwn===total?"pv-pos":(nOwn>0?"":"vide-note")}">${nOwn}/${total}</span>
@@ -2427,6 +2448,7 @@ function rendreSeries(){
             </span>
           </div>`;
         }
+        let vuTot=0, vuOwn=0;                 // pour l'état de la ligne
         const blocsAxes = axes.map(ax=>{
           const own = new Set();
           for(const p of e.pieces){ const v=valeurAxe(p,ax.id); if(v) own.add(normTxt(v)); }
@@ -2436,18 +2458,20 @@ function rendreSeries(){
             const court = vv.split(" ")[0];
             return `<span class="var-pastille ${ownV?"var-ok":""}" title="${esc(ax.nom)} ${esc(vv)}">${esc(court)}</span>`;
           }).join("");
+          vuTot += ax.valeurs.length; vuOwn += nOwn;
           return `<span class="axe-bloc"><span class="axe-nom">${esc(ax.nom)}</span>
             <span class="serie-item-cpt num ${nOwn===ax.valeurs.length?"pv-pos":(nOwn>0?"":"vide-note")}">${nOwn}/${ax.valeurs.length}</span>
             <span class="serie-vars">${pastilles}</span></span>`;
         }).join("");
-        return `<div class="serie-item serie-item-multi">
-          <span class="serie-item-lab">${ownIt?"":"✗ "}${esc(it.label)}</span>
+        const etatL = vuTot && vuOwn===vuTot ? "eu" : (vuOwn>0 ? "partiel" : "manque");
+        return `<div class="serie-item serie-item-multi ${etatL}">
+          <span class="serie-item-lab" title="${esc(it.label)}">${esc(abrege(it.label))}</span>
           <span class="serie-axes">${blocsAxes}</span>
         </div>`;
       }
       const enWish = !ownIt && etat.wishlist.some(w=>normTxt(w.nom).includes(normTxt(it.label).slice(0,20)));
       return `<div class="serie-item ${ownIt?"eu":"manque"}">
-        <span class="serie-item-lab">${enWish&&!ownIt?"☆ ":""}${esc(it.label)}</span>
+        <span class="serie-item-lab" title="${esc(it.label)}">${enWish&&!ownIt?"☆ ":""}${esc(abrege(it.label))}</span>
         <span class="serie-item-cpt">${ownIt?`<span class="pv-pos">possédée</span>`:`<span class="chip-mini" data-wish="${esc(it.label)}" data-serie="${esc(s.nom)}" role="button" tabindex="0" style="cursor:pointer">${enWish?"dans wishlist":"+ wishlist"}</span>`}</span>
       </div>`;
     }).join("");
@@ -2458,6 +2482,7 @@ function rendreSeries(){
         <span>${totItems? (aVariations? ownedVariations+" / "+totVariations+" variations" : itemsOwned+" / "+totItems)+" ("+pct+" %)" : ps.length+" pièce(s)"}</span>
       </h3>
       ${totItems?`<div class="barre-fond" style="margin-bottom:6px"><div class="barre-rempli" style="width:${Math.max(2,pct)}%"></div></div>`:""}
+      ${suffixeCommun?`<p class="vide-note" style="margin-bottom:6px">Chaque élément : <b>${esc(suffixeCommun)}</b></p>`:""}
       ${aVariations?`<p class="vide-note" style="margin-bottom:8px">${itemsOwned}/${totItems} modèles entamés${axeMax>1?" · variations comptées (ateliers, tranches…)":""}</p>`:""}
       <div class="serie-liste">${lignes||'<span class="vide-note">Série libre (pas de liste d\'éléments).</span>'}</div>
       ${horsListe?`<p class="vide-note">+ ${horsListe} pièce(s) rattachée(s) hors liste.</p>`:""}
@@ -3634,8 +3659,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "12.4";
+const VERSION_ACTUELLE = "12.5";
 const CHANGELOG = [
+  { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
+    points:["Téléphone : les filtres ne se tassent plus jusqu'à devenir illisibles — deux par ligne, largeur lisible","Le grade ne colle plus au prix en bas des cartes","Séries : toutes les lignes suivent la même présentation, avec la même pastille d'état","Libellés abrégés : « Belgique » au lieu de « Belgique — 2 euros Introduction de l'euro (10 ans) », le nom commun étant rappelé une fois en tête"] },
   { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
     points:["Carte : fini l'océan vide — les Açores, Canaries et Svalbard ne débordent plus le cadre","Chypre passe en médaillon, comme dans les atlas, au lieu d'être perdue dans un coin","Carte centrée et plafonnée en hauteur pour mieux s'intégrer au tableau de bord","Séries : lignes aérées, alternées, avec une pastille d'état (possédé, partiel, manquant)","Carte 30 fois plus rapide (33 ms → 1 ms) : sa géométrie n'est plus recalculée à chaque affichage","Deux plantages possibles corrigés sur un code de pays inconnu"] },
   { v:"12.3", type:"majeure", date:"2026-08", titre:"Carte : contours Natural Earth",
@@ -3660,6 +3687,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
+    points:["Téléphone : les filtres ne se tassent plus jusqu'à devenir illisibles — deux par ligne, largeur lisible","Le grade ne colle plus au prix en bas des cartes","Séries : toutes les lignes suivent la même présentation, avec la même pastille d'état","Libellés abrégés : « Belgique » au lieu de « Belgique — 2 euros Introduction de l'euro (10 ans) », le nom commun étant rappelé une fois en tête"] },
   { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
     points:["Carte : fini l'océan vide — les Açores, Canaries et Svalbard ne débordent plus le cadre","Chypre passe en médaillon, comme dans les atlas, au lieu d'être perdue dans un coin","Carte centrée et plafonnée en hauteur pour mieux s'intégrer au tableau de bord","Séries : lignes aérées, alternées, avec une pastille d'état (possédé, partiel, manquant)","Carte 30 fois plus rapide (33 ms → 1 ms) : sa géométrie n'est plus recalculée à chaque affichage","Deux plantages possibles corrigés sur un code de pays inconnu"] },
   { v:"12.3", type:"majeure", date:"2026-08", titre:"Carte : contours Natural Earth",
