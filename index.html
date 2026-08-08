@@ -253,6 +253,21 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 }
 .var-groupe i.on{background:var(--or);border-color:var(--or-fonce);color:#2A2510}
 .rim-bimetal::before{background:conic-gradient(from 210deg,#C9CBC7,#E3E5E1,#C9A85C,#E8D9A8,#C9CBC7)}
+.case-ligne{display:flex;align-items:flex-start;gap:9px;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.86rem;font-weight:400;color:var(--encre)}
+.case-ligne input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:var(--or)}
+.case-ligne small{display:block;color:var(--encre2);font-size:.76rem;margin-top:2px}
+.cat-fiche.absente{opacity:.55;filter:grayscale(.6)}
+.cat-fiche.absente .piece-photo{opacity:.5}
+.cat-fiche.absente:hover{opacity:.85;filter:none}
+.chip-mini{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:20px;background:#F0ECE0;color:var(--encre2)}
+.carte-piece{position:relative}
+.piece-empl{
+  position:absolute;top:8px;right:8px;z-index:2;max-width:60%;
+  font-size:.62rem;font-weight:700;padding:3px 7px;border-radius:20px;
+  background:#EFE8D3;color:var(--or-fonce);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;border:1px solid rgba(184,146,61,.35)
+}
+.piece-empl.conflit{background:#F7E6E1;color:var(--rouge);border-color:rgba(176,74,58,.45)}
 .jauge-completude{display:inline-flex;gap:2px;align-items:center;margin-right:4px}
 .jauge-completude i{width:6px;height:6px;border-radius:50%;background:var(--ligne);display:block;transition:background .2s}
 .jauge-completude.n1 i.on{background:var(--encre2)}
@@ -586,6 +601,7 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   <button class="onglet" data-vue="collection">Collection</button>
   <button class="onglet" data-vue="series">Séries</button>
   <button class="onglet" data-vue="completude">Complétude</button>
+  <button class="onglet" data-vue="catalogue">Catalogue</button>
   <button class="onglet" data-vue="registre">Registre des ventes</button>
   <button class="onglet" data-vue="wishlist">Wishlist</button>
   <button class="onglet" data-vue="fiscalite">Fiscalité</button>
@@ -725,6 +741,27 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
   </section>
 
   <!-- ================= CHANGELOG ================= -->
+  <section class="vue" id="vue-catalogue">
+    <div class="panneau" style="margin-bottom:14px">
+      <h3>Où en suis-je ?</h3>
+      <p class="vide-note" style="margin-bottom:10px">Choisissez un ensemble à collectionner : chaque pièce du catalogue s'affiche, possédée ou non, avec le détail des ateliers et des tranches.</p>
+      <div class="outils" style="margin-bottom:0">
+        <select id="catFamille"></select>
+        <select id="catPays"></select>
+        <select id="catAffichage">
+          <option value="tout">Tout afficher</option>
+          <option value="manquantes">Manquantes seulement</option>
+          <option value="possedees">Possédées seulement</option>
+          <option value="partielles">Variantes incomplètes</option>
+        </select>
+        <span class="compteur" id="catCompteur"></span>
+      </div>
+    </div>
+    <div id="catBarre"></div>
+    <div id="catGrille" class="grille-pieces"></div>
+    <p class="vide-note" id="catVide" style="display:none"></p>
+  </section>
+
   <section class="vue" id="vue-completude">
     <div id="vueCompletude"></div>
   </section>
@@ -734,6 +771,18 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
       <h3>Catalogues de référence</h3>
       <p class="vide-note" style="margin-bottom:10px">Activez seulement les catalogues qui vous intéressent : chacun est téléchargé puis gardé hors-ligne. Moins de catalogues = application plus rapide.</p>
       <div id="listeModules"><p class="vide-note">Aucun manifeste de catalogue trouvé (ouvrez l'app en ligne une fois).</p></div>
+    </div>
+    <div class="panneau" style="margin-bottom:14px">
+      <h3>Effacer les données</h3>
+      <p class="vide-note" style="margin-bottom:10px">
+        Supprime définitivement ce qui est enregistré dans ce navigateur.
+        <b>Exportez d'abord votre collection</b> : cette action est irréversible.
+      </p>
+      <div class="form-actions" style="justify-content:flex-start;flex-wrap:wrap">
+        <button class="btn-clair" onclick="ouvrirExport()">⬇ Exporter d'abord</button>
+        <button class="btn-clair" onclick="effacerDonnees('catalogues')">Vider les catalogues téléchargés</button>
+        <button class="btn-danger" onclick="effacerDonnees('tout')">Tout effacer</button>
+      </div>
     </div>
     <div class="panneau" style="margin-bottom:14px"><h3>Le Médaillier — versions</h3><p class="vide-note" id="clFooter"></p></div>
     <div id="listeChangelog"></div>
@@ -1114,6 +1163,12 @@ function ateliersAttendus(p){
 }
 /* Les deux tranches A/B s'appliquent-elles ? (2 € commémoratives et courantes) */
 function tranchesAttendues(p){
+  // Toutes les 2 € n'ont pas deux sens de tranche : Malte, par exemple,
+  // n'en frappe qu'un. La case « tranche unique » de la fiche le déclare,
+  // et l'information vaut pour tous les exemplaires du même type.
+  const cle = cleType(p);
+  const uneSeule = etat.pieces.some(x=>cleType(x)===cle && x.trancheUnique);
+  if(uneSeule || p.trancheUnique) return null;
   const f = normTxt(p.valeurFaciale||p.nom||"");
   return /^2\s*(euro|€)/.test(f) ? TRANCHES_2E.slice() : null;
 }
@@ -1368,14 +1423,28 @@ function rendreCollection(){
 
   $("#compteur").textContent = liste.length + " / " + etat.pieces.length;
   $("#videCollection").style.display = etat.pieces.length? "none":"block";
+  /* Un même code de rangement attribué à deux pièces est presque toujours une
+     erreur de saisie : on le repère pour l'alerter sur la carte. */
+  const parEmplacement = {};
+  for(const p of etat.pieces){
+    if(p.vendu || !p.emplacement) continue;
+    const k = normTxt(p.emplacement);
+    (parEmplacement[k] = parEmplacement[k] || []).push(p);
+  }
+  const emplacementsEnDoublon = new Set(
+    Object.entries(parEmplacement).filter(([,l])=>l.length>1).map(([k])=>k));
+
   $("#grillePieces").innerHTML = liste.map(p=>{
     const pv = plusValue(p);
     const imgC = p.miniature||p.photoAvers||p.photoAversUrl;
     const photo = imgC ? `style="background-image:url('${imgC}')"` : "";
+    const conflit = p.emplacement ? emplacementsEnDoublon.has(normTxt(p.emplacement)) : false;
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
+      ${p.emplacement?`<span class="piece-empl ${conflit?"conflit":""}"
+        title="${conflit?"⚠ Cet emplacement est déjà utilisé par une autre pièce":"Emplacement"} : ${esc(p.emplacement)}">${conflit?"⚠ ":"📍"}${esc(p.emplacement)}</span>`:""}
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
-      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${lettreTranche(p)?` · <b class="tr-mien">tranche ${lettreTranche(p)}</b>`:""}${rangExemplaire(p)}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
+      <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${rangExemplaire(p)}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
       ${bandeauVariantes(p)}
       <div class="piece-bas">
         <span class="pb-etat">${pastilleCompletude(p)}${p.grade?`<span class="chip-grade">${esc(p.grade)}</span>`:""}</span>
@@ -1425,6 +1494,7 @@ function rafraichir(){
   secu("majFiltres", majFiltres);
   secu("modules", rendreModules);
   secu("completude", rendreCompletude);
+  secu("catalogueProgression", rendreCatalogueProgression);
   invaliderCorpus();
   secu("dashboard", rendreDashboard);
   secu("collection", rendreCollection);
@@ -1563,6 +1633,11 @@ function ouvrirFormulaire(id){
         <option value="medaille" ${p?.axeFrappe==="medaille"?"selected":""}>Frappe médaille (axe 12 h)</option>
       </select></div>
       <div class="champ"><label>Tranche</label><input id="f-tranche" value="${v("tranche")}" placeholder="Lisse, cannelée, inscrite en relief…"></div>
+      <div class="champ champ-large"><label class="case-ligne">
+        <input type="checkbox" id="f-trancheUnique" ${p?.trancheUnique?"checked":""}>
+        <span>Ce type n'existe qu'avec <b>une seule tranche</b>
+          <small>(cas de Malte, des 1 € et de nombreuses pièces : ne pas les compter comme incomplètes)</small></span>
+      </label></div>
       <div class="champ"><label>Variante tranche</label><select id="f-varianteTranche">
         <option value=""></option>
         <option value="A" ${p?.varianteTranche==="A"?"selected":""}>Tranche A</option>
@@ -1659,6 +1734,7 @@ async function sauverFormulaire(id){
     coteEstimee:lire("coteEstimee",1), dateCote:lire("dateCote"), sourceCote:lire("sourceCote"),
     numeroKM:lire("numeroKM"), lienNumista:lienNumistaFR(lire("lienNumista")), notes:lire("notes"),
     categorie: ($("#f-categorie") ? $("#f-categorie").value : "") || undefined,
+    trancheUnique: !!($("#f-trancheUnique") && $("#f-trancheUnique").checked) || undefined,
     photoAvers:photosTemp.photoAvers, photoRevers:photosTemp.photoRevers,
     photoAversUrl:(!photosTemp.photoAvers && window._urlsCata) ? window._urlsCata.avers : p.photoAversUrl,
     photoReversUrl:(!photosTemp.photoRevers && window._urlsCata) ? window._urlsCata.revers : p.photoReversUrl,
@@ -1935,6 +2011,7 @@ surClic("btnImport", ()=>ouvrirImport());
 surClic("btnExport", ()=>ouvrirExport());
 surClic("btnCours", ()=>ouvrirCours());
 surClic("btnRecherche", ()=>ouvrirRecherche());
+["catFamille","catPays","catAffichage"].forEach(id=>surInput(id, ()=>rendreCatalogueProgression()));
 ["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreCompletude","filtreCategorie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, ()=>rendreCollection()));
 let _debRech;
 surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
@@ -3659,8 +3736,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "12.5";
+const VERSION_ACTUELLE = "13.0";
 const CHANGELOG = [
+  { v:"13.0", type:"majeure", date:"2026-08", titre:"Catalogue de progression et rangement",
+    points:["Nouvel onglet CATALOGUE : choisissez une famille (2 € commémoratives, cents…) et un pays, et voyez chaque pièce — possédée en couleur, manquante en grisé","Ateliers, tranches et nombre d'exemplaires affichés sur chaque fiche du catalogue","L'emplacement de rangement apparaît en haut à droite des cartes","Alerte si deux pièces portent le même code de rangement","Case « tranche unique » : Malte, les 1 €… ne comptent plus comme incomplètes","Bouton d'effacement des données, avec double confirmation et export préalable","La mention « tranche A » disparaît du sous-titre : le bandeau juste dessous la donne déjà"] },
   { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
     points:["Téléphone : les filtres ne se tassent plus jusqu'à devenir illisibles — deux par ligne, largeur lisible","Le grade ne colle plus au prix en bas des cartes","Séries : toutes les lignes suivent la même présentation, avec la même pastille d'état","Libellés abrégés : « Belgique » au lieu de « Belgique — 2 euros Introduction de l'euro (10 ans) », le nom commun étant rappelé une fois en tête"] },
   { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
@@ -3687,6 +3766,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"13.0", type:"majeure", date:"2026-08", titre:"Catalogue de progression et rangement",
+    points:["Nouvel onglet CATALOGUE : choisissez une famille (2 € commémoratives, cents…) et un pays, et voyez chaque pièce — possédée en couleur, manquante en grisé","Ateliers, tranches et nombre d'exemplaires affichés sur chaque fiche du catalogue","L'emplacement de rangement apparaît en haut à droite des cartes","Alerte si deux pièces portent le même code de rangement","Case « tranche unique » : Malte, les 1 €… ne comptent plus comme incomplètes","Bouton d'effacement des données, avec double confirmation et export préalable","La mention « tranche A » disparaît du sous-titre : le bandeau juste dessous la donne déjà"] },
   { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
     points:["Téléphone : les filtres ne se tassent plus jusqu'à devenir illisibles — deux par ligne, largeur lisible","Le grade ne colle plus au prix en bas des cartes","Séries : toutes les lignes suivent la même présentation, avec la même pastille d'état","Libellés abrégés : « Belgique » au lieu de « Belgique — 2 euros Introduction de l'euro (10 ans) », le nom commun étant rappelé une fois en tête"] },
   { v:"12.4", type:"mineure", date:"2026-08", titre:"Carte recadrée, séries reformatées",
@@ -3770,6 +3851,180 @@ function rendreModules(){
     basculerModule(b.dataset.mod, b.dataset.on!=="1").then(()=>rendreModules());
   }));
 }
+/* Effacement des données locales.
+   « catalogues » : ne vide que le catalogue de référence téléchargé —
+   la collection personnelle est intacte, et les catalogues se
+   re-téléchargent à la prochaine ouverture en ligne.
+   « tout » : efface aussi la collection, les séries et la wishlist. */
+async function effacerDonnees(portee){
+  const total = etat.pieces.length;
+  if(portee==="tout"){
+    if(!confirm("EFFACER TOUTES LES DONNÉES ?\n\n"+total+" pièce(s), séries, wishlist et catalogues seront supprimées de ce navigateur.\n\nCette action est IRRÉVERSIBLE. Avez-vous exporté votre collection ?")) return;
+    const mot = prompt("Pour confirmer, tapez : EFFACER");
+    if((mot||"").trim().toUpperCase()!=="EFFACER"){ toast("Effacement annulé"); return; }
+  } else {
+    if(!confirm("Vider les catalogues téléchargés ?\n\nVotre collection n'est PAS touchée. Les catalogues seront retéléchargés à la prochaine ouverture en ligne.")) return;
+  }
+  try{
+    if(portee==="tout"){
+      for(const p of etat.pieces.slice()) await dbSupprimer(p.id);
+      etat.pieces=[]; etat.series=[]; etat.wishlist=[];
+      await dbConfigEcrire("series",[]); await dbConfigEcrire("wishlist",[]);
+    }
+    // Catalogues : index, paquets et clé de déchiffrement
+    for(const m of (etat.manifeste?.modules||[])){
+      await dbConfigSupprimer("index:"+m.id);
+      for(let b=0;b<(m.nbPaquets||0);b++) await dbConfigSupprimer("paquet:"+m.id+":"+b);
+    }
+    await dbConfigSupprimer("manifeste");
+    await dbConfigSupprimer("modulesActifs");
+    await dbConfigSupprimer("cleCatalogue");
+    await dbConfigSupprimer("seriesCatalogue");
+    etat.catalogue=null; etat.manifeste=null; etat.modulesActifs=[];
+    if(typeof CLE_CATALOGUE!=="undefined") CLE_CATALOGUE=null;
+    invaliderCorpus();
+    // Vider aussi le cache du service worker
+    if(window.caches){ const cles=await caches.keys(); await Promise.all(cles.map(k=>caches.delete(k))); }
+  }catch(e){ console.error("Effacement :", e); }
+
+  ouvrirModale("Données effacées", `
+    <p>${portee==="tout" ? "Toutes les données ont été supprimées de ce navigateur." : "Les catalogues ont été vidés. Votre collection est intacte."}</p>
+    <p class="vide-note">L'application va se recharger.</p>
+    <div class="form-actions"><button class="btn-or" onclick="location.reload()">Recharger</button></div>`);
+  setTimeout(()=>location.reload(), 2500);
+}
+
+/* ================================================================
+   CATALOGUE DE PROGRESSION — « où en suis-je ? »
+   Choisir une famille (2 € commémoratives, pièces courantes…) et un
+   pays, puis voir CHAQUE pièce du catalogue : possédée ou non, avec
+   ses ateliers et tranches obtenus et le nombre d'exemplaires.
+================================================================= */
+const CAT_FAMILLES = [
+  {id:"comm2e",  nom:"2 € commémoratives",
+   test:e=>/^2\s*euro/i.test(e.valeurFaciale||"") && /commémorative/i.test(e.categorie||"")},
+  {id:"cour2e",  nom:"2 € courantes",
+   test:e=>/^2\s*euro/i.test(e.valeurFaciale||"") && !/commémorative/i.test(e.categorie||"")},
+  {id:"cour1e",  nom:"1 € courantes",
+   test:e=>/^1\s*euro/i.test(e.valeurFaciale||"")},
+  {id:"cents",   nom:"Cents (1 à 50)",
+   test:e=>/cent/i.test(e.valeurFaciale||"")},
+  {id:"euroTout",nom:"Toutes les pièces en euro",
+   test:e=>/euro|cent/i.test(e.valeurFaciale||"")},
+  {id:"tout",    nom:"Tout le catalogue actif", test:()=>true},
+];
+
+/* Les exemplaires que je possède d'une fiche de catalogue */
+function mesExemplairesDe(e){
+  const id = e.idNumista;
+  return etat.pieces.filter(p=>{
+    if(p.vendu) return false;
+    const pid = (p.lienNumista||"").match(/pieces(\d+)/)?.[1] || p.idNumista;
+    if(id && pid) return pid===String(id);
+    return normTxt(p.nom||"")===normTxt(e.nom||"")
+        && String(p.annee||"")===String((e.match||{}).annee||"");
+  });
+}
+
+function rendreCatalogueProgression(){
+  const grille=$("#catGrille"); if(!grille) return;
+  const selF=$("#catFamille"), selP=$("#catPays"), selA=$("#catAffichage");
+
+  // selF.options n'existe pas tant que la vue n'a jamais été affichée
+  if(selF && !(selF.options||[]).length)
+    selF.innerHTML = CAT_FAMILLES.map(f=>`<option value="${f.id}">${esc(f.nom)}</option>`).join("");
+
+  if(!etat.catalogue || !Array.isArray(etat.catalogue.pieces)){
+    grille.innerHTML=""; 
+    $("#catVide").style.display="block";
+    $("#catVide").textContent="Catalogue non chargé : ouvrez l'application en ligne une fois, puis activez un catalogue dans l'onglet Nouveautés.";
+    return;
+  }
+  const fam = CAT_FAMILLES.find(f=>f.id===(selF?.value)) || CAT_FAMILLES[0];
+  let lot = etat.catalogue.pieces.filter(fam.test);
+
+  // Liste des pays de cette famille
+  if(selP){
+    const pays=[...new Set(lot.map(e=>(e.match||{}).pays).filter(Boolean))].sort((a,b)=>a.localeCompare(b,"fr"));
+    const garde=selP.value;
+    selP.innerHTML=`<option value="">Tous pays</option>`+pays.map(p=>`<option>${esc(p)}</option>`).join("");
+    selP.value = pays.includes(garde)?garde:"";
+    if(selP.value) lot = lot.filter(e=>(e.match||{}).pays===selP.value);
+  }
+  lot.sort((a,b)=>((a.match||{}).pays||"").localeCompare((b.match||{}).pays||"","fr")
+                 || ((a.match||{}).annee||0)-((b.match||{}).annee||0)
+                 || String(a.nom).localeCompare(String(b.nom),"fr"));
+
+  // Bilan
+  let nEus=0, nVarTot=0, nVarEus=0;
+  const fiches = lot.map(e=>{
+    const miens = mesExemplairesDe(e);
+    const nb = miens.reduce((s,p)=>s+(parseInt(p.quantite)||1),0);
+    if(miens.length) nEus++;
+    const ref = miens[0] || {nom:e.nom, pays:(e.match||{}).pays, annee:(e.match||{}).annee,
+                             valeurFaciale:e.valeurFaciale, lienNumista:e.lienNumista};
+    const ats = e.ateliers || ateliersAttendus(ref);
+    const trs = e.tranches || tranchesAttendues(ref);
+    const atEus=new Set(), trEus=new Set(), couples=new Set();
+    for(const p of miens){
+      const a=(atelierAllemand(p)||{}).lettre||null, t=lettreTranche(p);
+      if(a) atEus.add(a); if(t) trEus.add(t);
+      if(a||t) couples.add((a||"?")+"/"+(t||"?"));
+    }
+    const total=(ats?ats.length:1)*(trs?trs.length:1);
+    const obtenu = (ats&&trs) ? couples.size : (ats? atEus.size : (trs? trEus.size : (miens.length?1:0)));
+    nVarTot += total; nVarEus += Math.min(obtenu,total);
+    return {e, miens, nb, ats, trs, atEus, trEus, couples, total, obtenu};
+  });
+
+  const aff = selA?.value || "tout";
+  const visibles = fiches.filter(f=>
+    aff==="manquantes" ? !f.miens.length :
+    aff==="possedees"  ? f.miens.length>0 :
+    aff==="partielles" ? (f.miens.length>0 && f.obtenu<f.total) : true);
+
+  $("#catCompteur").textContent = `${nEus} / ${lot.length} pièces`;
+  $("#catBarre").innerHTML = lot.length ? `<div class="panneau" style="margin-bottom:14px">
+    <div class="ligne-niveau"><span class="lbl">Pièces différentes</span>
+      <span class="barre"><i style="width:${Math.round(100*nEus/lot.length)}%;background:var(--or)"></i></span>
+      <span class="num">${nEus}/${lot.length}</span></div>
+    <div class="ligne-niveau"><span class="lbl">Variantes (ateliers, tranches)</span>
+      <span class="barre"><i style="width:${nVarTot?Math.round(100*nVarEus/nVarTot):0}%;background:var(--cuivre)"></i></span>
+      <span class="num">${nVarEus}/${nVarTot}</span></div>
+  </div>` : "";
+
+  $("#catVide").style.display = visibles.length? "none":"block";
+  $("#catVide").textContent = lot.length? "Aucune pièce ne correspond à ce filtre." : "Aucune pièce dans cette famille pour les catalogues activés.";
+
+  grille.innerHTML = visibles.map(f=>{
+    const {e,miens,nb,ats,trs,atEus,trEus,couples,total,obtenu}=f;
+    const eu = miens.length>0;
+    const img = e.imageAvers;
+    const groupe = (liste,eus,cle)=> liste ? `<span class="var-groupe">${liste.map(x=>
+        `<i class="${(cle==="couple"?couples.has(x):eus.has(x))?"on":""}">${x}</i>`).join("")}</span>` : "";
+    let variantes="";
+    if(ats&&trs){
+      variantes = `<div class="variantes croise">${ats.map(a=>`
+        <span class="var-col ${trs.some(t=>couples.has(a+"/"+t))?"eu":""}"><i>${a}</i>
+          <span class="var-tr">${trs.map(t=>`<b class="${couples.has(a+"/"+t)?"on":""}">${t}</b>`).join("")}</span>
+        </span>`).join("")}</div>`;
+    } else if(ats||trs){
+      variantes = `<div class="variantes">${ats?groupe(ats,atEus):groupe(trs,trEus)}</div>`;
+    }
+    return `<div class="carte-piece cat-fiche ${eu?"":"absente"}" ${eu?`data-id="${miens[0].id}" role="button" tabindex="0"`:""}>
+      ${nb>1?`<span class="piece-empl" style="background:#E7EDE6;color:var(--vert);border-color:rgba(62,122,78,.35)">×${nb}</span>`:""}
+      <div class="piece-photo ${RIMS[(miens[0]||{}).metal]||"rim-autre"}" ${img?`style="background-image:url('${img}')"`:""}>${img?"":"🪙"}</div>
+      <div class="piece-nom">${esc(e.nom)}</div>
+      <div class="piece-sous">${esc((e.match||{}).pays||"")}${(e.match||{}).annee?" · "+(e.match||{}).annee:""}</div>
+      ${variantes}
+      <div class="piece-bas">
+        <span class="pb-etat">${eu?`<span class="chip-grade">${obtenu}/${total}</span>`:`<span class="chip-mini">à trouver</span>`}</span>
+        <span class="pb-valeur">${eu?`<span class="piece-cote num">${nb} ex.</span>`:""}</span>
+      </div>
+    </div>`;
+  }).join("");
+}
+
 function rendreChangelog(){
   const el=$("#listeChangelog"); if(!el) return;
   const f=$("#clFooter"); if(f) f.textContent="Version actuelle : "+VERSION_ACTUELLE+" — "+CHANGELOG.length+" versions publiées.";

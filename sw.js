@@ -9,7 +9,7 @@
        satureraient le quota du navigateur ;
      - les requêtes non-GET.
 */
-const CACHE = "medaillier-v29";
+const CACHE = "medaillier-v30";
 const FICHIERS = [
   "./", "./index.html", "./manifest.webmanifest",
   "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png",
