@@ -261,9 +261,11 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .cat-fiche.absente:hover{opacity:.85;filter:none}
 .chip-mini{font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:20px;background:#F0ECE0;color:var(--encre2)}
 .carte-piece{position:relative}
+/* Dans le flux, au-dessus de la photo : en position absolue, la bulle
+   mordait sur la pièce et gênait la lecture du motif. */
+.piece-empl-ligne{display:flex;justify-content:flex-end;margin:-2px 0 4px}
 .piece-empl{
-  position:absolute;top:8px;right:8px;z-index:2;max-width:60%;
-  font-size:.62rem;font-weight:700;padding:3px 7px;border-radius:20px;
+  max-width:100%;font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:20px;
   background:#EFE8D3;color:var(--or-fonce);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis;border:1px solid rgba(184,146,61,.35)
 }
@@ -443,6 +445,27 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .carte-svg{width:100%;max-width:420px;height:auto;display:block;margin:0 auto}
 /* La carte est plus haute que large (l'Europe l'est) : on la centre et on
    plafonne sa hauteur pour qu'elle n'écrase pas le tableau de bord. */
+.carte-zone{display:flex;gap:14px;align-items:flex-start}
+.carte-principale{flex:1;min-width:0}
+.carte-petits{flex:0 0 132px;display:flex;flex-direction:column;gap:6px}
+.pastille-pays{
+  display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:10px;
+  border:1px solid var(--ligne);background:#F7F4EC;cursor:pointer;font:inherit;
+  font-size:.8rem;text-align:left;width:100%;transition:border-color .12s
+}
+.pastille-pays:hover{border-color:var(--or)}
+.pastille-pays .pp-nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--encre2)}
+.pastille-pays .pp-nb{font-weight:700;font-size:.82rem;color:var(--ligne)}
+.pastille-pays.eu{background:var(--or);border-color:var(--or-fonce)}
+.pastille-pays.eu .pp-nom{color:#2A2510;font-weight:600}
+.pastille-pays.eu .pp-nb{color:#2A2510}
+.carte-petits-titre{font-size:.64rem;text-transform:uppercase;letter-spacing:.12em;color:var(--encre2);font-weight:700;margin-bottom:2px}
+@media (max-width:820px){
+  .carte-zone{flex-direction:column}
+  .carte-petits{flex:1 1 auto;width:100%;flex-direction:row;flex-wrap:wrap}
+  .pastille-pays{width:auto;flex:1 1 calc(33% - 6px)}
+  .carte-petits-titre{width:100%}
+}
 .carte-svg{display:block;margin:0 auto;width:auto;max-width:100%;height:auto;
   max-height:min(62vh,560px);border-radius:12px;overflow:hidden;
   border:1px solid var(--ligne);background:#EDF1F2}
@@ -451,8 +474,6 @@ main{max-width:1200px;margin:0 auto;padding:18px 20px 70px}
 .geo-vide{fill:#F7F4EC;stroke:#D8D2C2;stroke-width:.7;stroke-linejoin:round}
 .geo-hors{fill:#F1EEE6;stroke:#E0DACB;stroke-width:.5;pointer-events:none}
 .geo-actifs path{filter:drop-shadow(0 1px 1px rgba(60,50,20,.18))}
-.med-cadre{fill:#EDF1F2;stroke:var(--ligne);stroke-width:.8;stroke-dasharray:3 2}
-.medaillon{cursor:pointer}
 .carte-svg .tuile{cursor:pointer}
 .carte-svg .tuile path,.carte-svg .tuile circle{transition:filter .15s}
 .carte-svg .tuile:hover path,.carte-svg .tuile:hover circle{filter:brightness(1.06)}
@@ -637,8 +658,24 @@ header{padding-top:calc(14px + env(safe-area-inset-top))}
 
     <div class="panneau" style="margin-bottom:16px"><h3>Évolution de la valeur de la collection</h3><div id="graphiqueValeur"></div></div>
 
-    <div class="panneau" style="margin-bottom:16px"><h3>Carte de la collection — pièces par pays</h3>
-      <div id="cartePays"></div><div id="cartAutres"></div>
+    <div class="panneau" style="margin-bottom:16px">
+      <h3 style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <span>Carte de la collection</span>
+        <select id="carteFiltre" style="font:inherit;font-size:.82rem;padding:5px 9px;border:1px solid var(--ligne);border-radius:8px;background:#fff;text-transform:none;letter-spacing:0">
+          <option value="tout">Toutes mes pièces</option>
+          <option value="comm2e">2 € commémoratives</option>
+          <option value="cour2e">2 € courantes</option>
+          <option value="euro1">1 €</option>
+          <option value="cents">Cents</option>
+          <option value="or">Or et argent</option>
+          <option value="avant2002">Avant l'euro</option>
+        </select>
+      </h3>
+      <div class="carte-zone">
+        <div id="cartePays" class="carte-principale"></div>
+        <div id="cartePetits" class="carte-petits"></div>
+      </div>
+      <div id="cartAutres"></div>
       <p class="vide-note" style="margin-top:8px">Touchez un pays pour filtrer la collection.</p>
     </div>
 
@@ -1440,8 +1477,8 @@ function rendreCollection(){
     const photo = imgC ? `style="background-image:url('${imgC}')"` : "";
     const conflit = p.emplacement ? emplacementsEnDoublon.has(normTxt(p.emplacement)) : false;
     return `<div class="carte-piece" data-id="${p.id}" role="button" tabindex="0">
-      ${p.emplacement?`<span class="piece-empl ${conflit?"conflit":""}"
-        title="${conflit?"⚠ Cet emplacement est déjà utilisé par une autre pièce":"Emplacement"} : ${esc(p.emplacement)}">${conflit?"⚠ ":"📍"}${esc(p.emplacement)}</span>`:""}
+      ${p.emplacement?`<div class="piece-empl-ligne"><span class="piece-empl ${conflit?"conflit":""}"
+        title="${conflit?"⚠ Cet emplacement est déjà utilisé par une autre pièce":"Emplacement"} : ${esc(p.emplacement)}">${conflit?"⚠ ":"📍 "}${esc(p.emplacement)}</span></div>`:""}
       <div class="piece-photo ${RIMS[p.metal]||"rim-autre"}" ${photo}>${p.photoAvers?"":"🪙"}</div>
       <div class="piece-nom">${esc(p.nom)}</div>
       <div class="piece-sous">${esc(p.pays||"")}${p.annee?" · "+esc(p.annee):""}${(p._at=atelierAllemand(p))?" · "+p._at.lettre:""}${rangExemplaire(p)}${p.estLot?` <span class="badge-lot">Rouleau · ${parseInt(p.quantite)||1}</span>`:((parseInt(p.quantite)||1)>1?` <span class="badge-qte">×${parseInt(p.quantite)}</span>`:"")}${p.doublon&&!p.vendu?` <span class="badge-qte" style="background:var(--cuivre)">Échange</span>`:""}${p.vendu?` <span class="badge-qte" style="background:var(--rouge)">Vendue</span>`:""}</div>
@@ -2012,6 +2049,7 @@ surClic("btnExport", ()=>ouvrirExport());
 surClic("btnCours", ()=>ouvrirCours());
 surClic("btnRecherche", ()=>ouvrirRecherche());
 ["catFamille","catPays","catAffichage"].forEach(id=>surInput(id, ()=>rendreCatalogueProgression()));
+surInput("carteFiltre", ()=>rendreCarte());
 ["filtrePays","filtreMetal","filtreGrade","filtreEmplacement","filtreMonnaie","filtreCompletude","filtreCategorie","filtreNature","filtreStatut","tri"].forEach(id=>surInput(id, ()=>rendreCollection()));
 let _debRech;
 surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCollection,180); });
@@ -2871,9 +2909,21 @@ function couleurTuile(n){
   if(n<10) return {f:"#B8923D",t:"#FFFFFF",s:"#A07E31"};
   return {f:"#8A6B24",t:"#FFFFFF",s:"#6F551B"};
 }
+/* Filtres de la carte : restreindre le comptage à une famille de pièces */
+const CARTE_FILTRES = {
+  tout:      ()=>true,
+  comm2e:    p=>/^2\s*euro/i.test(p.valeurFaciale||"") && /comm[ée]morative/i.test(p.categorie||inferCategorie(p)),
+  cour2e:    p=>/^2\s*euro/i.test(p.valeurFaciale||"") && !/comm[ée]morative/i.test(p.categorie||inferCategorie(p)),
+  euro1:     p=>/^1\s*euro/i.test(p.valeurFaciale||""),
+  cents:     p=>/cent/i.test(p.valeurFaciale||""),
+  or:        p=>["or","argent"].includes(p.metal),
+  avant2002: p=>(parseInt(p.annee)||9999)<2002,
+};
 function rendreCarte(){
   const el=$("#cartePays"); if(!el) return;
-  const ps = etat.pieces.filter(p=>!p.vendu);
+  const nomFiltre = ($("#carteFiltre")||{}).value || "tout";
+  const garder = CARTE_FILTRES[nomFiltre] || CARTE_FILTRES.tout;
+  const ps = etat.pieces.filter(p=>!p.vendu && garder(p));
   const compte={}, regions={}, autres={};
   for(const p of ps){
     const q = p.estLot ? 1 : (parseInt(p.quantite)||1);
@@ -2916,10 +2966,12 @@ function rendreCarte(){
 
   // Chypre est trop à l'est (33°) : l'inclure creuserait un vide de mer.
   // On la sort de la carte principale et on la place en médaillon.
-  const EN_MEDAILLON = ["CY"];
+  /* Petits pays : trop menus pour être visés au doigt sur la carte.
+     Ils sont présentés en pastilles à côté (à droite, ou dessous sur mobile). */
+  const EN_MEDAILLON = ["CY","MT","MC","SM","VA","AD","LU"];
 
   const CADRAGE = ["FR","DE","ES","IT","BE","NL","PT","AT","GR","IE","FI","SE","DK","PL",
-                   "CZ","SK","SI","HR","HU","RO","BG","EE","LV","LT","LU","CH","GB","NO"];
+                   "CZ","SK","SI","HR","HU","RO","BG","EE","LV","LT","CH","GB","NO"];
   let bx0=1e9,by0=1e9,bx1=-1e9,by1=-1e9;
   for(const f of (rendreCarte._cadre ? [] : GEO_EUROPE)){
     if(!CADRAGE.includes(f.c)) continue;
@@ -2988,37 +3040,24 @@ function rendreCarte(){
         font-weight="700" fill="${c.t}" font-family="inherit" pointer-events="none">${n}</text></g>`;
   }
 
-  /* Médaillon : Chypre à son échelle, dans un cadre en bas à droite —
-     usage courant des atlas pour les territoires excentrés. */
-  let medaillon="";
-  for(const code of EN_MEDAILLON){
-    const f = GEO_EUROPE.find(x=>x.c===code); if(!f) continue;
-    const n = compte[code]||0, c = couleurTuile(n);
-    // Cadre local du pays, puis mise à l'échelle dans une vignette
-    let ax0=1e9,ay0=1e9,ax1=-1e9,ay1=-1e9;
-    for(const ring of f.p) for(const [lo,la] of ring){
-      const [x,y]=proj(lo,la);
-      if(x<ax0)ax0=x; if(x>ax1)ax1=x; if(y<ay0)ay0=y; if(y>ay1)ay1=y;
-    }
-    const cote = Math.min(vbw,vbh)*0.13;
-    const k = cote/Math.max(ax1-ax0, ay1-ay0)*0.66;
-    const px = vbx+vbw-cote-6, py = vby+vbh-cote-6;    // coin bas-droit
-    const cx = px+cote/2 - ((ax0+ax1)/2)*k, cy = py+cote/2 - ((ay0+ay1)/2)*k;
-    const d = f.p.map(ring=>"M"+ring.map(([lo,la])=>{
-      const [x,y]=proj(lo,la); return (x*k+cx).toFixed(1)+","+(y*k+cy).toFixed(1);
-    }).join("L")+"Z").join("");
-    medaillon = `<g data-code="${code}" class="tuile medaillon">
-      <title>${esc((PAYS[code]||{}).nom||f.n)} : ${n} pièce(s)</title>
-      <rect x="${px.toFixed(1)}" y="${py.toFixed(1)}" width="${cote.toFixed(1)}" height="${cote.toFixed(1)}"
-        rx="5" class="med-cadre"/>
-      <path d="${d}" ${n?`fill="${c.f}" stroke="${c.s}" stroke-width="1"`:`class="geo-vide"`}/>
-      <text x="${(px+4).toFixed(1)}" y="${(py+10).toFixed(1)}" font-size="7" fill="var(--encre2)"
-        font-family="inherit" pointer-events="none">${code}</text>
-      ${n?`<text x="${(px+cote-5).toFixed(1)}" y="${(py+cote-4).toFixed(1)}" text-anchor="end" font-size="10"
-        font-weight="700" fill="${c.t}" paint-order="stroke" stroke="${c.f}" stroke-width="2.5"
-        font-family="inherit" pointer-events="none">${n}</text>`:""}
-    </g>`;
+  /* Pastilles des petits pays, hors de la carte : plus lisibles et
+     bien plus faciles à toucher qu'un point de quelques pixels. */
+  const petitsEl = $("#cartePetits");
+  if(petitsEl){
+    const lignes = EN_MEDAILLON
+      .filter(c=>PAYS[c])
+      .map(c=>({code:c, nom:PAYS[c].nom, n:compte[c]||0}))
+      .sort((a,b)=>b.n-a.n || a.nom.localeCompare(b.nom,"fr"));
+    petitsEl.innerHTML =
+      `<div class="carte-petits-titre">Petits territoires</div>` +
+      lignes.map(l=>`<button type="button" class="pastille-pays ${l.n?"eu":""}" data-code="${l.code}"
+          title="${esc(l.nom)} : ${l.n} pièce(s)">
+          <span class="pp-nom">${esc(l.nom)}</span><span class="pp-nb">${l.n||"–"}</span>
+        </button>`).join("");
+    petitsEl.querySelectorAll("[data-code]").forEach(b=>
+      b.addEventListener("click", ()=>filtrerParPaysCode(b.dataset.code)));
   }
+  const medaillon = "";
 
   el.innerHTML = `<svg class="carte-svg" viewBox="${vbx.toFixed(1)} ${vby.toFixed(1)} ${vbw.toFixed(1)} ${vbh.toFixed(1)}"
       role="img" aria-label="Carte d'Europe : nombre de pièces par pays">
@@ -3736,8 +3775,10 @@ async function preRemplirCatalogue(){
 
 "use strict";
 /* Changelog — historique des versions du Médaillier */
-const VERSION_ACTUELLE = "13.0";
+const VERSION_ACTUELLE = "13.1";
 const CHANGELOG = [
+  { v:"13.1", type:"mineure", date:"2026-08", titre:"Carte : petits pays et filtres",
+    points:["Malte, Chypre, Monaco, Saint-Marin, Vatican, Andorre et Luxembourg passent en pastilles à côté de la carte — à droite sur ordinateur, dessous sur téléphone","Fini les points de quelques pixels impossibles à viser au doigt","Filtre sur la carte : toutes les pièces, 2 € commémoratives, 2 € courantes, 1 €, cents, or et argent, avant l'euro","L'étiquette d'emplacement ne mord plus sur la photo de la pièce"] },
   { v:"13.0", type:"majeure", date:"2026-08", titre:"Catalogue de progression et rangement",
     points:["Nouvel onglet CATALOGUE : choisissez une famille (2 € commémoratives, cents…) et un pays, et voyez chaque pièce — possédée en couleur, manquante en grisé","Ateliers, tranches et nombre d'exemplaires affichés sur chaque fiche du catalogue","L'emplacement de rangement apparaît en haut à droite des cartes","Alerte si deux pièces portent le même code de rangement","Case « tranche unique » : Malte, les 1 €… ne comptent plus comme incomplètes","Bouton d'effacement des données, avec double confirmation et export préalable","La mention « tranche A » disparaît du sous-titre : le bandeau juste dessous la donne déjà"] },
   { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
@@ -3766,6 +3807,8 @@ const CHANGELOG = [
     points:["Correction majeure : une pièce ajoutée depuis la recherche récupérait les données et l'image d'une AUTRE pièce (le plus souvent allemande)","Le formulaire reprend désormais toute la fiche choisie : nom, pays, année, faciale, poids, diamètre, métal, titre, KM#, catégorie, axe, lien, composition","Le métal et le titre sont déduits automatiquement de la composition (« Argent 925‰ » → argent, 925)","Le bouton « Pré-remplir » identifie la bonne pièce dans 100 % des cas testés (contre 13 % avant)"] },
   { v:"11.0", type:"majeure", date:"2026-08", titre:"55 séries de collection",
     points:["55 séries reconstituées depuis les séries officielles Numista, étendues à tout le catalogue : 687 pièces à collectionner","8 émissions communes (Traité de Rome, Erasmus, Drapeau européen, 10 ans de l euro…) et 47 séries nationales","Länder allemands, Régions françaises, UNESCO, Europa Star, Provinces finlandaises, Régions baltes, Sites maltais…","Vos pièces se rattachent automatiquement à leur série, avec les 5 ateliers allemands quand ils s appliquent","Correction : les séries larges captaient les pièces des séries précises ; les séries autres que 2 € étaient ignorées"] },
+  { v:"13.1", type:"mineure", date:"2026-08", titre:"Carte : petits pays et filtres",
+    points:["Malte, Chypre, Monaco, Saint-Marin, Vatican, Andorre et Luxembourg passent en pastilles à côté de la carte — à droite sur ordinateur, dessous sur téléphone","Fini les points de quelques pixels impossibles à viser au doigt","Filtre sur la carte : toutes les pièces, 2 € commémoratives, 2 € courantes, 1 €, cents, or et argent, avant l'euro","L'étiquette d'emplacement ne mord plus sur la photo de la pièce"] },
   { v:"13.0", type:"majeure", date:"2026-08", titre:"Catalogue de progression et rangement",
     points:["Nouvel onglet CATALOGUE : choisissez une famille (2 € commémoratives, cents…) et un pays, et voyez chaque pièce — possédée en couleur, manquante en grisé","Ateliers, tranches et nombre d'exemplaires affichés sur chaque fiche du catalogue","L'emplacement de rangement apparaît en haut à droite des cartes","Alerte si deux pièces portent le même code de rangement","Case « tranche unique » : Malte, les 1 €… ne comptent plus comme incomplètes","Bouton d'effacement des données, avec double confirmation et export préalable","La mention « tranche A » disparaît du sous-titre : le bandeau juste dessous la donne déjà"] },
   { v:"12.5", type:"correction", date:"2026-08", titre:"Affichage mobile et séries uniformes",
@@ -4012,7 +4055,7 @@ function rendreCatalogueProgression(){
       variantes = `<div class="variantes">${ats?groupe(ats,atEus):groupe(trs,trEus)}</div>`;
     }
     return `<div class="carte-piece cat-fiche ${eu?"":"absente"}" ${eu?`data-id="${miens[0].id}" role="button" tabindex="0"`:""}>
-      ${nb>1?`<span class="piece-empl" style="background:#E7EDE6;color:var(--vert);border-color:rgba(62,122,78,.35)">×${nb}</span>`:""}
+      ${nb>1?`<div class="piece-empl-ligne"><span class="piece-empl" style="background:#E7EDE6;color:var(--vert);border-color:rgba(62,122,78,.35)">×${nb}</span></div>`:""}
       <div class="piece-photo ${RIMS[(miens[0]||{}).metal]||"rim-autre"}" ${img?`style="background-image:url('${img}')"`:""}>${img?"":"🪙"}</div>
       <div class="piece-nom">${esc(e.nom)}</div>
       <div class="piece-sous">${esc((e.match||{}).pays||"")}${(e.match||{}).annee?" · "+(e.match||{}).annee:""}</div>
