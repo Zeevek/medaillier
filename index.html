@@ -927,6 +927,19 @@ function dbSauver(p){
     rq.onsuccess=()=>res(); rq.onerror=()=>rej(rq.error);
   });
 }
+/* Sauvegarde groupée : une seule transaction IndexedDB pour tout un lot,
+   au lieu d'une transaction par pièce (coûteux sur les imports/migrations). */
+function dbSauverLot(pieces){
+  return new Promise((res,rej)=>{
+    if(!pieces || !pieces.length) return res();
+    let tx;
+    try{ tx = db.transaction("pieces","readwrite"); }
+    catch(e){ signalerQuota(e); return rej(e); }
+    const store = tx.objectStore("pieces");
+    for(const p of pieces) store.put(p);
+    tx.oncomplete=()=>res(); tx.onerror=()=>{ signalerQuota(tx.error); rej(tx.error); };
+  });
+}
 function dbSupprimer(id){
   return new Promise((res,rej)=>{
     const rq = db.transaction("pieces","readwrite").objectStore("pieces").delete(id);
@@ -1858,22 +1871,25 @@ async function importerTexte(){
   else { $("#rapportImport").textContent="Format non reconnu."; return; }
 
   let ajoutees=0, maj=0, ignorees=0;
+  const parId=new Map(etat.pieces.map((x,idx)=>[x.id,idx]));
+  const aSauver=[];
   for(const brut of pieces){
     if(!brut || !brut.nom){ ignorees++; continue; }
     const p={...brut};
     if(!p.id) p.id=uuid();
     if(p.lienNumista) p.lienNumista = lienNumistaFR(p.lienNumista);
     if(!p.ajoute) p.ajoute=new Date().toISOString().slice(0,10);
-    const i=etat.pieces.findIndex(x=>x.id===p.id);
-    if(i>=0){
+    const i=parId.get(p.id);
+    if(i!==undefined){
       const anc=etat.pieces[i];
       for(const f of ["photoAvers","photoRevers","photoTranche","miniature"]) if(!p[f] && anc[f]) p[f]=anc[f];
       etat.pieces[i]=p; maj++;
-    } else { etat.pieces.push(p); ajoutees++; }
+    } else { parId.set(p.id, etat.pieces.length); etat.pieces.push(p); ajoutees++; }
     if(p.photoAvers && !p.miniature){ try{ p.miniature = await miniatureDepuisDataURL(p.photoAvers); }catch(e){} }
     await detecterSerie(p);
-    await dbSauver(p);
+    aSauver.push(p);
   }
+  await dbSauverLot(aSauver);
   rafraichir();
   $("#rapportImport").textContent =
     `✓ ${ajoutees} ajoutée(s), ${maj} mise(s) à jour` + (ignorees?`, ${ignorees} ignorée(s) (nom manquant)`:"");
@@ -2090,6 +2106,10 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
     console.error(e);
     toast("Attention : stockage local indisponible (mode privé ?)");
   }
+  /* Premier rendu immédiat : les migrations éventuelles ci-dessous se font ensuite,
+     en tâche de fond, plutôt que de bloquer l'affichage initial. */
+  rafraichir();
+  majBandeauSauvegarde();
   /* PWA : service worker (ignoré en ouverture locale) + stockage persistant */
   if("serviceWorker" in navigator && location.protocol.startsWith("http")){
     navigator.serviceWorker.register("sw.js").catch(()=>{});
@@ -2097,64 +2117,115 @@ surInput("recherche", ()=>{ clearTimeout(_debRech); _debRech=setTimeout(rendreCo
   if(navigator.storage && navigator.storage.persist){
     navigator.storage.persist().then(ok=>console.log("Stockage persistant :", ok?"accordé":"refusé"));
   }
+  await executerMigrations();
+})();
+
+/* Migrations one-shot sur la collection. Chacune ne reparcourt les pièces qu'une seule
+   fois grâce à un drapeau persisté dans le store "config" (sauf le re-scan de séries,
+   naturellement borné aux pièces qui n'ont pas encore de série). Les pièces modifiées
+   sont sauvegardées en une seule transaction groupée par migration plutôt qu'une
+   transaction IndexedDB par pièce. */
+async function executerMigrations(){
+  let toucheAffichage=false;
+
   /* Migration v5 : éclatement de l'ancienne série commune en séries par émission */
-  const ancienNomSerie = "2 € Émissions communes zone euro";
-  if(etat.series.some(x=>x.nom===ancienNomSerie)){
-    etat.series = etat.series.filter(x=>x.nom!==ancienNomSerie);
-    await dbConfigEcrire("series", etat.series);
+  if(!(await dbConfigLire("migV5Faite"))){
+    const ancienNomSerie = "2 € Émissions communes zone euro";
+    if(etat.series.some(x=>x.nom===ancienNomSerie)){
+      etat.series = etat.series.filter(x=>x.nom!==ancienNomSerie);
+      await dbConfigEcrire("series", etat.series);
+      const modifiees=[];
+      for(const p of etat.pieces){
+        if(p.serie===ancienNomSerie){
+          p.serie=null; p.serieItem=null;
+          await detecterSerie(p);
+          modifiees.push(p);
+        }
+      }
+      if(modifiees.length){ await dbSauverLot(modifiees); toucheAffichage=true; }
+    }
+    await dbConfigEcrire("migV5Faite", true);
+  }
+
+  /* Normalisation des liens Numista vers la version française */
+  if(!(await dbConfigLire("migLiensNumistaFaite"))){
+    const modifiees=[];
     for(const p of etat.pieces){
-      if(p.serie===ancienNomSerie){
-        p.serie=null; p.serieItem=null;
-        await detecterSerie(p);
-        await dbSauver(p);
+      if(p.lienNumista && p.lienNumista.includes("//en.numista.com")){
+        p.lienNumista = lienNumistaFR(p.lienNumista);
+        modifiees.push(p);
       }
     }
+    if(modifiees.length) await dbSauverLot(modifiees);
+    await dbConfigEcrire("migLiensNumistaFaite", true);
   }
-  /* Normalisation des liens Numista vers la version française */
-  for(const p of etat.pieces){
-    if(p.lienNumista && p.lienNumista.includes("//en.numista.com")){
-      p.lienNumista = lienNumistaFR(p.lienNumista);
-      await dbSauver(p);
-    }
-  }
+
   await chargerCatalogue();
   await chargerSeries();
+
   /* Migration : classer les pièces existantes par monnaie et nature */
-  for(const p of etat.pieces){
-    let modifie=false;
-    if(!p.monnaie){ const m=inferMonnaie(p); if(m){ p.monnaie=m; modifie=true; } }
-    if(!p.nature){ const nn=inferNature(p); if(nn){ p.nature=nn; modifie=true; } }
-    if(modifie) await dbSauver(p);
+  if(!(await dbConfigLire("migMonnaieNatureFaite"))){
+    const modifiees=[];
+    for(const p of etat.pieces){
+      let modifie=false;
+      if(!p.monnaie){ const m=inferMonnaie(p); if(m){ p.monnaie=m; modifie=true; } }
+      if(!p.nature){ const nn=inferNature(p); if(nn){ p.nature=nn; modifie=true; } }
+      if(modifie) modifiees.push(p);
+    }
+    if(modifiees.length){ await dbSauverLot(modifiees); toucheAffichage=true; }
+    await dbConfigEcrire("migMonnaieNatureFaite", true);
   }
-  /* Re-scan : rattacher les pièces déjà enregistrées aux séries (dont les modèles ajoutés depuis) */
-  for(const p of etat.pieces){
-    if(!p.serie) await detecterSerie(p);
+
+  /* Re-scan : rattacher les pièces déjà enregistrées aux séries (dont les modèles ajoutés
+     depuis) — non gaté par un drapeau puisque limité aux pièces sans série. */
+  {
+    const modifiees=[];
+    for(const p of etat.pieces){
+      if(!p.serie){ await detecterSerie(p); if(p.serie) modifiees.push(p); }
+    }
+    if(modifiees.length){ await dbSauverLot(modifiees); toucheAffichage=true; }
   }
+
   /* Migration variations : backfill de l'atelier allemand pour les pièces déjà en série,
      et re-détection des anciens items bilatéraux "Allemagne — X (Ville)" → item "Allemagne" + variation */
-  for(const p of etat.pieces){
-    if(p.serie && trouverCodePays(p.pays)==="DE" && !p.serieVariation){
-      const at = atelierAllemand(p);
-      if(at){ p.serieVariation = at.lettre+" ("+at.ville+")"; await dbSauver(p); }
+  if(!(await dbConfigLire("migAtelierAllemandFaite"))){
+    const modifiees=[];
+    for(const p of etat.pieces){
+      let modifie=false;
+      if(p.serie && trouverCodePays(p.pays)==="DE" && !p.serieVariation){
+        const at = atelierAllemand(p);
+        if(at){ p.serieVariation = at.lettre+" ("+at.ville+")"; modifie=true; }
+      }
+      if(p.serieItem && /^Allemagne — [ADFGJ] /.test(p.serieItem)){
+        const at = atelierAllemand(p) || (p.serieItem.match(/^Allemagne — ([ADFGJ]) \(([^)]+)\)/) ? {lettre:RegExp.$1, ville:RegExp.$2} : null);
+        p.serieItem = "Allemagne";
+        if(at && !p.serieVariation) p.serieVariation = at.lettre+" ("+at.ville+")";
+        modifie=true;
+      }
+      if(modifie) modifiees.push(p);
     }
-    if(p.serieItem && /^Allemagne — [ADFGJ] /.test(p.serieItem)){
-      const at = atelierAllemand(p) || (p.serieItem.match(/^Allemagne — ([ADFGJ]) \(([^)]+)\)/) ? {lettre:RegExp.$1, ville:RegExp.$2} : null);
-      p.serieItem = "Allemagne";
-      if(at && !p.serieVariation) p.serieVariation = at.lettre+" ("+at.ville+")";
-      await dbSauver(p);
-    }
+    if(modifiees.length){ await dbSauverLot(modifiees); toucheAffichage=true; }
+    await dbConfigEcrire("migAtelierAllemandFaite", true);
   }
-  rafraichir();
-  majBandeauSauvegarde();
+
+  if(toucheAffichage) rafraichir();
+
   /* Migration : générer les miniatures manquantes (une seule fois) */
-  let genere=0;
-  for(const p of etat.pieces){
-    if(p.photoAvers && !p.miniature){
-      try{ p.miniature = await miniatureDepuisDataURL(p.photoAvers); await dbSauver(p); genere++; }catch(e){}
+  if(!(await dbConfigLire("migMiniaturesFaite"))){
+    const modifiees=[];
+    for(const p of etat.pieces){
+      if(p.photoAvers && !p.miniature){
+        try{ p.miniature = await miniatureDepuisDataURL(p.photoAvers); modifiees.push(p); }catch(e){}
+      }
     }
+    if(modifiees.length){
+      await dbSauverLot(modifiees);
+      rendreCollection();
+      console.log(modifiees.length+" miniature(s) générée(s)");
+    }
+    await dbConfigEcrire("migMiniaturesFaite", true);
   }
-  if(genere){ rendreCollection(); console.log(genere+" miniature(s) générée(s)"); }
-})();
+}
 
 
 
@@ -4009,15 +4080,43 @@ const CAT_FAMILLES = [
 ];
 
 /* Les exemplaires que je possède d'une fiche de catalogue */
-function mesExemplairesDe(e){
-  const id = e.idNumista;
-  return etat.pieces.filter(p=>{
-    if(p.vendu) return false;
+/* Index de etat.pieces par pid Numista et par (nom,année), construit une seule fois
+   par rendu du catalogue plutôt que de rescanner toute la collection pour chaque fiche
+   (mesExemplairesDe était appelée une fois par fiche du catalogue, jusqu'à ~8000 fiches). */
+function indexerMesPieces(){
+  const pidIndex=new Map(), nomAnneeIndexNoPid=new Map(), nomAnneeIndexAll=new Map();
+  for(const p of etat.pieces){
+    if(p.vendu) continue;
     const pid = (p.lienNumista||"").match(/pieces(\d+)/)?.[1] || p.idNumista;
-    if(id && pid) return pid===String(id);
-    return normTxt(p.nom||"")===normTxt(e.nom||"")
-        && String(p.annee||"")===String((e.match||{}).annee||"");
-  });
+    const key = normTxt(p.nom||"")+"|"+String(p.annee||"");
+    (nomAnneeIndexAll.get(key) || nomAnneeIndexAll.set(key,[]).get(key)).push(p);
+    if(pid){
+      const pk=String(pid);
+      (pidIndex.get(pk) || pidIndex.set(pk,[]).get(pk)).push(p);
+    } else {
+      (nomAnneeIndexNoPid.get(key) || nomAnneeIndexNoPid.set(key,[]).get(key)).push(p);
+    }
+  }
+  return {pidIndex, nomAnneeIndexNoPid, nomAnneeIndexAll};
+}
+function mesExemplairesDe(e, idx){
+  const id = e.idNumista;
+  const key = normTxt(e.nom||"")+"|"+String((e.match||{}).annee||"");
+  if(!idx){
+    return etat.pieces.filter(p=>{
+      if(p.vendu) return false;
+      const pid = (p.lienNumista||"").match(/pieces(\d+)/)?.[1] || p.idNumista;
+      if(id && pid) return pid===String(id);
+      return normTxt(p.nom||"")===normTxt(e.nom||"")
+          && String(p.annee||"")===String((e.match||{}).annee||"");
+    });
+  }
+  if(id){
+    const byPid = idx.pidIndex.get(String(id)) || [];
+    const byName = idx.nomAnneeIndexNoPid.get(key) || [];
+    return byPid.concat(byName);
+  }
+  return idx.nomAnneeIndexAll.get(key) || [];
 }
 
 function rendreCatalogueProgression(){
@@ -4051,8 +4150,9 @@ function rendreCatalogueProgression(){
 
   // Bilan
   let nEus=0, nVarTot=0, nVarEus=0;
+  const idxPieces = indexerMesPieces();
   const fiches = lot.map(e=>{
-    const miens = mesExemplairesDe(e);
+    const miens = mesExemplairesDe(e, idxPieces);
     const nb = miens.reduce((s,p)=>s+(parseInt(p.quantite)||1),0);
     if(miens.length) nEus++;
     const ref = miens[0] || {nom:e.nom, pays:(e.match||{}).pays, annee:(e.match||{}).annee,
